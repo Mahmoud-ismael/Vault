@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@300;400;500&family=Geist:wght@300;400;500;600&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
@@ -7,9 +8,10 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-sans);
+  --font-sans: 'Geist', sans-serif;
+  --font-mono: 'DM Mono', monospace;
+  --font-serif: 'Instrument Serif', serif;
+  --font-heading: 'Instrument Serif', serif;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -46,6 +48,29 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+
+  --color-vault-bg: var(--vault-bg);
+  --color-vault-bg-2: var(--vault-bg-2);
+  --color-vault-bg-3: var(--vault-bg-3);
+  --color-vault-bg-4: var(--vault-bg-4);
+  --color-vault-border: var(--vault-border);
+  --color-vault-border-2: var(--vault-border-2);
+  --color-vault-border-3: var(--vault-border-3);
+  --color-vault-text: var(--vault-text);
+  --color-vault-text-2: var(--vault-text-2);
+  --color-vault-text-3: var(--vault-text-3);
+  --color-vault-text-4: var(--vault-text-4);
+  --color-vault-accent: var(--vault-accent);
+  --color-vault-accent-2: var(--vault-accent-2);
+  --color-vault-accent-3: var(--vault-accent-3);
+  --color-vault-accent-dim: var(--vault-accent-dim);
+  --color-vault-accent-border: var(--vault-accent-border);
+  --color-vault-settled: var(--vault-settled);
+  --color-vault-evolving: var(--vault-evolving);
+  --color-vault-undecided: var(--vault-undecided);
+  --color-vault-empty: var(--vault-empty);
+  --color-vault-danger: var(--vault-danger);
+  --color-vault-warning: var(--vault-warning);
 }
 
 :root {
@@ -81,6 +106,38 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+  /* Vault Backgrounds */
+  --vault-bg: #0D0D0F;
+  --vault-bg-2: #121215;
+  --vault-bg-3: #18181C;
+  --vault-bg-4: #1F1F26;
+
+  /* Vault Borders */
+  --vault-border: #252529;
+  --vault-border-2: #32323A;
+  --vault-border-3: #404048;
+
+  /* Vault Text */
+  --vault-text: #F0EDE8;
+  --vault-text-2: #9E9B94;
+  --vault-text-3: #5A5854;
+  --vault-text-4: #38362F;
+
+  /* Vault Accent (Sky Blue) */
+  --vault-accent: #3B9EFF;
+  --vault-accent-2: #1A6FCC;
+  --vault-accent-3: #0D4A8A;
+  --vault-accent-dim: #3B9EFF14;
+  --vault-accent-border: #3B9EFF33;
+
+  /* Vault Status */
+  --vault-settled: #4CAF7D;
+  --vault-evolving: #E8A838;
+  --vault-undecided: #7B9FE0;
+  --vault-empty: #3A3A42;
+  --vault-danger: #C95050;
+  --vault-warning: #C98A30;
 }
 
 .dark {
@@ -122,9 +179,25 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    background-color: var(--vault-bg);
+    color: var(--vault-text);
+    font-family: 'Geist', sans-serif;
   }
-  html {
-    @apply font-sans;
-  }
+}
+
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--vault-border-2); border-radius: 2px; }
+
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.page-enter {
+  animation: pageIn 180ms ease forwards;
+}
+
+a, button, input, select, textarea, [role="button"] {
+  transition-duration: 150ms;
+  transition-timing-function: ease;
 }
