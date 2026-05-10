@@ -1,0 +1,1 @@
+export function JournalEditor() { return <div>JournalEditor</div> }

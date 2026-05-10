@@ -1,0 +1,1 @@
+export function StanceCard() { return <div>StanceCard</div> }

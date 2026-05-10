@@ -1,0 +1,1 @@
+export function FrictionPrompt() { return <div>FrictionPrompt</div> }

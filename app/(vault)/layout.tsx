@@ -1,0 +1,1 @@
+export default function VaultLayout({ children }: { children: React.ReactNode }) { return (<div className="flex h-screen"><aside className="w-64 border-r">Sidebar</aside><main className="flex-1 flex flex-col"><header className="h-14 border-b flex items-center px-4">Topbar</header><div className="flex-1 p-4 overflow-auto">{children}</div></main></div>) }

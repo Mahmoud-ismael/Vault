@@ -1,0 +1,1 @@
+export default function StancesPage() { return <div>Stances</div> }
