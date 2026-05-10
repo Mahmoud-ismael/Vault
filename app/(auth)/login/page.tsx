@@ -1,16 +1,18 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Loader2 } from 'lucide-react'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
-  const [success, setSuccess] = useState(false)
   const [error, setError] = useState<string | null>(null)
   
   const supabase = createClient()
+  const router = useRouter()
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -20,22 +22,24 @@ export default function LoginPage() {
       return
     }
 
+    if (!password) {
+      setError('Please enter your password.')
+      return
+    }
+
     setLoading(true)
     setError(null)
 
-    const { error: signInError } = await supabase.auth.signInWithOtp({
+    const { error: signInError } = await supabase.auth.signInWithPassword({
       email,
-      options: {
-        emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/callback`,
-      },
+      password,
     })
 
     if (signInError) {
       setError(signInError.message)
       setLoading(false)
     } else {
-      setSuccess(true)
-      setLoading(false)
+      router.push('/dashboard')
     }
   }
 
@@ -58,45 +62,51 @@ export default function LoginPage() {
           
           <h2 className="font-serif text-[22px] mb-2 text-vault-text">Sign in</h2>
           <p className="font-sans text-[14px] text-vault-text-2 mb-8">
-            We'll send a magic link to your email. No password needed.
+            Enter your credentials to access your Vault.
           </p>
 
-          {success ? (
-            <div className="py-4">
-              <p className="font-serif italic text-[18px] text-vault-settled text-center">
-                Check your email. The link expires in 10 minutes.
-              </p>
-            </div>
-          ) : (
-            <form onSubmit={handleLogin} className="flex flex-col gap-4">
-              <div className="flex flex-col gap-1.5">
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => {
-                    setEmail(e.target.value)
-                    setError(null)
-                  }}
-                  placeholder="Enter your email"
-                  className="w-full bg-vault-bg-4 border border-vault-border rounded-[4px] px-3 py-2 font-sans text-[15px] text-vault-text placeholder-vault-text-3 placeholder:italic focus:outline-none focus:border-vault-accent transition-all duration-150"
-                  disabled={loading}
-                />
-                {error && (
-                  <span className="font-mono text-[11px] text-vault-danger mt-1">
-                    {error}
-                  </span>
-                )}
-              </div>
-
-              <button
-                type="submit"
+          <form onSubmit={handleLogin} className="flex flex-col gap-4">
+            <div className="flex flex-col gap-1.5">
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value)
+                  setError(null)
+                }}
+                placeholder="Email address"
+                className="w-full bg-vault-bg-4 border border-vault-border rounded-[4px] px-3 py-2 font-sans text-[15px] text-vault-text placeholder-vault-text-3 placeholder:italic focus:outline-none focus:border-vault-accent transition-all duration-150"
                 disabled={loading}
-                className="w-full flex items-center justify-center bg-vault-accent text-[#0D0D0F] font-mono text-[11px] uppercase tracking-[0.1em] py-2 px-4 rounded-[4px] hover:bg-vault-accent-2 disabled:opacity-50 transition-colors duration-150 h-10 mt-2"
-              >
-                {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Send Magic Link"}
-              </button>
-            </form>
-          )}
+              />
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value)
+                  setError(null)
+                }}
+                placeholder="Password"
+                className="w-full bg-vault-bg-4 border border-vault-border rounded-[4px] px-3 py-2 font-sans text-[15px] text-vault-text placeholder-vault-text-3 placeholder:italic focus:outline-none focus:border-vault-accent transition-all duration-150"
+                disabled={loading}
+              />
+              {error && (
+                <span className="font-mono text-[11px] text-vault-danger mt-1">
+                  {error}
+                </span>
+              )}
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full flex items-center justify-center bg-vault-accent text-[#0D0D0F] font-mono text-[11px] uppercase tracking-[0.1em] py-2 px-4 rounded-[4px] hover:bg-vault-accent-2 disabled:opacity-50 transition-colors duration-150 h-10 mt-2"
+            >
+              {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : "SIGN IN"}
+            </button>
+          </form>
         </div>
       </div>
     </div>
