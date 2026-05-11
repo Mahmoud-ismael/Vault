@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Loader2 } from 'lucide-react'
+import Image from 'next/image'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -46,13 +47,14 @@ export default function LoginPage() {
   return (
     <div className="flex min-h-screen bg-vault-bg">
       {/* Left Side - 60% */}
-      <div className="hidden lg:flex flex-col justify-center w-[60%] px-20 xl:px-32">
-        <h1 className="font-serif italic text-vault-text mb-6 text-[36px] leading-[1.15]">
-          Your thinking, preserved.
-        </h1>
-        <p className="font-sans text-[17px] leading-[1.7] text-vault-text-2 max-w-xl">
-          Vault is a personal intelligence operating system. A single, private space to store, write, organise, research, and think through everything that matters to you.
-        </p>
+      <div className="hidden lg:flex relative w-[60%] bg-[#f4ebe8]">
+        <Image
+          src="/login-bg.png"
+          alt="Vault Logo"
+          fill
+          className="object-cover object-center"
+          priority
+        />
       </div>
 
       {/* Right Side - 40% */}
