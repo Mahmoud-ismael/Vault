@@ -62,6 +62,7 @@ create table documents (
   extracted_text text,
   summary text,
   tags text[] default '{}',
+  annotations jsonb default '[]',
   source_url text,
   created_at timestamptz default now()
 );

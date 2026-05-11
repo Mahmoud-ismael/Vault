@@ -3,16 +3,17 @@ import Anthropic from '@anthropic-ai/sdk'
 
 export async function POST(req: Request) {
   try {
-    const { topic } = await req.json()
-    if (!topic) return NextResponse.json({ error: 'Missing topic' }, { status: 400 })
+    const { question, document_text } = await req.json()
+    if (!question || !document_text) return NextResponse.json({ error: 'Missing parameters' }, { status: 400 })
 
+    const truncatedText = document_text.substring(0, 6000)
     const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
     const response = await anthropic.messages.create({
       model: 'claude-3-5-sonnet-20241022',
       max_tokens: 800,
-      system: `Create a structured outline for a research note on: [topic]. Use clear section headings and 2-3 bullet points per section. Format as plain text with ## for headings and - for bullets. 5-7 sections. No preamble.`,
-      messages: [{ role: 'user', content: `Topic: ${topic}` }],
+      system: 'Answer the following question using ONLY the information in the document provided. If the answer is not in the document, say so. Be concise and direct.',
+      messages: [{ role: 'user', content: `Document:\n${truncatedText}\n\nQuestion: ${question}` }],
       stream: true,
     })
 

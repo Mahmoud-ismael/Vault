@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import Tesseract from 'tesseract.js'
+import pdfParse from 'pdf-parse'
 
 export async function POST(req: Request) {
   try {
@@ -8,11 +8,14 @@ export async function POST(req: Request) {
     if (!file) return NextResponse.json({ error: 'No file provided' }, { status: 400 })
 
     const buffer = Buffer.from(await file.arrayBuffer())
-    const { data: { text } } = await Tesseract.recognize(buffer, 'eng')
+    const data = await pdfParse(buffer)
     
-    return NextResponse.json({ text })
+    return NextResponse.json({
+      text: data.text,
+      pageCount: data.numpages
+    })
   } catch (error: any) {
-    console.error('OCR Error:', error)
+    console.error('PDF Extraction Error:', error)
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
 }

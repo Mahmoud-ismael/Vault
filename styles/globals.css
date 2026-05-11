@@ -201,3 +201,23 @@ a, button, input, select, textarea, [role="button"] {
   transition-duration: 150ms;
   transition-timing-function: ease;
 }
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.sonner-toast {
+  background: var(--vault-bg-2) !important;
+  border: 1px solid var(--vault-border) !important;
+  color: var(--vault-text) !important;
+  font-family: 'DM Mono', monospace !important;
+  font-size: 12px !important;
+  border-radius: 6px !important;
+}
+.sonner-toast[data-type="success"] {
+  border-left: 3px solid var(--vault-settled) !important;
+}
+.sonner-toast[data-type="error"] {
+  border-left: 3px solid var(--vault-danger) !important;
+}

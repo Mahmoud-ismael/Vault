@@ -3,7 +3,8 @@ import { createClient } from '@/lib/supabase/server'
 import { Sidebar } from '@/components/vault/Sidebar'
 import { Topbar } from '@/components/vault/Topbar'
 import { TopbarProvider } from '@/components/vault/TopbarContext'
-
+import { Toaster } from 'sonner'
+import { KeyboardShortcuts } from '@/components/shared/KeyboardShortcuts'
 export default async function VaultLayout({
   children,
 }: {
@@ -42,6 +43,8 @@ export default async function VaultLayout({
           </main>
         </div>
       </div>
+      <Toaster theme="dark" toastOptions={{ className: 'sonner-toast' }} />
+      <KeyboardShortcuts />
     </TopbarProvider>
   )
 }

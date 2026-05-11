@@ -5,6 +5,8 @@ import Link from 'next/link'
 import { Download } from 'lucide-react'
 import { SetTopbar } from '@/components/vault/SetTopbar'
 import { ExportButton } from '@/components/vault/ExportButton'
+import { EmptyState } from '@/components/shared/EmptyState'
+import { LayoutDashboard } from 'lucide-react'
 
 const PROMPTS = [
   "Does morality require religion, or can it be derived from reason alone?",
@@ -204,7 +206,11 @@ export default async function DashboardPage() {
           </div>
           <div className="flex flex-col gap-4">
             {activities.length === 0 ? (
-              <div className="text-vault-text-3 text-[14px] font-sans italic">No recent activity.</div>
+              <EmptyState 
+                icon={LayoutDashboard}
+                title="No recent activity."
+                subtitle="Start writing or organizing your vault."
+              />
             ) : (
               activities.map(item => (
                 <div key={`${item.type}-${item.id}`} className="flex items-start gap-3 group cursor-pointer">

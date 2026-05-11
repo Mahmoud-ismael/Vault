@@ -3,7 +3,8 @@
 import { useState, useMemo } from 'react'
 import Link from 'next/link'
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay, addMonths, subMonths, isToday } from 'date-fns'
-import { Plus, Search, Calendar as CalendarIcon, List, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Plus, Search, Calendar as CalendarIcon, List, ArrowRight, ChevronLeft, ChevronRight, BookOpen } from 'lucide-react'
+import { EmptyState } from '@/components/shared/EmptyState'
 import { SetTopbar } from '@/components/vault/SetTopbar'
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
@@ -109,42 +110,50 @@ export default function JournalClient({ initialEntries }: { initialEntries: Entr
         {/* List View */}
         {view === 'list' && (
           <div className="flex-1 overflow-y-auto flex flex-col p-2 gap-1">
-            {filteredEntries.map(entry => {
-              const isActive = selectedId === entry.id
-              const preview = extractTextFromJSON(entry.content)
-              const truncatedPreview = preview.length > 80 ? preview.substring(0, 80) + '...' : preview
+            {filteredEntries.length === 0 ? (
+              <EmptyState 
+                icon={BookOpen}
+                title="No entries yet."
+                subtitle="Begin with a thought."
+              />
+            ) : (
+              filteredEntries.map(entry => {
+                const isActive = selectedId === entry.id
+                const preview = extractTextFromJSON(entry.content)
+                const truncatedPreview = preview.length > 80 ? preview.substring(0, 80) + '...' : preview
 
-              return (
-                <button
-                  key={entry.id}
-                  onClick={() => setSelectedId(entry.id)}
-                  className={`flex flex-col items-start gap-1.5 p-3 rounded-[4px] border-l-2 transition-all duration-150 text-left ${
-                    isActive 
-                      ? 'bg-vault-accent-dim border-vault-accent' 
-                      : 'border-transparent hover:bg-vault-bg-3'
-                  }`}
-                >
-                  <div className="font-mono text-[9px] uppercase text-vault-text-3 tracking-wider">
-                    {format(new Date(entry.created_at), 'dd MMM yyyy')}
-                  </div>
-                  <div className={`font-sans text-[14px] ${isActive ? 'text-vault-accent' : 'text-vault-text'} line-clamp-1`}>
-                    {entry.title || 'Untitled'}
-                  </div>
-                  <div className="font-sans text-[12px] text-vault-text-3 line-clamp-2 leading-snug">
-                    {truncatedPreview || 'No content...'}
-                  </div>
-                  {entry.tags && entry.tags.length > 0 && (
-                    <div className="flex flex-wrap gap-1.5 mt-1">
-                      {entry.tags.map((tag, i) => (
-                        <div key={i} className="font-mono text-[9px] bg-vault-bg-4 text-vault-text-3 px-1.5 py-0.5 rounded-[2px]">
-                          {tag}
-                        </div>
-                      ))}
+                return (
+                  <button
+                    key={entry.id}
+                    onClick={() => setSelectedId(entry.id)}
+                    className={`flex flex-col items-start gap-1.5 p-3 rounded-[4px] border-l-2 transition-all duration-150 text-left ${
+                      isActive 
+                        ? 'bg-vault-accent-dim border-vault-accent' 
+                        : 'border-transparent hover:bg-vault-bg-3'
+                    }`}
+                  >
+                    <div className="font-mono text-[9px] uppercase text-vault-text-3 tracking-wider">
+                      {format(new Date(entry.created_at), 'dd MMM yyyy')}
                     </div>
-                  )}
-                </button>
-              )
-            })}
+                    <div className={`font-sans text-[14px] ${isActive ? 'text-vault-accent' : 'text-vault-text'} line-clamp-1`}>
+                      {entry.title || 'Untitled'}
+                    </div>
+                    <div className="font-sans text-[12px] text-vault-text-3 line-clamp-2 leading-snug">
+                      {truncatedPreview || 'No content...'}
+                    </div>
+                    {entry.tags && entry.tags.length > 0 && (
+                      <div className="flex flex-wrap gap-1.5 mt-1">
+                        {entry.tags.map((tag, i) => (
+                          <div key={i} className="font-mono text-[9px] bg-vault-bg-4 text-vault-text-3 px-1.5 py-0.5 rounded-[2px]">
+                            {tag}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </button>
+                )
+              })
+            )}
           </div>
         )}
 
@@ -219,16 +228,20 @@ export default function JournalClient({ initialEntries }: { initialEntries: Entr
       {/* RIGHT PANEL */}
       <div className="flex-1 bg-vault-bg flex flex-col overflow-hidden relative">
         {!selectedEntry ? (
-          <div className="flex flex-col items-center justify-center h-full gap-6">
-            <div className="font-serif italic text-[24px] text-vault-text-3">
-              Select an entry or write something new.
-            </div>
-            <Link 
-              href="/journal/new"
-              className="bg-vault-accent text-[#0D0D0F] font-mono text-[11px] uppercase tracking-[0.1em] py-2 px-6 rounded-[4px] hover:bg-vault-accent-2 transition-colors duration-150"
-            >
-              New Entry
-            </Link>
+          <div className="flex flex-col items-center justify-center h-full">
+            <EmptyState 
+              icon={BookOpen}
+              title={entries.length === 0 ? "No entries yet." : "Select an entry or write something new."}
+              subtitle={entries.length === 0 ? "Begin with a thought." : undefined}
+              action={
+                <Link 
+                  href="/journal/new"
+                  className="bg-vault-accent text-[#0D0D0F] font-mono text-[11px] uppercase tracking-[0.1em] py-2 px-6 rounded-[4px] hover:bg-vault-accent-2 transition-colors duration-150 inline-block mt-4"
+                >
+                  {entries.length === 0 ? "Write First Entry" : "New Entry"}
+                </Link>
+              }
+            />
           </div>
         ) : (
           <div className="flex-1 overflow-y-auto p-10 lg:p-16 flex flex-col gap-6 w-full mx-auto max-w-4xl">

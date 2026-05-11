@@ -7,6 +7,7 @@ import { createClient } from '@/lib/supabase/client'
 import { format } from 'date-fns'
 import { ArrowLeft, Sparkles, Tag, Trash2, X, Heading1, Heading2, Heading3, Bold, Italic, Underline as UnderlineIcon, Strikethrough, List, ListOrdered, CheckSquare, Quote, Code, Link as LinkIcon, SidebarClose } from 'lucide-react'
 import { SetTopbar } from '@/components/vault/SetTopbar'
+import { toast } from 'sonner'
 
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
@@ -139,6 +140,12 @@ export default function JournalEditorClient({ initialEntry }: { initialEntry: an
     }, 2000)
   }
 
+  useEffect(() => {
+    const handleManualSave = () => saveToDb()
+    window.addEventListener('vault-manual-save', handleManualSave)
+    return () => window.removeEventListener('vault-manual-save', handleManualSave)
+  }, [])
+
   const saveToDb = async () => {
     setSaveStatus('Saving...')
     
@@ -151,6 +158,7 @@ export default function JournalEditorClient({ initialEntry }: { initialEntry: an
     }).eq('id', initialEntry.id)
     
     setSaveStatus('Saved')
+    toast.success('Entry saved')
     router.refresh()
   }
 

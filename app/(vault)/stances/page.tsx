@@ -5,7 +5,9 @@ import { createClient } from '@/lib/supabase/client'
 import { STANCE_SEEDS } from '@/lib/stances/seed'
 import { SetTopbar } from '@/components/vault/SetTopbar'
 import { StanceCard } from '@/components/vault/StanceCard'
-import { Loader2 } from 'lucide-react'
+import { Target } from 'lucide-react'
+import { Skeleton } from '@/components/shared/Skeleton'
+import { EmptyState } from '@/components/shared/EmptyState'
 
 type Stance = {
   id: string
@@ -57,14 +59,19 @@ export default function StancesPage() {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center h-[50vh] gap-4">
+      <div className="flex flex-col gap-8 w-full max-w-7xl mx-auto pb-16">
         <SetTopbar title="Stances" />
-        <Loader2 className="w-6 h-6 animate-spin text-vault-accent" />
-        {seeding ? (
-          <div className="font-mono text-[11px] uppercase tracking-widest text-vault-text-3">Seeding 100 worldview topics...</div>
-        ) : (
-          <div className="font-mono text-[11px] uppercase tracking-widest text-vault-text-3">Loading stances...</div>
-        )}
+        <div className="flex flex-col gap-2">
+          <Skeleton className="h-[28px] w-[150px]" />
+          <Skeleton className="h-[14px] w-[300px] mt-1" />
+        </div>
+        <Skeleton className="h-[40px] w-full mt-2" />
+        <div className="flex flex-col gap-4 mt-2">
+          <Skeleton className="h-[20px] w-full" />
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+            {[1, 2, 3, 4, 5, 6].map(i => <Skeleton key={i} className="h-[140px] w-full" />)}
+          </div>
+        </div>
       </div>
     )
   }
@@ -157,9 +164,11 @@ export default function StancesPage() {
       {/* CATEGORY SECTIONS */}
       <div className="flex flex-col gap-12 mt-2">
         {categories.length === 0 ? (
-          <div className="text-vault-text-3 font-sans text-[14px] italic text-center py-10">
-            No topics match your filters.
-          </div>
+          <EmptyState 
+            icon={Target} 
+            title="No stances match your filter." 
+            subtitle="Adjust your search or status filter to see more topics."
+          />
         ) : (
           categories.map(cat => (
             <div key={cat} className="flex flex-col gap-4">

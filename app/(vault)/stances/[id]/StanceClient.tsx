@@ -8,6 +8,7 @@ import { StatusBadge } from '@/components/shared/StatusBadge'
 import { format } from 'date-fns'
 import { ArrowLeft, Sparkles } from 'lucide-react'
 import { SetTopbar } from '@/components/vault/SetTopbar'
+import { toast } from 'sonner'
 
 const AutoTextArea = ({ value, onChange, placeholder, className }: any) => {
   const ref = useRef<HTMLTextAreaElement>(null)
@@ -98,7 +99,11 @@ export default function StanceClient({ initialStance, allSettledStances }: { ini
     if (!error) {
       setStance((prev: any) => ({ ...prev, status: newStatus, last_updated: now }))
       setSaving(false)
+      toast.success('Stance saved')
       router.refresh()
+    } else {
+      setSaving(false)
+      toast.error(error.message)
     }
   }
 
