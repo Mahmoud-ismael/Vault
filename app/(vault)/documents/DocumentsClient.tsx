@@ -3,8 +3,9 @@
 import { useState, useCallback, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import { useDropzone } from 'react-dropzone'
-import { Archive, Plus, Loader2 } from 'lucide-react'
+import { Archive, Plus, Loader2, Camera, Scan } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
+import { CameraModal, CameraMode } from '@/components/vault/CameraModal'
 import { SetTopbar } from '@/components/vault/SetTopbar'
 import { DocumentCard } from '@/components/vault/DocumentCard'
 import { EmptyState } from '@/components/shared/EmptyState'
@@ -21,6 +22,7 @@ export default function DocumentsClient({ initialDocuments, user }: { initialDoc
   const [filter, setFilter] = useState('All')
   const [uploads, setUploads] = useState<UploadStatus[]>([])
   const [showUploader, setShowUploader] = useState(initialDocuments.length === 0)
+  const [cameraMode, setCameraMode] = useState<CameraMode | null>(null)
   
   const supabase = createClient()
   const router = useRouter()
@@ -133,6 +135,91 @@ export default function DocumentsClient({ initialDocuments, user }: { initialDoc
     }
   }
 
+  const processScanBatch = async (files: File[]) => {
+    if (files.length === 0) return
+    if (files.length === 1) return processFile(files[0])
+    
+    const batchName = `Scanned_Doc_${new Date().getTime()}`
+    const newUpload = { filename: batchName, status: 'uploading' as const }
+    setUploads(prev => [...prev, newUpload])
+    
+    try {
+      let combinedText = ''
+      const uuid = crypto.randomUUID()
+      const firstFilePath = `${user.id}/${uuid}/${files[0].name}`
+      
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i]
+        const filePath = `${user.id}/${uuid}/${file.name}`
+        const { error: uploadError } = await supabase.storage.from('documents').upload(filePath, file)
+        if (uploadError) throw new Error(uploadError.message)
+        
+        updateUploadStatus(batchName, 'extracting')
+        const formData = new FormData()
+        formData.append('file', file)
+        const res = await fetch('/api/documents/ocr', { method: 'POST', body: formData })
+        if (res.ok) {
+          const data = await res.json()
+          combinedText += `\n\n--- Page ${i + 1} ---\n\n` + data.text
+        }
+      }
+      
+      if (!combinedText.trim()) throw new Error('No text extracted')
+
+      const { data: docRecord, error: dbError } = await supabase.from('documents').insert({
+        user_id: user.id,
+        title: `Scanned Document (${files.length} pages)`,
+        file_path: firstFilePath,
+        file_type: 'IMAGE',
+        extracted_text: combinedText,
+      }).select().single()
+      
+      if (dbError) throw new Error(dbError.message)
+      setDocuments(prev => [docRecord, ...prev])
+
+      updateUploadStatus(batchName, 'summarising')
+      const sumRes = await fetch('/api/ai/summarise-document', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: combinedText, title: `Scanned Document (${files.length} pages)` })
+      })
+      
+      const reader = sumRes.body?.getReader()
+      const decoder = new TextDecoder()
+      let summary = ''
+      
+      if (reader) {
+        while (true) {
+          const { done, value } = await reader.read()
+          if (done) break
+          summary += decoder.decode(value)
+          setDocuments(prev => prev.map(d => d.id === docRecord.id ? { ...d, summary } : d))
+        }
+      }
+
+      await supabase.from('documents').update({ summary }).eq('id', docRecord.id)
+      updateUploadStatus(batchName, 'complete')
+      toast.success('Document scan processed')
+
+    } catch (err: any) {
+      updateUploadStatus(batchName, 'error', err.message)
+      toast.error(`Error: ${err.message}`)
+    }
+  }
+
+  const handleCameraComplete = async (files: File[]) => {
+    setCameraMode(null)
+    if (files.length === 0) return
+    
+    if (files.length === 1) {
+      const newUploads = [{ filename: files[0].name, status: 'uploading' as const }]
+      setUploads(prev => [...prev, ...newUploads])
+      await processFile(files[0])
+    } else {
+      await processScanBatch(files)
+    }
+  }
+
   const LeftNode = (
     <div className="font-serif text-[28px] text-vault-text leading-none">Documents</div>
   )
@@ -172,18 +259,42 @@ export default function DocumentsClient({ initialDocuments, user }: { initialDoc
       {/* UPLOADER */}
       {showUploader && (
         <div className="flex flex-col gap-4">
-          <div 
-            {...getRootProps()} 
-            className={`border-[2px] border-dashed rounded-[8px] p-10 flex flex-col items-center justify-center cursor-pointer transition-colors duration-150 ${
-              isDragActive ? 'border-vault-accent bg-vault-accent/[0.05]' : 'border-vault-border-2 bg-vault-bg-2 hover:border-vault-accent-border hover:bg-vault-bg-3'
-            }`}
-          >
-            <input {...getInputProps()} />
-            <Archive className="w-8 h-8 text-vault-text-3 mb-4" />
-            <h2 className="font-serif italic text-[20px] text-vault-text mb-2">Drop files here or click to upload</h2>
-            <div className="font-mono text-[10px] text-vault-text-3 uppercase tracking-wider">
-              Supported: PDF, DOCX, TXT, PNG, JPG, WEBP
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div 
+              {...getRootProps()} 
+              className={`md:col-span-1 border-[2px] border-dashed rounded-[8px] p-8 flex flex-col items-center justify-center cursor-pointer transition-colors duration-150 ${
+                isDragActive ? 'border-vault-accent bg-vault-accent/[0.05]' : 'border-vault-border-2 bg-vault-bg-2 hover:border-vault-accent-border hover:bg-vault-bg-3'
+              }`}
+            >
+              <input {...getInputProps()} />
+              <Archive className="w-8 h-8 text-vault-text-3 mb-4" />
+              <h2 className="font-serif italic text-[18px] text-vault-text mb-2 text-center">Drop files or click</h2>
+              <div className="font-mono text-[9px] text-vault-text-3 uppercase tracking-wider text-center">
+                PDF, DOCX, TXT, PNG, JPG, WEBP
+              </div>
             </div>
+
+            <button 
+              onClick={() => setCameraMode('photo')}
+              className="md:col-span-1 border border-vault-border-2 bg-vault-bg-2 hover:border-vault-accent-border hover:bg-vault-bg-3 rounded-[8px] p-8 flex flex-col items-center justify-center transition-colors duration-150"
+            >
+              <Camera className="w-8 h-8 text-vault-text-3 mb-4" />
+              <h2 className="font-serif italic text-[18px] text-vault-text mb-2">Take Photo</h2>
+              <div className="font-mono text-[9px] text-vault-text-3 uppercase tracking-wider text-center">
+                Capture image instantly
+              </div>
+            </button>
+
+            <button 
+              onClick={() => setCameraMode('scan')}
+              className="md:col-span-1 border border-vault-border-2 bg-vault-bg-2 hover:border-vault-accent-border hover:bg-vault-bg-3 rounded-[8px] p-8 flex flex-col items-center justify-center transition-colors duration-150"
+            >
+              <Scan className="w-8 h-8 text-vault-text-3 mb-4" />
+              <h2 className="font-serif italic text-[18px] text-vault-text mb-2">Scan Document</h2>
+              <div className="font-mono text-[9px] text-vault-text-3 uppercase tracking-wider text-center">
+                Multi-page auto-crop
+              </div>
+            </button>
           </div>
 
           {/* Upload Progress Queue */}
@@ -226,6 +337,14 @@ export default function DocumentsClient({ initialDocuments, user }: { initialDoc
               Upload Document
             </button>
           }
+        />
+      )}
+
+      {cameraMode && (
+        <CameraModal 
+          mode={cameraMode} 
+          onClose={() => setCameraMode(null)} 
+          onComplete={handleCameraComplete} 
         />
       )}
     </div>
