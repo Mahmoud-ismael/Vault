@@ -221,12 +221,12 @@ export default function DocumentsClient({ initialDocuments, user }: { initialDoc
   }
 
   const LeftNode = (
-    <div className="font-serif text-[28px] text-vault-text leading-none">Documents</div>
+    <div className="text-[28px] text-vault-text leading-none">Documents</div>
   )
 
   const RightNode = (
     <div className="flex items-center gap-4">
-      <div className="hidden sm:flex items-center gap-2 font-mono text-[10px] uppercase tracking-wider text-vault-text-3">
+      <div className="hidden sm:flex items-center gap-2 text-[10px] uppercase tracking-normal text-vault-text-3">
         {documents.length} · PDFs, images, scans, articles
       </div>
       <div className="w-[1px] h-4 bg-vault-border hidden sm:block" />
@@ -235,7 +235,7 @@ export default function DocumentsClient({ initialDocuments, user }: { initialDoc
           <button 
             key={f}
             onClick={() => setFilter(f)}
-            className={`px-3 py-1 text-[10px] font-mono uppercase tracking-widest rounded-[3px] transition-colors ${
+            className={`px-3 py-1 text-[10px]  uppercase tracking-normal rounded-[3px] transition-colors ${
               filter === f ? 'bg-vault-bg-2 text-vault-text shadow-sm' : 'text-vault-text-3 hover:text-vault-text-2 hover:bg-vault-bg-3'
             }`}
           >
@@ -245,7 +245,7 @@ export default function DocumentsClient({ initialDocuments, user }: { initialDoc
       </div>
       <button 
         onClick={() => setShowUploader(!showUploader)}
-        className="flex items-center gap-2 bg-vault-accent text-[#0D0D0F] font-mono text-[11px] uppercase tracking-[0.1em] py-1.5 px-4 rounded-[4px] hover:bg-vault-accent-2 transition-colors duration-150"
+        className="flex items-center gap-2 bg-vault-accent text-[#0D0D0F] text-[11px] uppercase tracking-[0.1em] py-1.5 px-4 rounded-[4px] hover:bg-vault-accent-2 transition-colors duration-150"
       >
         <Plus className="w-3.5 h-3.5" /> Upload
       </button>
@@ -268,8 +268,8 @@ export default function DocumentsClient({ initialDocuments, user }: { initialDoc
             >
               <input {...getInputProps()} />
               <Archive className="w-8 h-8 text-vault-text-3 mb-4" />
-              <h2 className="font-serif italic text-[18px] text-vault-text mb-2 text-center">Drop files or click</h2>
-              <div className="font-mono text-[9px] text-vault-text-3 uppercase tracking-wider text-center">
+              <h2 className="text-[18px] text-vault-text mb-2 text-center">Drop files or click</h2>
+              <div className="text-[9px] text-vault-text-3 uppercase tracking-normal text-center">
                 PDF, DOCX, TXT, PNG, JPG, WEBP
               </div>
             </div>
@@ -279,8 +279,8 @@ export default function DocumentsClient({ initialDocuments, user }: { initialDoc
               className="md:col-span-1 border border-vault-border-2 bg-vault-bg-2 hover:border-vault-accent-border hover:bg-vault-bg-3 rounded-[8px] p-8 flex flex-col items-center justify-center transition-colors duration-150"
             >
               <Camera className="w-8 h-8 text-vault-text-3 mb-4" />
-              <h2 className="font-serif italic text-[18px] text-vault-text mb-2">Take Photo</h2>
-              <div className="font-mono text-[9px] text-vault-text-3 uppercase tracking-wider text-center">
+              <h2 className="text-[18px] text-vault-text mb-2">Take Photo</h2>
+              <div className="text-[9px] text-vault-text-3 uppercase tracking-normal text-center">
                 Capture image instantly
               </div>
             </button>
@@ -290,8 +290,8 @@ export default function DocumentsClient({ initialDocuments, user }: { initialDoc
               className="md:col-span-1 border border-vault-border-2 bg-vault-bg-2 hover:border-vault-accent-border hover:bg-vault-bg-3 rounded-[8px] p-8 flex flex-col items-center justify-center transition-colors duration-150"
             >
               <Scan className="w-8 h-8 text-vault-text-3 mb-4" />
-              <h2 className="font-serif italic text-[18px] text-vault-text mb-2">Scan Document</h2>
-              <div className="font-mono text-[9px] text-vault-text-3 uppercase tracking-wider text-center">
+              <h2 className="text-[18px] text-vault-text mb-2">Scan Document</h2>
+              <div className="text-[9px] text-vault-text-3 uppercase tracking-normal text-center">
                 Multi-page auto-crop
               </div>
             </button>
@@ -302,8 +302,8 @@ export default function DocumentsClient({ initialDocuments, user }: { initialDoc
             <div className="flex flex-col gap-2">
               {uploads.map((u, i) => (
                 <div key={i} className="flex items-center justify-between bg-vault-bg-2 border border-vault-border rounded-[4px] p-3 px-4">
-                  <div className="font-sans text-[13px] text-vault-text line-clamp-1">{u.filename}</div>
-                  <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest">
+                  <div className="text-[13px] text-vault-text line-clamp-1">{u.filename}</div>
+                  <div className="flex items-center gap-2 text-[10px] uppercase tracking-normal">
                     {u.status === 'uploading' && <><Loader2 className="w-3 h-3 animate-spin text-vault-accent" /> <span className="text-vault-text-3">Uploading...</span></>}
                     {u.status === 'extracting' && <><Loader2 className="w-3 h-3 animate-spin text-vault-accent" /> <span className="text-vault-text-3">Extracting text...</span></>}
                     {u.status === 'summarising' && <><Loader2 className="w-3 h-3 animate-spin text-vault-accent" /> <span className="text-vault-accent">Generating summary...</span></>}
@@ -332,7 +332,7 @@ export default function DocumentsClient({ initialDocuments, user }: { initialDoc
           action={
             <button 
               onClick={() => setShowUploader(true)}
-              className="bg-vault-accent text-[#0D0D0F] font-mono text-[11px] uppercase tracking-[0.1em] py-2 px-6 rounded-[4px] hover:bg-vault-accent-2 transition-colors duration-150 inline-block mt-2"
+              className="bg-vault-accent text-[#0D0D0F] text-[11px] uppercase tracking-[0.1em] py-2 px-6 rounded-[4px] hover:bg-vault-accent-2 transition-colors duration-150 inline-block mt-2"
             >
               Upload Document
             </button>

@@ -32,17 +32,17 @@ export function StanceCard({ id, topic, status, myStance, lastUpdated }: StanceC
     >
       <div className={`absolute left-0 top-0 bottom-0 w-[3px] ${getBorderColor()}`} />
       
-      <div className="font-sans text-[15px] text-vault-text line-clamp-2 leading-snug group-hover:text-vault-accent transition-colors">
+      <div className="text-[15px] text-vault-text line-clamp-2 leading-snug group-hover:text-vault-accent transition-colors">
         {topic}
       </div>
       
-      <div className="font-mono text-[10px] text-vault-text-3 line-clamp-2 min-h-[30px] leading-relaxed">
+      <div className="text-[10px] text-vault-text-3 line-clamp-2 min-h-[30px] leading-relaxed">
         {previewText}
       </div>
       
       <div className="flex items-center justify-between mt-1">
         <StatusBadge status={status} />
-        <div className="font-mono text-[9px] text-vault-text-3 uppercase tracking-wider">
+        <div className="text-[9px] text-vault-text-3 uppercase tracking-normal">
           {format(new Date(lastUpdated), 'dd MMM yyyy')}
         </div>
       </div>

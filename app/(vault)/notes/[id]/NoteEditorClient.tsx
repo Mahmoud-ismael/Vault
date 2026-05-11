@@ -44,25 +44,25 @@ const EditorStyles = `
   color: var(--vault-text-3);
   pointer-events: none;
   height: 0;
-  font-family: 'Instrument Serif', serif;
-  font-style: italic;
+  font-family: 'Satoshi', sans-serif;
+  font-style: ;
 }
 .tiptap :focus { outline: none; }
 .tiptap p { margin-bottom: 1rem; }
 .tiptap p:last-child { margin-bottom: 0; }
-.tiptap h1 { font-family: 'Instrument Serif', serif; font-size: 28px; color: var(--vault-text); margin-bottom: 1rem; margin-top: 2rem; }
-.tiptap h2 { font-family: 'Geist', sans-serif; font-size: 20px; color: var(--vault-text); margin-bottom: 0.75rem; margin-top: 1.5rem; }
-.tiptap h3 { font-family: 'Geist', sans-serif; font-size: 17px; font-weight: 500; color: var(--vault-text); margin-bottom: 0.5rem; margin-top: 1.5rem; }
+.tiptap h1 { font-family: 'Satoshi', sans-serif; font-size: 28px; color: var(--vault-text); margin-bottom: 1rem; margin-top: 2rem; }
+.tiptap h2 { font-family: 'Satoshi', sans-serif; font-size: 20px; color: var(--vault-text); margin-bottom: 0.75rem; margin-top: 1.5rem; }
+.tiptap h3 { font-family: 'Satoshi', sans-serif; font-size: 17px; font-weight: 500; color: var(--vault-text); margin-bottom: 0.5rem; margin-top: 1.5rem; }
 .tiptap ul { list-style-type: disc; padding-left: 1.5rem; margin-bottom: 1rem; }
 .tiptap ol { list-style-type: decimal; padding-left: 1.5rem; margin-bottom: 1rem; }
 .tiptap ul[data-type="taskList"] { list-style: none; padding-left: 0; }
 .tiptap ul[data-type="taskList"] li { display: flex; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.5rem; }
 .tiptap ul[data-type="taskList"] input[type="checkbox"] { margin-top: 0.3rem; accent-color: var(--vault-accent); }
-.tiptap blockquote { border-left: 2px solid var(--vault-accent); padding-left: 1rem; font-style: italic; color: var(--vault-text-3); background: var(--vault-accent-dim); padding-top: 0.5rem; padding-bottom: 0.5rem; border-radius: 0 4px 4px 0; margin-bottom: 1rem; }
-.tiptap code { background: var(--vault-bg-3); padding: 0.2rem 0.4rem; border-radius: 3px; font-family: 'DM Mono', monospace; font-size: 14px; }
-.tiptap pre { background: var(--vault-bg-4); padding: 1rem; border-radius: 6px; overflow-x: auto; font-family: 'DM Mono', monospace; font-size: 13px; margin: 1.5rem 0; }
+.tiptap blockquote { border-left: 2px solid var(--vault-accent); padding-left: 1rem; font-style: ; color: var(--vault-text-3); background: var(--vault-accent-dim); padding-top: 0.5rem; padding-bottom: 0.5rem; border-radius: 0 4px 4px 0; margin-bottom: 1rem; }
+.tiptap code { background: var(--vault-bg-3); padding: 0.2rem 0.4rem; border-radius: 3px; font-family: 'Satoshi', sans-serif; font-size: 14px; }
+.tiptap pre { background: var(--vault-bg-4); padding: 1rem; border-radius: 6px; overflow-x: auto; font-family: 'Satoshi', sans-serif; font-size: 13px; margin: 1.5rem 0; }
 .tiptap pre code { background: none; padding: 0; border-radius: 0; }
-.tiptap .callout-block { background: var(--vault-bg-4); border-left: 3px solid var(--vault-accent); padding: 1rem 1rem 1rem 2.5rem; border-radius: 4px; position: relative; margin: 1.5rem 0; font-family: 'Geist', sans-serif; }
+.tiptap .callout-block { background: var(--vault-bg-4); border-left: 3px solid var(--vault-accent); padding: 1rem 1rem 1rem 2.5rem; border-radius: 4px; position: relative; margin: 1.5rem 0; font-family: 'Satoshi', sans-serif; }
 .tiptap .callout-block::before { content: '💡'; position: absolute; left: 0.75rem; top: 1rem; }
 .tiptap table { border-collapse: collapse; table-layout: fixed; width: 100%; margin: 0; overflow: hidden; border-radius: 4px; }
 .tiptap td, .tiptap th { border: 1px solid var(--vault-border); padding: 8px; vertical-align: top; box-sizing: border-box; position: relative; }
@@ -339,7 +339,7 @@ export default function NoteEditorClient({ initialNote }: { initialNote: any }) 
   }
 
   const LeftNode = (
-    <Link href="/notes" className="flex items-center gap-1.5 text-vault-text-3 hover:text-vault-text transition-colors font-mono text-[10px] uppercase tracking-wider pr-4 border-r border-vault-border mr-2">
+    <Link href="/notes" className="flex items-center gap-1.5 text-vault-text-3 hover:text-vault-text transition-colors text-[10px] uppercase tracking-normal pr-4 border-r border-vault-border mr-2">
       <ArrowLeft className="w-3.5 h-3.5" /> Notes
     </Link>
   )
@@ -352,14 +352,14 @@ export default function NoteEditorClient({ initialNote }: { initialNote: any }) 
         handleContentChange()
       }}
       placeholder="Untitled Note"
-      className="bg-transparent border-none focus:outline-none font-serif text-[16px] text-vault-text-2 min-w-[200px]"
+      className="bg-transparent border-none focus:outline-none text-[16px] text-vault-text-2 min-w-[200px]"
     />
   )
 
   const RightNode = (
     <div className="flex items-center gap-4">
       <div className="relative">
-        <button onClick={() => setShowTemplates(!showTemplates)} className="flex items-center gap-2 text-vault-text-3 hover:text-vault-text transition-colors duration-150 text-[11px] font-mono uppercase tracking-wider px-3 py-1.5 rounded-[4px] hover:bg-vault-bg-3">
+        <button onClick={() => setShowTemplates(!showTemplates)} className="flex items-center gap-2 text-vault-text-3 hover:text-vault-text transition-colors duration-150 text-[11px] uppercase tracking-normal px-3 py-1.5 rounded-[4px] hover:bg-vault-bg-3">
           <FileText className="w-3.5 h-3.5" /> Templates <ChevronDown className="w-3 h-3" />
         </button>
         {showTemplates && (
@@ -367,7 +367,7 @@ export default function NoteEditorClient({ initialNote }: { initialNote: any }) 
             <div className="fixed inset-0 z-40" onClick={() => setShowTemplates(false)} />
             <div className="absolute right-0 top-8 z-50 w-48 bg-vault-bg-2 border border-vault-border rounded-[4px] shadow-lg flex flex-col py-1">
               {TEMPLATES.map((t, i) => (
-                <button key={i} onClick={() => applyTemplate(t.html)} className="text-left px-4 py-2 font-sans text-[13px] text-vault-text-2 hover:bg-vault-bg-3 hover:text-vault-text transition-colors">
+                <button key={i} onClick={() => applyTemplate(t.html)} className="text-left px-4 py-2 text-[13px] text-vault-text-2 hover:bg-vault-bg-3 hover:text-vault-text transition-colors">
                   {t.name}
                 </button>
               ))}
@@ -377,7 +377,7 @@ export default function NoteEditorClient({ initialNote }: { initialNote: any }) 
       </div>
 
       <div className="w-[1px] h-4 bg-vault-border hidden sm:block" />
-      <div className="font-mono text-[9px] uppercase text-vault-text-3 tracking-widest min-w-[70px] text-right">
+      <div className="text-[9px] uppercase text-vault-text-3 tracking-normal min-w-[70px] text-right">
         {saveStatus}
       </div>
       <div className="flex items-center gap-1 bg-vault-bg-4 rounded-[4px] p-0.5 ml-2">
@@ -414,16 +414,16 @@ export default function NoteEditorClient({ initialNote }: { initialNote: any }) 
             }}
             placeholder="Untitled Note"
             autoFocus={initialNote.title === 'Untitled Note'}
-            className="w-full bg-transparent border-none focus:outline-none font-serif text-[36px] text-vault-text leading-tight mb-8"
+            className="w-full bg-transparent border-none focus:outline-none text-[36px] text-vault-text leading-tight mb-8"
           />
           
-          <div className="font-sans text-[17px] leading-[1.8] text-vault-text-2 min-h-[400px]">
+          <div className="text-[17px] leading-[1.8] text-vault-text-2 min-h-[400px]">
             <EditorContent editor={editor} />
           </div>
           
           {referencedBy.length > 0 && (
             <div className="mt-20 pt-8 border-t border-vault-border">
-              <div className="font-mono text-[10px] uppercase tracking-widest text-vault-text-3 mb-4">Referenced By</div>
+              <div className="text-[10px] uppercase tracking-normal text-vault-text-3 mb-4">Referenced By</div>
               <div className="flex flex-col gap-2">
                 {referencedBy.map(ref => (
                   <Link 
@@ -431,7 +431,7 @@ export default function NoteEditorClient({ initialNote }: { initialNote: any }) 
                     href={`/notes/${ref.id}`}
                     className="group block bg-vault-bg-2 border border-vault-border rounded-[4px] p-4 hover:border-vault-accent transition-colors"
                   >
-                    <div className="font-sans text-[14px] text-vault-text group-hover:text-vault-accent transition-colors">
+                    <div className="text-[14px] text-vault-text group-hover:text-vault-accent transition-colors">
                       {ref.title || 'Untitled Note'}
                     </div>
                   </Link>
@@ -456,8 +456,8 @@ export default function NoteEditorClient({ initialNote }: { initialNote: any }) 
               onMouseEnter={() => setSlashIndex(i)}
               className={`w-full text-left px-3 py-2 flex flex-col gap-0.5 ${i === slashIndex ? 'bg-vault-bg-3' : 'hover:bg-vault-bg-4'}`}
             >
-              <div className="font-mono text-[11px] uppercase tracking-wider text-vault-text">{cmd.label}</div>
-              <div className="font-sans text-[12px] text-vault-text-3">{cmd.desc}</div>
+              <div className="text-[11px] uppercase tracking-normal text-vault-text">{cmd.label}</div>
+              <div className="text-[12px] text-vault-text-3">{cmd.desc}</div>
             </button>
           ))}
         </div>
@@ -476,7 +476,7 @@ export default function NoteEditorClient({ initialNote }: { initialNote: any }) 
               onMouseEnter={() => setLinkIndex(i)}
               className={`w-full text-left px-3 py-2 flex flex-col gap-0.5 ${i === linkIndex ? 'bg-vault-bg-3' : 'hover:bg-vault-bg-4'}`}
             >
-              <div className="font-sans text-[13px] text-vault-text line-clamp-1">{note.title || 'Untitled'}</div>
+              <div className="text-[13px] text-vault-text line-clamp-1">{note.title || 'Untitled'}</div>
             </button>
           ))}
         </div>
@@ -488,7 +488,7 @@ export default function NoteEditorClient({ initialNote }: { initialNote: any }) 
           <div className="sticky top-0 z-10 bg-vault-bg-2 border-b border-vault-border p-4 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Sparkles className="w-3.5 h-3.5 text-vault-accent" />
-              <div className="font-mono text-[10px] uppercase tracking-widest text-vault-text-3">AI Tools</div>
+              <div className="text-[10px] uppercase tracking-normal text-vault-text-3">AI Tools</div>
             </div>
             <button onClick={() => setShowAI(false)} className="text-vault-text-3 hover:text-vault-text transition-colors">
               <SidebarClose className="w-4 h-4" />
@@ -497,17 +497,17 @@ export default function NoteEditorClient({ initialNote }: { initialNote: any }) 
           
           <div className="p-4 flex flex-col gap-4">
             <div className="flex flex-col gap-2 bg-vault-bg-3 border border-vault-border p-3 rounded-[6px]">
-              <div className="font-mono text-[10px] uppercase tracking-widest text-vault-accent">✦ Generate outline</div>
+              <div className="text-[10px] uppercase tracking-normal text-vault-accent">✦ Generate outline</div>
               <input 
                 value={aiOutlineTopic}
                 onChange={e => setAiOutlineTopic(e.target.value)}
                 placeholder="Topic to research..."
-                className="w-full bg-vault-bg-4 border border-vault-border rounded-[4px] px-2 py-1.5 font-sans text-[13px] text-vault-text placeholder-vault-text-3 focus:outline-none focus:border-vault-accent transition-colors duration-150"
+                className="w-full bg-vault-bg-4 border border-vault-border rounded-[4px] px-2 py-1.5 text-[13px] text-vault-text placeholder-vault-text-3 focus:outline-none focus:border-vault-accent transition-colors duration-150"
               />
               <button 
                 onClick={generateOutline}
                 disabled={aiOutlineLoading || !aiOutlineTopic.trim()}
-                className="w-full bg-vault-accent text-[#0D0D0F] font-mono text-[10px] uppercase tracking-widest py-1.5 rounded-[4px] hover:bg-vault-accent-2 disabled:opacity-50 transition-colors"
+                className="w-full bg-vault-accent text-[#0D0D0F] text-[10px] uppercase tracking-normal py-1.5 rounded-[4px] hover:bg-vault-accent-2 disabled:opacity-50 transition-colors"
               >
                 {aiOutlineLoading ? 'Generating...' : 'Generate Blocks'}
               </button>
@@ -518,14 +518,14 @@ export default function NoteEditorClient({ initialNote }: { initialNote: any }) 
               disabled={aiSummaryLoading}
               className="flex items-center justify-between w-full bg-vault-bg-3 hover:bg-vault-bg-4 border border-vault-border hover:border-vault-accent-border p-3 rounded-[6px] transition-all duration-150 text-left group"
             >
-              <span className="font-mono text-[11px] text-vault-text-2 group-hover:text-vault-accent transition-colors">
+              <span className="text-[11px] text-vault-text-2 group-hover:text-vault-accent transition-colors">
                 {aiSummaryLoading ? 'Thinking...' : '✦ Summarise note'}
               </span>
             </button>
 
             {aiSummary && (
               <div className="bg-vault-accent-dim border-l-[3px] border-vault-accent rounded-r-[6px] p-3 flex flex-col gap-2">
-                <div className="font-sans text-[13px] text-vault-text leading-relaxed">
+                <div className="text-[13px] text-vault-text leading-relaxed">
                   {aiSummary}
                 </div>
               </div>
@@ -535,14 +535,14 @@ export default function NoteEditorClient({ initialNote }: { initialNote: any }) 
               onClick={() => alert("Coming soon: AI Improve Note")}
               className="flex items-center justify-between w-full bg-vault-bg-3 hover:bg-vault-bg-4 border border-vault-border hover:border-vault-accent-border p-3 rounded-[6px] transition-all duration-150 text-left group"
             >
-              <span className="font-mono text-[11px] text-vault-text-2 group-hover:text-vault-accent transition-colors">✦ Improve note</span>
+              <span className="text-[11px] text-vault-text-2 group-hover:text-vault-accent transition-colors">✦ Improve note</span>
             </button>
 
             <button 
               onClick={() => alert("Coming soon: AI Suggest Related")}
               className="flex items-center justify-between w-full bg-vault-bg-3 hover:bg-vault-bg-4 border border-vault-border hover:border-vault-accent-border p-3 rounded-[6px] transition-all duration-150 text-left group"
             >
-              <span className="font-mono text-[11px] text-vault-text-2 group-hover:text-vault-accent transition-colors">✦ Suggest related</span>
+              <span className="text-[11px] text-vault-text-2 group-hover:text-vault-accent transition-colors">✦ Suggest related</span>
             </button>
           </div>
         </div>

@@ -25,25 +25,25 @@ const EditorStyles = `
   color: var(--vault-text-3);
   pointer-events: none;
   height: 0;
-  font-family: 'Instrument Serif', serif;
-  font-style: italic;
+  font-family: 'Satoshi', sans-serif;
+  font-style: ;
 }
 .tiptap :focus {
   outline: none;
 }
 .tiptap p { margin-bottom: 1rem; }
 .tiptap p:last-child { margin-bottom: 0; }
-.tiptap h1 { font-family: 'Instrument Serif', serif; font-size: 28px; color: var(--vault-text); margin-bottom: 1rem; margin-top: 2rem; }
-.tiptap h2 { font-family: 'Geist', sans-serif; font-size: 20px; color: var(--vault-text); margin-bottom: 0.75rem; margin-top: 1.5rem; }
-.tiptap h3 { font-family: 'Geist', sans-serif; font-size: 17px; font-weight: 500; color: var(--vault-text); margin-bottom: 0.5rem; margin-top: 1.5rem; }
+.tiptap h1 { font-family: 'Satoshi', sans-serif; font-size: 28px; color: var(--vault-text); margin-bottom: 1rem; margin-top: 2rem; }
+.tiptap h2 { font-family: 'Satoshi', sans-serif; font-size: 20px; color: var(--vault-text); margin-bottom: 0.75rem; margin-top: 1.5rem; }
+.tiptap h3 { font-family: 'Satoshi', sans-serif; font-size: 17px; font-weight: 500; color: var(--vault-text); margin-bottom: 0.5rem; margin-top: 1.5rem; }
 .tiptap ul { list-style-type: disc; padding-left: 1.5rem; margin-bottom: 1rem; }
 .tiptap ol { list-style-type: decimal; padding-left: 1.5rem; margin-bottom: 1rem; }
 .tiptap ul[data-type="taskList"] { list-style: none; padding-left: 0; }
 .tiptap ul[data-type="taskList"] li { display: flex; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.5rem; }
 .tiptap ul[data-type="taskList"] input[type="checkbox"] { margin-top: 0.3rem; accent-color: var(--vault-accent); }
-.tiptap blockquote { border-left: 2px solid var(--vault-accent); padding-left: 1rem; font-style: italic; color: var(--vault-text-3); margin: 1.5rem 0; }
-.tiptap code { background: var(--vault-bg-3); padding: 0.2rem 0.4rem; border-radius: 3px; font-family: 'DM Mono', monospace; font-size: 14px; }
-.tiptap pre { background: var(--vault-bg-4); padding: 1rem; border-radius: 6px; overflow-x: auto; font-family: 'DM Mono', monospace; font-size: 13px; margin: 1.5rem 0; }
+.tiptap blockquote { border-left: 2px solid var(--vault-accent); padding-left: 1rem; font-style: ; color: var(--vault-text-3); margin: 1.5rem 0; }
+.tiptap code { background: var(--vault-bg-3); padding: 0.2rem 0.4rem; border-radius: 3px; font-family: 'Satoshi', sans-serif; font-size: 14px; }
+.tiptap pre { background: var(--vault-bg-4); padding: 1rem; border-radius: 6px; overflow-x: auto; font-family: 'Satoshi', sans-serif; font-size: 13px; margin: 1.5rem 0; }
 .tiptap pre code { background: none; padding: 0; border-radius: 0; }
 `
 
@@ -64,7 +64,7 @@ const MenuBar = ({ editor }: { editor: any }) => {
   return (
     <div className="flex items-center gap-1 bg-vault-bg/95 backdrop-blur border border-vault-border rounded-[6px] p-1 sticky top-6 z-10 mb-8 transition-all">
       <Btn onClick={() => editor.chain().focus().toggleBold().run()} isActive={editor.isActive('bold')} icon={Bold} />
-      <Btn onClick={() => editor.chain().focus().toggleItalic().run()} isActive={editor.isActive('italic')} icon={Italic} />
+      <Btn onClick={() => editor.chain().focus().toggleItalic().run()} isActive={editor.isActive('')} icon={Italic} />
       <Btn onClick={() => editor.chain().focus().toggleUnderline().run()} isActive={editor.isActive('underline')} icon={UnderlineIcon} />
       <Btn onClick={() => editor.chain().focus().toggleStrike().run()} isActive={editor.isActive('strike')} icon={Strikethrough} />
       <Divider />
@@ -249,7 +249,7 @@ export default function JournalEditorClient({ initialEntry }: { initialEntry: an
   }
 
   const LeftNode = (
-    <Link href="/journal" className="flex items-center gap-1.5 text-vault-text-3 hover:text-vault-text transition-colors font-mono text-[10px] uppercase tracking-wider pr-4 border-r border-vault-border mr-2">
+    <Link href="/journal" className="flex items-center gap-1.5 text-vault-text-3 hover:text-vault-text transition-colors text-[10px] uppercase tracking-normal pr-4 border-r border-vault-border mr-2">
       <ArrowLeft className="w-3.5 h-3.5" /> Journal
     </Link>
   )
@@ -262,17 +262,17 @@ export default function JournalEditorClient({ initialEntry }: { initialEntry: an
         handleContentChange()
       }}
       placeholder="Untitled"
-      className="bg-transparent border-none focus:outline-none font-serif text-[16px] text-vault-text-2 min-w-[200px]"
+      className="bg-transparent border-none focus:outline-none text-[16px] text-vault-text-2 min-w-[200px]"
     />
   )
 
   const RightNode = (
     <div className="flex items-center gap-4">
-      <div className="font-mono text-[10px] text-vault-text-3 tracking-wider hidden sm:block">
+      <div className="text-[10px] text-vault-text-3 tracking-normal hidden sm:block">
         {wordCount} words · {Math.max(1, Math.ceil(wordCount / 200))} min read
       </div>
       <div className="w-[1px] h-4 bg-vault-border hidden sm:block" />
-      <div className="font-mono text-[9px] uppercase text-vault-text-3 tracking-widest min-w-[70px] text-right">
+      <div className="text-[9px] uppercase text-vault-text-3 tracking-normal min-w-[70px] text-right">
         {saveStatus}
       </div>
       <div className="flex items-center gap-1 bg-vault-bg-4 rounded-[4px] p-0.5 ml-2">
@@ -306,10 +306,10 @@ export default function JournalEditorClient({ initialEntry }: { initialEntry: an
             }}
             placeholder="Title..."
             autoFocus={initialEntry.title === 'Untitled'}
-            className="w-full bg-transparent border-none focus:outline-none font-serif text-[36px] text-vault-text leading-tight mb-2"
+            className="w-full bg-transparent border-none focus:outline-none text-[36px] text-vault-text leading-tight mb-2"
           />
           
-          <div className="font-mono text-[10px] uppercase text-vault-text-3 tracking-widest mb-6">
+          <div className="text-[10px] uppercase text-vault-text-3 tracking-normal mb-6">
             {format(new Date(initialEntry.created_at), 'EEEE, MMMM do yyyy')}
           </div>
 
@@ -317,7 +317,7 @@ export default function JournalEditorClient({ initialEntry }: { initialEntry: an
             <div className="flex flex-wrap items-center gap-2 mb-8 bg-vault-bg-2 border border-vault-border rounded-[4px] p-2">
               <Tag className="w-3.5 h-3.5 text-vault-text-3 ml-1" />
               {tags.map((tag, i) => (
-                <div key={i} className="flex items-center gap-1 bg-vault-bg-4 text-vault-text-2 font-mono text-[9px] uppercase tracking-wider px-2 py-1 rounded-[3px]">
+                <div key={i} className="flex items-center gap-1 bg-vault-bg-4 text-vault-text-2 text-[9px] uppercase tracking-normal px-2 py-1 rounded-[3px]">
                   {tag}
                   <button onClick={() => removeTag(i)} className="hover:text-vault-text ml-1"><X className="w-2.5 h-2.5" /></button>
                 </div>
@@ -327,14 +327,14 @@ export default function JournalEditorClient({ initialEntry }: { initialEntry: an
                 onChange={e => setTagInput(e.target.value)}
                 onKeyDown={handleAddTag}
                 placeholder="Add tag..."
-                className="bg-transparent border-none focus:outline-none font-mono text-[10px] text-vault-text placeholder-vault-text-3 min-w-[100px] px-1"
+                className="bg-transparent border-none focus:outline-none text-[10px] text-vault-text placeholder-vault-text-3 min-w-[100px] px-1"
               />
             </div>
           )}
 
           <MenuBar editor={editor} />
           
-          <div className="font-sans text-[17px] leading-[1.8] text-vault-text-2 min-h-[400px]">
+          <div className="text-[17px] leading-[1.8] text-vault-text-2 min-h-[400px]">
             <EditorContent editor={editor} />
           </div>
           
@@ -347,7 +347,7 @@ export default function JournalEditorClient({ initialEntry }: { initialEntry: an
           <div className="sticky top-0 z-10 bg-vault-bg-2 border-b border-vault-border p-4 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Sparkles className="w-3.5 h-3.5 text-vault-accent" />
-              <div className="font-mono text-[10px] uppercase tracking-widest text-vault-text-3">AI Tools</div>
+              <div className="text-[10px] uppercase tracking-normal text-vault-text-3">AI Tools</div>
             </div>
             <button onClick={() => setShowAI(false)} className="text-vault-text-3 hover:text-vault-text transition-colors">
               <SidebarClose className="w-4 h-4" />
@@ -360,7 +360,7 @@ export default function JournalEditorClient({ initialEntry }: { initialEntry: an
               disabled={aiSummaryLoading}
               className="flex items-center justify-between w-full bg-vault-bg-3 hover:bg-vault-bg-4 border border-vault-border hover:border-vault-accent-border p-3 rounded-[6px] transition-all duration-150 text-left group"
             >
-              <span className="font-mono text-[11px] text-vault-text-2 group-hover:text-vault-accent transition-colors">
+              <span className="text-[11px] text-vault-text-2 group-hover:text-vault-accent transition-colors">
                 {aiSummaryLoading ? 'Thinking...' : '✦ Summarise entry'}
               </span>
             </button>
@@ -368,9 +368,9 @@ export default function JournalEditorClient({ initialEntry }: { initialEntry: an
             {aiSummary && (
               <div className="bg-vault-accent-dim border-l-[3px] border-vault-accent rounded-r-[6px] p-3 flex flex-col gap-2">
                 <div className="flex items-center gap-2">
-                  <div className="bg-vault-accent/[0.15] text-vault-accent font-mono text-[8px] uppercase px-1.5 py-0.5 rounded-[2px] tracking-widest">Summary</div>
+                  <div className="bg-vault-accent/[0.15] text-vault-accent text-[8px] uppercase px-1.5 py-0.5 rounded-[2px] tracking-normal">Summary</div>
                 </div>
-                <div className="font-sans text-[13px] text-vault-text leading-relaxed">
+                <div className="text-[13px] text-vault-text leading-relaxed">
                   {aiSummary}
                 </div>
               </div>
@@ -381,7 +381,7 @@ export default function JournalEditorClient({ initialEntry }: { initialEntry: an
               disabled={aiExpandLoading}
               className="flex items-center justify-between w-full bg-vault-bg-3 hover:bg-vault-bg-4 border border-vault-border hover:border-vault-accent-border p-3 rounded-[6px] transition-all duration-150 text-left group"
             >
-              <span className="font-mono text-[11px] text-vault-text-2 group-hover:text-vault-accent transition-colors">
+              <span className="text-[11px] text-vault-text-2 group-hover:text-vault-accent transition-colors">
                 {aiExpandLoading ? 'Expanding...' : '✦ Expand thought'}
               </span>
             </button>
@@ -389,9 +389,9 @@ export default function JournalEditorClient({ initialEntry }: { initialEntry: an
             {aiExpand && (
               <div className="bg-vault-accent-dim border-l-[3px] border-vault-accent rounded-r-[6px] p-3 flex flex-col gap-2">
                 <div className="flex items-center gap-2">
-                  <div className="bg-vault-accent/[0.15] text-vault-accent font-mono text-[8px] uppercase px-1.5 py-0.5 rounded-[2px] tracking-widest">Expansion</div>
+                  <div className="bg-vault-accent/[0.15] text-vault-accent text-[8px] uppercase px-1.5 py-0.5 rounded-[2px] tracking-normal">Expansion</div>
                 </div>
-                <div className="font-sans text-[13px] text-vault-text leading-relaxed">
+                <div className="text-[13px] text-vault-text leading-relaxed">
                   {aiExpand}
                 </div>
                 <div className="flex items-center gap-3 pt-2">
@@ -402,11 +402,11 @@ export default function JournalEditorClient({ initialEntry }: { initialEntry: an
                         setAiExpand('')
                       }
                     }}
-                    className="text-vault-accent hover:underline font-mono text-[9px] uppercase tracking-wider"
+                    className="text-vault-accent hover:underline text-[9px] uppercase tracking-normal"
                   >
                     Insert
                   </button>
-                  <button onClick={() => setAiExpand('')} className="text-vault-text-3 hover:text-vault-text font-mono text-[9px] uppercase tracking-wider transition-colors">Dismiss</button>
+                  <button onClick={() => setAiExpand('')} className="text-vault-text-3 hover:text-vault-text text-[9px] uppercase tracking-normal transition-colors">Dismiss</button>
                 </div>
               </div>
             )}
@@ -415,14 +415,14 @@ export default function JournalEditorClient({ initialEntry }: { initialEntry: an
               onClick={() => alert("Coming soon: AI Contradiction Check")}
               className="flex items-center justify-between w-full bg-vault-bg-3 hover:bg-vault-bg-4 border border-vault-border hover:border-vault-accent-border p-3 rounded-[6px] transition-all duration-150 text-left group"
             >
-              <span className="font-mono text-[11px] text-vault-text-2 group-hover:text-vault-accent transition-colors">✦ Find contradictions</span>
+              <span className="text-[11px] text-vault-text-2 group-hover:text-vault-accent transition-colors">✦ Find contradictions</span>
             </button>
 
             <button 
               onClick={() => alert("Coming soon: AI Stance Link")}
               className="flex items-center justify-between w-full bg-vault-bg-3 hover:bg-vault-bg-4 border border-vault-border hover:border-vault-accent-border p-3 rounded-[6px] transition-all duration-150 text-left group"
             >
-              <span className="font-mono text-[11px] text-vault-text-2 group-hover:text-vault-accent transition-colors">✦ Link to stance</span>
+              <span className="text-[11px] text-vault-text-2 group-hover:text-vault-accent transition-colors">✦ Link to stance</span>
             </button>
           </div>
         </div>

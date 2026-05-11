@@ -119,7 +119,7 @@ export default function StancesPage() {
     return (
       <button 
         onClick={() => setFilter(label)}
-        className={`font-mono text-[10px] uppercase px-4 py-1.5 rounded-[20px] border transition-colors duration-150 tracking-wider ${
+        className={` text-[10px] uppercase px-4 py-1.5 rounded-[20px] border transition-colors duration-150 tracking-normal ${
           isActive ? activeClass : 'border-vault-border-2 text-vault-text-3 hover:text-vault-text hover:border-vault-border-3 hover:bg-vault-bg-3'
         }`}
       >
@@ -134,10 +134,10 @@ export default function StancesPage() {
 
       {/* HEADER */}
       <div className="flex flex-col gap-2">
-        <h1 className="font-serif text-[28px] text-vault-text leading-none">
+        <h1 className="text-[28px] text-vault-text leading-none">
           My Stances
         </h1>
-        <div className="font-mono text-[10px] tracking-[0.05em] text-vault-text-3">
+        <div className="text-[10px] tracking-[0.05em] text-vault-text-3">
           {counts.settled} settled · {counts.evolving} evolving · {counts.undecided} undecided · {counts.empty} not started
         </div>
       </div>
@@ -157,7 +157,7 @@ export default function StancesPage() {
           placeholder="Filter topics..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full sm:w-[240px] bg-vault-bg-4 border border-vault-border rounded-[4px] px-3 py-1.5 font-sans text-[13px] text-vault-text placeholder-vault-text-3 focus:outline-none focus:border-vault-accent transition-all duration-150"
+          className="w-full sm:w-[240px] bg-vault-bg-4 border border-vault-border rounded-[4px] px-3 py-1.5 text-[13px] text-vault-text placeholder-vault-text-3 focus:outline-none focus:border-vault-accent transition-all duration-150"
         />
       </div>
 
@@ -173,10 +173,10 @@ export default function StancesPage() {
           categories.map(cat => (
             <div key={cat} className="flex flex-col gap-4">
               <div className="flex items-center justify-between border-b border-vault-border pb-2">
-                <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-vault-text-3">
+                <div className="text-[10px] uppercase tracking-[0.2em] text-vault-text-3">
                   {cat}
                 </div>
-                <div className="font-mono text-[9px] bg-vault-bg-4 text-vault-text-3 px-2 py-0.5 rounded-full">
+                <div className="text-[9px] bg-vault-bg-4 text-vault-text-3 px-2 py-0.5 rounded-full">
                   {grouped[cat].length}
                 </div>
               </div>

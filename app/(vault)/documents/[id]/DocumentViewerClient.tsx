@@ -166,7 +166,7 @@ export default function DocumentViewerClient({ document, publicUrl }: { document
   }
 
   const LeftNode = (
-    <Link href="/documents" className="flex items-center gap-1.5 text-vault-text-3 hover:text-vault-text transition-colors font-mono text-[10px] uppercase tracking-wider pr-4 border-r border-vault-border mr-2">
+    <Link href="/documents" className="flex items-center gap-1.5 text-vault-text-3 hover:text-vault-text transition-colors text-[10px] uppercase tracking-normal pr-4 border-r border-vault-border mr-2">
       <ArrowLeft className="w-3.5 h-3.5" /> Documents
     </Link>
   )
@@ -186,9 +186,9 @@ export default function DocumentViewerClient({ document, publicUrl }: { document
 
   // Markdown rendering components to intercept headings
   const components = {
-    h1: ({node, ...props}: any) => <h1 className="font-serif text-[32px] text-vault-text mt-8 mb-4" {...props} />,
-    h2: ({node, ...props}: any) => <h2 className="font-serif text-[24px] text-vault-text mt-6 mb-3" {...props} />,
-    h3: ({node, ...props}: any) => <h3 className="font-sans font-medium text-[18px] text-vault-text mt-4 mb-2" {...props} />,
+    h1: ({node, ...props}: any) => <h1 className="text-[32px] text-vault-text mt-8 mb-4" {...props} />,
+    h2: ({node, ...props}: any) => <h2 className="text-[24px] text-vault-text mt-6 mb-3" {...props} />,
+    h3: ({node, ...props}: any) => <h3 className="font-medium text-[18px] text-vault-text mt-4 mb-2" {...props} />,
     p: ({node, ...props}: any) => <p className="mb-4" {...props} />
   }
 
@@ -205,7 +205,7 @@ export default function DocumentViewerClient({ document, publicUrl }: { document
         >
           <button 
             onClick={() => addAnnotation()}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-[4px] hover:bg-vault-bg-3 font-sans text-[12px] text-vault-text-2 transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-[4px] hover:bg-vault-bg-3 text-[12px] text-vault-text-2 transition-colors"
           >
             <MessageSquare className="w-3.5 h-3.5" /> Add Note
           </button>
@@ -218,12 +218,12 @@ export default function DocumentViewerClient({ document, publicUrl }: { document
           {document.file_type === 'IMAGE' ? (
             <div className="max-w-4xl mx-auto flex flex-col gap-8">
               <img src={publicUrl} alt={document.title} className="w-full rounded-[6px] border border-vault-border shadow-sm" />
-              <div className="font-sans text-[17px] leading-[1.8] text-vault-text-2" ref={contentRef}>
+              <div className="text-[17px] leading-[1.8] text-vault-text-2" ref={contentRef}>
                 <ReactMarkdown components={components}>{document.extracted_text || ''}</ReactMarkdown>
               </div>
             </div>
           ) : (
-            <div className="max-w-[700px] mx-auto font-sans text-[17px] leading-[1.8] text-vault-text-2" ref={contentRef}>
+            <div className="max-w-[700px] mx-auto text-[17px] leading-[1.8] text-vault-text-2" ref={contentRef}>
               <ReactMarkdown components={components}>{document.extracted_text || ''}</ReactMarkdown>
             </div>
           )}
@@ -236,11 +236,11 @@ export default function DocumentViewerClient({ document, publicUrl }: { document
           
           {/* Annotations List */}
           <div className="flex flex-col gap-4">
-            <div className="font-mono text-[10px] uppercase tracking-widest text-vault-text-3">
+            <div className="text-[10px] uppercase tracking-normal text-vault-text-3">
               Annotations ({annotations.length})
             </div>
             {annotations.length === 0 ? (
-              <div className="font-sans text-[13px] italic text-vault-text-3">
+              <div className="text-[13px] text-vault-text-3">
                 Select text in the document to add notes.
               </div>
             ) : (
@@ -253,13 +253,13 @@ export default function DocumentViewerClient({ document, publicUrl }: { document
                     >
                       <Trash2 className="w-3 h-3 text-vault-danger" />
                     </button>
-                    <div className="pl-3 border-l-[3px] border-vault-accent font-serif italic text-[14px] text-vault-text-3 leading-snug">
+                    <div className="pl-3 border-l-[3px] border-vault-accent text-[14px] text-vault-text-3 leading-snug">
                       "{ann.selectedText}"
                     </div>
-                    <div className="font-sans text-[14px] text-vault-text">
+                    <div className="text-[14px] text-vault-text">
                       {ann.note}
                     </div>
-                    <div className="font-mono text-[9px] uppercase tracking-wider text-vault-text-4">
+                    <div className="text-[9px] uppercase tracking-normal text-vault-text-4">
                       {format(new Date(ann.timestamp), 'MMM d, yyyy')}
                     </div>
                   </div>
@@ -274,35 +274,35 @@ export default function DocumentViewerClient({ document, publicUrl }: { document
           <div className="flex flex-col gap-4">
             <div className="flex items-center gap-2">
               <Sparkles className="w-3.5 h-3.5 text-vault-accent" />
-              <div className="font-mono text-[10px] uppercase tracking-widest text-vault-text-3">AI Intelligence</div>
+              <div className="text-[10px] uppercase tracking-normal text-vault-text-3">AI Intelligence</div>
             </div>
 
             {/* Summary */}
             <div className="bg-vault-accent-dim border border-vault-accent-border rounded-[6px] p-3 flex flex-col gap-2">
-              <div className="font-mono text-[10px] tracking-wider text-vault-accent uppercase">AI Summary</div>
-              <div className="font-sans text-[13px] text-vault-text leading-relaxed">
+              <div className="text-[10px] tracking-normal text-vault-accent uppercase">AI Summary</div>
+              <div className="text-[13px] text-vault-text leading-relaxed">
                 {summary || 'No summary available.'}
               </div>
             </div>
 
             {/* Ask Document */}
             <div className="flex flex-col gap-2 bg-vault-bg-3 border border-vault-border p-3 rounded-[6px]">
-              <div className="font-mono text-[10px] uppercase tracking-widest text-vault-accent">✦ Ask this document</div>
+              <div className="text-[10px] uppercase tracking-normal text-vault-accent">✦ Ask this document</div>
               <input 
                 value={askQuery}
                 onChange={e => setAskQuery(e.target.value)}
                 placeholder="Ask a question..."
-                className="w-full bg-vault-bg-4 border border-vault-border rounded-[4px] px-2 py-1.5 font-sans text-[13px] text-vault-text placeholder-vault-text-3 focus:outline-none focus:border-vault-accent transition-colors duration-150"
+                className="w-full bg-vault-bg-4 border border-vault-border rounded-[4px] px-2 py-1.5 text-[13px] text-vault-text placeholder-vault-text-3 focus:outline-none focus:border-vault-accent transition-colors duration-150"
               />
               <button 
                 onClick={askDocument}
                 disabled={askLoading || !askQuery.trim()}
-                className="w-full bg-vault-accent text-[#0D0D0F] font-mono text-[10px] uppercase tracking-widest py-1.5 rounded-[4px] hover:bg-vault-accent-2 disabled:opacity-50 transition-colors"
+                className="w-full bg-vault-accent text-[#0D0D0F] text-[10px] uppercase tracking-normal py-1.5 rounded-[4px] hover:bg-vault-accent-2 disabled:opacity-50 transition-colors"
               >
                 {askLoading ? 'Thinking...' : 'Ask AI'}
               </button>
               {askAnswer && (
-                <div className="mt-2 font-sans text-[13px] text-vault-text bg-vault-bg-4 p-2 rounded-[4px] border border-vault-border-2 leading-relaxed">
+                <div className="mt-2 text-[13px] text-vault-text bg-vault-bg-4 p-2 rounded-[4px] border border-vault-border-2 leading-relaxed">
                   {askAnswer}
                 </div>
               )}
@@ -315,13 +315,13 @@ export default function DocumentViewerClient({ document, publicUrl }: { document
                 disabled={extractLoading}
                 className="flex items-center justify-between w-full bg-vault-bg-3 hover:bg-vault-bg-4 border border-vault-border hover:border-vault-accent-border p-3 rounded-[6px] transition-all duration-150 text-left group"
               >
-                <span className="font-mono text-[11px] text-vault-text-2 group-hover:text-vault-accent transition-colors">
+                <span className="text-[11px] text-vault-text-2 group-hover:text-vault-accent transition-colors">
                   {extractLoading ? 'Extracting...' : '✦ Extract key arguments'}
                 </span>
               </button>
               
               {extractArgs && (
-                <div className="bg-vault-bg-4 border border-vault-border rounded-[6px] p-3 font-sans text-[13px] text-vault-text leading-relaxed whitespace-pre-wrap">
+                <div className="bg-vault-bg-4 border border-vault-border rounded-[6px] p-3 text-[13px] text-vault-text leading-relaxed whitespace-pre-wrap">
                   {extractArgs}
                 </div>
               )}
@@ -332,7 +332,7 @@ export default function DocumentViewerClient({ document, publicUrl }: { document
               onClick={generateNote}
               className="flex items-center justify-between w-full bg-vault-bg-3 hover:bg-vault-bg-4 border border-vault-border hover:border-vault-accent-border p-3 rounded-[6px] transition-all duration-150 text-left group"
             >
-              <span className="font-mono text-[11px] text-vault-text-2 group-hover:text-vault-accent transition-colors">
+              <span className="text-[11px] text-vault-text-2 group-hover:text-vault-accent transition-colors">
                 ✦ Generate note
               </span>
             </button>

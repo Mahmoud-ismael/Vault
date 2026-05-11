@@ -129,8 +129,8 @@ export default function SearchClient() {
         {/* HERO */}
         {!activeQuery && (
           <div className="flex flex-col items-center justify-center animate-in fade-in slide-in-from-bottom-4 duration-500 mt-10">
-            <h1 className="font-serif italic text-[44px] text-vault-text mb-1">Ask Anything</h1>
-            <p className="font-mono text-[10px] uppercase tracking-widest text-vault-text-3 mb-8">
+            <h1 className="text-[44px] text-vault-text mb-1">Ask Anything</h1>
+            <p className="text-[10px] uppercase tracking-normal text-vault-text-3 mb-8">
               Search your vault · Research the web · Think out loud
             </p>
           </div>
@@ -144,7 +144,7 @@ export default function SearchClient() {
               value={query}
               onChange={e => setQuery(e.target.value)}
               placeholder="What do you want to understand?"
-              className="w-full bg-vault-bg-2 border border-vault-border-2 rounded-[8px] py-4 pl-[52px] pr-[52px] font-sans text-[18px] text-vault-text placeholder:italic placeholder:text-vault-text-3 focus:outline-none focus:border-vault-accent focus:ring-[3px] focus:ring-vault-accent-dim transition-all shadow-sm"
+              className="w-full bg-vault-bg-2 border border-vault-border-2 rounded-[8px] py-4 pl-[52px] pr-[52px] text-[18px] text-vault-text placeholder: placeholder:text-vault-text-3 focus:outline-none focus:border-vault-accent focus:ring-[3px] focus:ring-vault-accent-dim transition-all shadow-sm"
             />
             <button 
               type="submit"
@@ -160,7 +160,7 @@ export default function SearchClient() {
               <button
                 key={m}
                 onClick={() => setMode(m)}
-                className={`px-4 py-2 text-[10px] font-mono uppercase tracking-widest transition-colors ${
+                className={`px-4 py-2 text-[10px]  uppercase tracking-normal transition-colors ${
                   mode === m 
                     ? 'bg-vault-accent text-[#0D0D0F]' 
                     : 'bg-vault-bg-2 text-vault-text-3 hover:text-vault-text hover:bg-vault-bg-3'
@@ -177,7 +177,7 @@ export default function SearchClient() {
                 <button 
                   key={i} 
                   onClick={() => handleSearch(undefined, r)}
-                  className="px-3 py-1.5 rounded-full border border-vault-border-2 bg-vault-bg-2 text-vault-text-3 font-sans text-[13px] hover:text-vault-text hover:border-vault-accent-border transition-colors"
+                  className="px-3 py-1.5 rounded-full border border-vault-border-2 bg-vault-bg-2 text-vault-text-3 text-[13px] hover:text-vault-text hover:border-vault-accent-border transition-colors"
                 >
                   {r}
                 </button>
@@ -190,7 +190,7 @@ export default function SearchClient() {
         {loading && !aiResponse && (
           <div className="flex flex-col items-center justify-center py-20 gap-4">
             <Loader2 className="w-8 h-8 animate-spin text-vault-accent" />
-            <div className="font-mono text-[10px] uppercase tracking-widest text-vault-text-3">
+            <div className="text-[10px] uppercase tracking-normal text-vault-text-3">
               {mode === 'Vault' ? 'Searching Vault...' : 'AI Thinking...'}
             </div>
           </div>
@@ -210,13 +210,13 @@ export default function SearchClient() {
             {/* Render Stances */}
             {vaultResults.stances.length > 0 && (
               <div className="flex flex-col gap-4">
-                <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-vault-text-3 border-b border-vault-border pb-2">
+                <div className="flex items-center gap-2 text-[10px] uppercase tracking-normal text-vault-text-3 border-b border-vault-border pb-2">
                   <Target className="w-3.5 h-3.5" /> Stances ({vaultResults.stances.length})
                 </div>
                 {vaultResults.stances.map((s: any) => (
                   <Link href={`/stances/${s.id}`} key={s.id} className="block group bg-vault-bg-2 border border-vault-border rounded-[6px] p-4 hover:border-vault-accent-border hover:bg-vault-bg-3 transition-colors">
-                    <h3 className="font-serif text-[20px] text-vault-text mb-2">{s.topic}</h3>
-                    <p className="font-sans text-[14px] text-vault-text-2 line-clamp-2">{s.my_stance || 'No stance recorded.'}</p>
+                    <h3 className="text-[20px] text-vault-text mb-2">{s.topic}</h3>
+                    <p className="text-[14px] text-vault-text-2 line-clamp-2">{s.my_stance || 'No stance recorded.'}</p>
                   </Link>
                 ))}
               </div>
@@ -225,12 +225,12 @@ export default function SearchClient() {
             {/* Render Notes */}
             {vaultResults.notes.length > 0 && (
               <div className="flex flex-col gap-4">
-                <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-vault-text-3 border-b border-vault-border pb-2">
+                <div className="flex items-center gap-2 text-[10px] uppercase tracking-normal text-vault-text-3 border-b border-vault-border pb-2">
                   <FileText className="w-3.5 h-3.5" /> Notes ({vaultResults.notes.length})
                 </div>
                 {vaultResults.notes.map((n: any) => (
                   <Link href={`/notes/${n.id}`} key={n.id} className="block group bg-vault-bg-2 border border-vault-border rounded-[6px] p-4 hover:border-vault-accent-border hover:bg-vault-bg-3 transition-colors">
-                    <h3 className="font-sans font-medium text-[16px] text-vault-text">{n.title}</h3>
+                    <h3 className="font-medium text-[16px] text-vault-text">{n.title}</h3>
                   </Link>
                 ))}
               </div>
@@ -239,16 +239,16 @@ export default function SearchClient() {
             {/* Render Docs */}
             {vaultResults.docs.length > 0 && (
               <div className="flex flex-col gap-4">
-                <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-vault-text-3 border-b border-vault-border pb-2">
+                <div className="flex items-center gap-2 text-[10px] uppercase tracking-normal text-vault-text-3 border-b border-vault-border pb-2">
                   <Archive className="w-3.5 h-3.5" /> Documents ({vaultResults.docs.length})
                 </div>
                 {vaultResults.docs.map((d: any) => (
                   <Link href={`/documents/${d.id}`} key={d.id} className="block group bg-vault-bg-2 border border-vault-border rounded-[6px] p-4 hover:border-vault-accent-border hover:bg-vault-bg-3 transition-colors">
                     <div className="flex items-center gap-2 mb-2">
-                      <span className="font-mono text-[9px] uppercase tracking-wider px-1.5 py-0.5 rounded-[3px] bg-vault-bg-4 text-vault-text-3">{d.file_type}</span>
-                      <h3 className="font-sans font-medium text-[16px] text-vault-text">{d.title}</h3>
+                      <span className="text-[9px] uppercase tracking-normal px-1.5 py-0.5 rounded-[3px] bg-vault-bg-4 text-vault-text-3">{d.file_type}</span>
+                      <h3 className="font-medium text-[16px] text-vault-text">{d.title}</h3>
                     </div>
-                    <p className="font-sans text-[13px] text-vault-text-2 line-clamp-2">{d.summary || 'Processing...'}</p>
+                    <p className="text-[13px] text-vault-text-2 line-clamp-2">{d.summary || 'Processing...'}</p>
                   </Link>
                 ))}
               </div>
@@ -257,12 +257,12 @@ export default function SearchClient() {
             {/* Render Journal */}
             {vaultResults.journal.length > 0 && (
               <div className="flex flex-col gap-4">
-                <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-vault-text-3 border-b border-vault-border pb-2">
+                <div className="flex items-center gap-2 text-[10px] uppercase tracking-normal text-vault-text-3 border-b border-vault-border pb-2">
                   <BookOpen className="w-3.5 h-3.5" /> Journal ({vaultResults.journal.length})
                 </div>
                 {vaultResults.journal.map((j: any) => (
                   <Link href={`/journal/${j.id}`} key={j.id} className="block group bg-vault-bg-2 border border-vault-border rounded-[6px] p-4 hover:border-vault-accent-border hover:bg-vault-bg-3 transition-colors">
-                    <h3 className="font-sans font-medium text-[16px] text-vault-text">{j.title}</h3>
+                    <h3 className="font-medium text-[16px] text-vault-text">{j.title}</h3>
                   </Link>
                 ))}
               </div>
@@ -279,23 +279,23 @@ export default function SearchClient() {
               <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-vault-accent to-vault-accent/20" />
               <div className="flex items-center gap-2 mb-6">
                 <Sparkles className="w-4 h-4 text-vault-accent" />
-                <span className="font-mono text-[11px] uppercase tracking-widest text-vault-text-2">
+                <span className="text-[11px] uppercase tracking-normal text-vault-text-2">
                   {mode === 'Deep Reason' ? 'Claude Sonnet Analysis' : 'Gemini Synthesis'}
                 </span>
               </div>
-              <div className="font-sans text-[17px] leading-[1.8] text-vault-text prose prose-invert max-w-none [&_h1]:font-serif [&_h1]:text-[24px] [&_h1]:mt-6 [&_h1]:mb-4 [&_h2]:font-serif [&_h2]:text-[20px] [&_h2]:mt-6 [&_h2]:mb-3 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:mb-4 [&_p]:mb-4">
+              <div className="text-[17px] leading-[1.8] text-vault-text prose prose-invert max-w-none [&_h1]: [&_h1]:text-[24px] [&_h1]:mt-6 [&_h1]:mb-4 [&_h2]: [&_h2]:text-[20px] [&_h2]:mt-6 [&_h2]:mb-3 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:mb-4 [&_p]:mb-4">
                 <ReactMarkdown>{aiResponse}</ReactMarkdown>
               </div>
 
               {/* Sources array (Web + AI / Academic) */}
               {aiSources.length > 0 && (
                 <div className="mt-8 pt-6 border-t border-vault-border-2 flex flex-col gap-3">
-                  <div className="font-mono text-[10px] uppercase tracking-widest text-vault-text-3">Grounding Sources</div>
+                  <div className="text-[10px] uppercase tracking-normal text-vault-text-3">Grounding Sources</div>
                   <div className="flex flex-wrap gap-2">
                     {aiSources.map((src, i) => (
                       <a key={i} href={src.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 px-3 py-1.5 bg-vault-bg-3 border border-vault-border rounded-[4px] hover:border-vault-accent-border transition-colors group">
                         <ExternalLink className="w-3 h-3 text-vault-text-3 group-hover:text-vault-accent transition-colors" />
-                        <span className="font-sans text-[12px] text-vault-text-2 group-hover:text-vault-text truncate max-w-[200px]">{src.title || src.url}</span>
+                        <span className="text-[12px] text-vault-text-2 group-hover:text-vault-text truncate max-w-[200px]">{src.title || src.url}</span>
                       </a>
                     ))}
                   </div>
@@ -311,20 +311,20 @@ export default function SearchClient() {
             {/* Related Vault Items */}
             {(mode === 'Web + AI' || mode === 'Academic') && !loading && (vaultResults.stances.length > 0 || vaultResults.notes.length > 0) && (
               <div className="flex flex-col gap-4 mt-4">
-                <div className="font-mono text-[10px] uppercase tracking-widest text-vault-text-3 border-b border-vault-border pb-2">
+                <div className="text-[10px] uppercase tracking-normal text-vault-text-3 border-b border-vault-border pb-2">
                   Related in your vault
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   {vaultResults.stances.slice(0, 2).map((s: any) => (
                     <Link href={`/stances/${s.id}`} key={s.id} className="bg-vault-bg-2 border border-vault-border rounded-[6px] p-4 hover:border-vault-accent-border transition-colors">
-                      <div className="flex items-center gap-2 mb-2 font-mono text-[9px] uppercase text-vault-text-3"><Target className="w-3 h-3" /> Stance</div>
-                      <h3 className="font-serif text-[18px] text-vault-text">{s.topic}</h3>
+                      <div className="flex items-center gap-2 mb-2 text-[9px] uppercase text-vault-text-3"><Target className="w-3 h-3" /> Stance</div>
+                      <h3 className="text-[18px] text-vault-text">{s.topic}</h3>
                     </Link>
                   ))}
                   {vaultResults.notes.slice(0, 2).map((n: any) => (
                     <Link href={`/notes/${n.id}`} key={n.id} className="bg-vault-bg-2 border border-vault-border rounded-[6px] p-4 hover:border-vault-accent-border transition-colors">
-                      <div className="flex items-center gap-2 mb-2 font-mono text-[9px] uppercase text-vault-text-3"><FileText className="w-3 h-3" /> Note</div>
-                      <h3 className="font-sans font-medium text-[15px] text-vault-text">{n.title}</h3>
+                      <div className="flex items-center gap-2 mb-2 text-[9px] uppercase text-vault-text-3"><FileText className="w-3 h-3" /> Note</div>
+                      <h3 className="font-medium text-[15px] text-vault-text">{n.title}</h3>
                     </Link>
                   ))}
                 </div>

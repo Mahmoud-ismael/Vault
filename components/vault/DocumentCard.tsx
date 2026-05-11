@@ -14,26 +14,26 @@ export function DocumentCard({ doc }: { doc: any }) {
   return (
     <div className="bg-vault-bg-2 border border-vault-border rounded-[6px] p-[18px] px-[20px] cursor-pointer hover:border-vault-border-2 hover:bg-vault-bg-3 transition-colors duration-150 flex flex-col gap-3 h-[160px]">
       <div className="flex items-center justify-between">
-        <div className={`font-mono text-[9px] uppercase tracking-wider px-2 py-0.5 rounded-[3px] border ${getBadgeStyle(doc.file_type)}`}>
+        <div className={`text-[9px] uppercase tracking-normal px-2 py-0.5 rounded-[3px] border ${getBadgeStyle(doc.file_type)}`}>
           {doc.file_type}
         </div>
-        <div className="font-mono text-[9px] uppercase tracking-wider text-vault-text-3">
+        <div className="text-[9px] uppercase tracking-normal text-vault-text-3">
           {format(new Date(doc.created_at), 'MMM d, yyyy')}
         </div>
       </div>
       
-      <h3 className="font-sans font-medium text-[15px] text-vault-text line-clamp-2 leading-snug">
+      <h3 className="font-medium text-[15px] text-vault-text line-clamp-2 leading-snug">
         {doc.title}
       </h3>
       
-      <div className="font-sans text-[13px] text-vault-text-2 line-clamp-2 leading-relaxed flex-1">
+      <div className="text-[13px] text-vault-text-2 line-clamp-2 leading-relaxed flex-1">
         {doc.summary || "Processing..."}
       </div>
       
       {doc.tags && doc.tags.length > 0 && (
         <div className="flex flex-wrap gap-1.5 mt-auto">
           {doc.tags.map((tag: string, i: number) => (
-            <span key={i} className="font-mono text-[9px] uppercase tracking-wider px-1.5 py-0.5 rounded-[2px] bg-vault-bg-4 text-vault-text-3">
+            <span key={i} className="text-[9px] uppercase tracking-normal px-1.5 py-0.5 rounded-[2px] bg-vault-bg-4 text-vault-text-3">
               {tag}
             </span>
           ))}

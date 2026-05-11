@@ -81,7 +81,7 @@ export function Sidebar() {
     return (
       <Link 
         href={href}
-        className={`flex items-center justify-between py-[9px] px-[20px] font-sans text-[14px] border-l-2 transition-colors duration-150 ${
+        className={`flex items-center justify-between py-[9px] px-[20px]  text-[14px] border-l-2 transition-colors duration-150 ${
           active 
             ? 'text-vault-accent border-vault-accent bg-vault-accent-dim' 
             : 'text-vault-text-2 border-transparent hover:bg-vault-bg-3 hover:text-vault-text'
@@ -92,7 +92,7 @@ export function Sidebar() {
           <span>{label}</span>
         </div>
         {typeof badge === 'number' && badge > 0 && (
-          <span className="font-mono text-[10px] bg-vault-bg-4 text-vault-text-3 px-2 rounded-full">
+          <span className="text-[10px] bg-vault-bg-4 text-vault-text-3 px-2 rounded-full">
             {badge}
           </span>
         )}
@@ -101,7 +101,7 @@ export function Sidebar() {
   }
 
   const SectionLabel = ({ text }: { text: string }) => (
-    <div className="font-mono text-[9px] uppercase tracking-[0.2em] text-vault-text-3 pt-[14px] px-[20px] pb-[6px]">
+    <div className="text-[9px] uppercase tracking-[0.2em] text-vault-text-3 pt-[14px] px-[20px] pb-[6px]">
       {text}
     </div>
   )
@@ -114,8 +114,8 @@ export function Sidebar() {
     <div className="flex flex-col h-full bg-vault-bg-2 border-r border-vault-border">
       {/* Logo Area */}
       <div className="flex flex-col px-[24px] py-[24px] border-b border-vault-border">
-        <div className="font-mono text-[18px] uppercase text-vault-accent">VAULT</div>
-        <div className="font-mono text-[9px] uppercase tracking-[0.1em] text-vault-text-3">Personal Intelligence</div>
+        <div className="text-[18px] uppercase text-vault-accent">VAULT</div>
+        <div className="text-[9px] uppercase tracking-[0.1em] text-vault-text-3">Personal Intelligence</div>
       </div>
 
       {/* Nav */}
@@ -140,20 +140,20 @@ export function Sidebar() {
       <div className="p-4 flex flex-col gap-4 border-t border-vault-border">
         {counts.reviewNeeded > 0 && (
           <div className="bg-vault-accent-dim border border-vault-accent-border rounded-[6px] p-3 flex flex-col gap-1 cursor-pointer hover:bg-vault-accent/10 transition-colors">
-            <div className="font-mono text-[10px] tracking-wider text-vault-accent uppercase">
+            <div className="text-[10px] tracking-normal text-vault-accent uppercase">
               Review Due
             </div>
-            <div className="font-sans text-[13px] text-vault-text">
+            <div className="text-[13px] text-vault-text">
               {counts.reviewNeeded} stance{counts.reviewNeeded > 1 ? 's' : ''} need update
             </div>
           </div>
         )}
         
         <div className="flex items-center gap-3 px-2 py-1">
-          <div className="flex items-center justify-center w-8 h-8 rounded-full bg-vault-bg-4 text-vault-text font-mono text-[12px] border border-vault-border">
+          <div className="flex items-center justify-center w-8 h-8 rounded-full bg-vault-bg-4 text-vault-text text-[12px] border border-vault-border">
             {initials}
           </div>
-          <div className="font-sans text-[14px] text-vault-text truncate flex-1">
+          <div className="text-[14px] text-vault-text truncate flex-1">
             {userName || 'User'}
           </div>
         </div>

@@ -121,26 +121,26 @@ export default async function DashboardPage() {
 
       {/* 1. GREETING SECTION */}
       <div className="flex flex-col gap-2">
-        <h1 className="font-serif italic text-[32px] text-vault-text">
+        <h1 className="text-[32px] text-vault-text">
           {greeting}, {userName}.
         </h1>
-        <div className="font-mono text-[11px] uppercase tracking-widest text-vault-text-3">
+        <div className="text-[11px] uppercase tracking-normal text-vault-text-3">
           {dateString}
         </div>
       </div>
 
       {/* 2. DAILY REFLECTION PROMPT */}
       <div className="bg-vault-bg-2 border border-vault-accent-border rounded-[6px] p-[20px] px-[24px] flex flex-col gap-4">
-        <div className="font-mono text-[9px] uppercase tracking-[0.2em] text-vault-accent">
+        <div className="text-[9px] uppercase tracking-[0.2em] text-vault-accent">
           Today's Reflection
         </div>
-        <div className="font-serif italic text-[20px] text-vault-text leading-snug">
+        <div className="text-[20px] text-vault-text leading-snug">
           "{prompt}"
         </div>
         <div className="pt-2">
           <Link 
             href="/journal/new" 
-            className="font-sans text-[14px] text-vault-text-2 hover:text-vault-accent transition-colors"
+            className="text-[14px] text-vault-text-2 hover:text-vault-accent transition-colors"
           >
             Write in Journal →
           </Link>
@@ -150,20 +150,20 @@ export default async function DashboardPage() {
       {/* 3. STATS ROW */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
         <div className="bg-vault-bg-2 border border-vault-border rounded-[6px] p-5 flex flex-col gap-1">
-          <div className="font-serif text-[36px] text-vault-accent leading-none mb-1">{settledCount || 0}</div>
-          <div className="font-mono text-[10px] uppercase tracking-wider text-vault-text-3">Stances Settled</div>
+          <div className="text-[36px] text-vault-accent leading-none mb-1">{settledCount || 0}</div>
+          <div className="text-[10px] uppercase tracking-normal text-vault-text-3">Stances Settled</div>
         </div>
         <div className="bg-vault-bg-2 border border-vault-border rounded-[6px] p-5 flex flex-col gap-1">
-          <div className="font-serif text-[36px] text-vault-accent leading-none mb-1">{evolvingCount || 0}</div>
-          <div className="font-mono text-[10px] uppercase tracking-wider text-vault-text-3">Still Evolving</div>
+          <div className="text-[36px] text-vault-accent leading-none mb-1">{evolvingCount || 0}</div>
+          <div className="text-[10px] uppercase tracking-normal text-vault-text-3">Still Evolving</div>
         </div>
         <div className="bg-vault-bg-2 border border-vault-border rounded-[6px] p-5 flex flex-col gap-1">
-          <div className="font-serif text-[36px] text-vault-accent leading-none mb-1">{journalCount || 0}</div>
-          <div className="font-mono text-[10px] uppercase tracking-wider text-vault-text-3">Journal Entries</div>
+          <div className="text-[36px] text-vault-accent leading-none mb-1">{journalCount || 0}</div>
+          <div className="text-[10px] uppercase tracking-normal text-vault-text-3">Journal Entries</div>
         </div>
         <div className="bg-vault-bg-2 border border-vault-border rounded-[6px] p-5 flex flex-col gap-1">
-          <div className="font-serif text-[36px] text-vault-accent leading-none mb-1">{docsCount || 0}</div>
-          <div className="font-mono text-[10px] uppercase tracking-wider text-vault-text-3">Documents</div>
+          <div className="text-[36px] text-vault-accent leading-none mb-1">{docsCount || 0}</div>
+          <div className="text-[10px] uppercase tracking-normal text-vault-text-3">Documents</div>
         </div>
       </div>
 
@@ -172,7 +172,7 @@ export default async function DashboardPage() {
         
         {/* Left: Stance Progress */}
         <div className="flex flex-col gap-6">
-          <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-vault-text-3">
+          <div className="text-[10px] uppercase tracking-[0.2em] text-vault-text-3">
             Stance Progress
           </div>
           <div className="flex flex-col gap-4">
@@ -183,7 +183,7 @@ export default async function DashboardPage() {
 
               return (
                 <div key={cat} className="flex flex-col gap-1.5">
-                  <div className="flex items-center justify-between font-mono text-[10px] text-vault-text-2 uppercase">
+                  <div className="flex items-center justify-between text-[10px] text-vault-text-2 uppercase">
                     <span>{cat}</span>
                     <span>{filled} / {total}</span>
                   </div>
@@ -201,7 +201,7 @@ export default async function DashboardPage() {
 
         {/* Right: Recent Activity Feed */}
         <div className="flex flex-col gap-6">
-          <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-vault-text-3">
+          <div className="text-[10px] uppercase tracking-[0.2em] text-vault-text-3">
             Recent Activity
           </div>
           <div className="flex flex-col gap-4">
@@ -216,10 +216,10 @@ export default async function DashboardPage() {
                 <div key={`${item.type}-${item.id}`} className="flex items-start gap-3 group cursor-pointer">
                   <div className={`mt-1.5 w-[6px] h-[6px] rounded-full ${getDotColor(item)} shrink-0`} />
                   <div className="flex flex-col gap-0.5">
-                    <div className="font-sans text-[14px] text-vault-text group-hover:text-vault-accent transition-colors line-clamp-1">
+                    <div className="text-[14px] text-vault-text group-hover:text-vault-accent transition-colors line-clamp-1">
                       {item.title}
                     </div>
-                    <div className="font-mono text-[10px] text-vault-text-3 uppercase">
+                    <div className="text-[10px] text-vault-text-3 uppercase">
                       {formatDistanceToNow(new Date(item.date), { addSuffix: true })}
                     </div>
                   </div>
@@ -238,8 +238,8 @@ export default async function DashboardPage() {
             <Download className="w-4 h-4 text-vault-text-2" />
           </div>
           <div className="flex flex-col gap-0.5">
-            <div className="font-sans text-[15px] text-vault-text">Your vault is always yours</div>
-            <div className="font-mono text-[10px] text-vault-text-3">Export all data as JSON or Markdown · Last export: Never</div>
+            <div className="text-[15px] text-vault-text">Your vault is always yours</div>
+            <div className="text-[10px] text-vault-text-3">Export all data as JSON or Markdown · Last export: Never</div>
           </div>
         </div>
         <ExportButton />

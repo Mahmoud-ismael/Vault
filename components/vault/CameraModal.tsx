@@ -107,8 +107,8 @@ export function CameraModal({ mode, onComplete, onClose }: CameraModalProps) {
   if (error) {
     return (
       <div className="fixed inset-0 z-50 bg-[#0D0D0F]/90 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center">
-        <p className="text-vault-danger font-sans text-lg max-w-md">{error}</p>
-        <button onClick={onClose} className="mt-6 px-6 py-2 bg-vault-bg-3 rounded-[4px] font-mono text-[11px] uppercase text-vault-text hover:bg-vault-bg-4 transition-colors">
+        <p className="text-vault-danger text-lg max-w-md">{error}</p>
+        <button onClick={onClose} className="mt-6 px-6 py-2 bg-vault-bg-3 rounded-[4px] text-[11px] uppercase text-vault-text hover:bg-vault-bg-4 transition-colors">
           Close
         </button>
       </div>
@@ -121,7 +121,7 @@ export function CameraModal({ mode, onComplete, onClose }: CameraModalProps) {
         
         {/* Header */}
         <div className="flex items-center justify-between p-4 bg-vault-bg-2 border-b border-vault-border z-10">
-          <div className="font-serif text-[18px] text-vault-text">
+          <div className="text-[18px] text-vault-text">
             {mode === 'scan' ? 'Scan Document' : 'Take Photo'}
           </div>
           <button onClick={onClose} className="text-vault-text-3 hover:text-vault-text transition-colors">
@@ -165,10 +165,10 @@ export function CameraModal({ mode, onComplete, onClose }: CameraModalProps) {
         <div className="p-6 bg-vault-bg-2 border-t border-vault-border flex flex-col gap-4 z-10">
           {previewUrl ? (
             <div className="flex items-center justify-center gap-4 w-full">
-              <button onClick={handleRetake} className="flex-1 py-3 px-4 bg-vault-bg-3 hover:bg-vault-bg-4 text-vault-text rounded-[4px] font-mono text-[11px] uppercase tracking-wider transition-colors">
+              <button onClick={handleRetake} className="flex-1 py-3 px-4 bg-vault-bg-3 hover:bg-vault-bg-4 text-vault-text rounded-[4px] text-[11px] uppercase tracking-normal transition-colors">
                 Retake
               </button>
-              <button onClick={handleConfirm} className="flex-1 py-3 px-4 bg-vault-accent hover:bg-vault-accent-2 text-[#0D0D0F] rounded-[4px] font-mono text-[11px] uppercase tracking-wider transition-colors flex items-center justify-center gap-2">
+              <button onClick={handleConfirm} className="flex-1 py-3 px-4 bg-vault-accent hover:bg-vault-accent-2 text-[#0D0D0F] rounded-[4px] text-[11px] uppercase tracking-normal transition-colors flex items-center justify-center gap-2">
                 <Check className="w-4 h-4" /> {mode === 'scan' ? 'Add Page' : 'Confirm'}
               </button>
             </div>
@@ -180,7 +180,7 @@ export function CameraModal({ mode, onComplete, onClose }: CameraModalProps) {
               
               {mode === 'scan' && capturedImages.length > 0 && (
                 <div className="absolute right-0 flex flex-col items-center">
-                  <button onClick={handleFinishScan} className="bg-vault-accent text-[#0D0D0F] px-4 py-2 rounded-[4px] font-mono text-[11px] uppercase tracking-wider transition-colors shadow-lg">
+                  <button onClick={handleFinishScan} className="bg-vault-accent text-[#0D0D0F] px-4 py-2 rounded-[4px] text-[11px] uppercase tracking-normal transition-colors shadow-lg">
                     Finish ({capturedImages.length})
                   </button>
                 </div>

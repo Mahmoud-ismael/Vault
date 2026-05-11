@@ -9,7 +9,7 @@ export function StatusBadge({ status }: { status: 'settled' | 'evolving' | 'unde
   const config = configs[status] || configs.empty
 
   return (
-    <div className={`font-mono text-[9px] uppercase px-2 py-[2px] rounded-[3px] ${config.bg} ${config.color} tracking-widest`}>
+    <div className={`text-[9px] uppercase px-2 py-[2px] rounded-[3px] ${config.bg} ${config.color} tracking-normal`}>
       {config.text}
     </div>
   )

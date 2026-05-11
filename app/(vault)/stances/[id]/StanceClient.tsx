@@ -35,10 +35,10 @@ const AutoTextArea = ({ value, onChange, placeholder, className }: any) => {
 const Section = ({ num, title, children }: { num: number, title: string, children: React.ReactNode }) => (
   <div className="bg-vault-bg-2 border border-vault-border rounded-[6px] mb-4 overflow-hidden flex flex-col transition-colors duration-150 hover:border-vault-border-2">
     <div className="flex items-center gap-3 px-5 py-[12px] border-b border-vault-border bg-vault-bg-2/30">
-      <div className="flex items-center justify-center w-5 h-5 rounded-full bg-vault-bg-4 font-mono text-[10px] text-vault-text-3">
+      <div className="flex items-center justify-center w-5 h-5 rounded-full bg-vault-bg-4 text-[10px] text-vault-text-3">
         {num}
       </div>
-      <div className="font-mono text-[9px] uppercase tracking-widest text-vault-text-3">
+      <div className="text-[9px] uppercase tracking-normal text-vault-text-3">
         {title}
       </div>
     </div>
@@ -201,19 +201,19 @@ export default function StanceClient({ initialStance, allSettledStances }: { ini
 
       {/* HEADER */}
       <div className="flex flex-col gap-6">
-        <Link href="/stances" className="text-vault-text-3 hover:text-vault-text transition-colors font-mono text-[10px] uppercase flex items-center gap-1 w-fit tracking-wider">
+        <Link href="/stances" className="text-vault-text-3 hover:text-vault-text transition-colors text-[10px] uppercase flex items-center gap-1 w-fit tracking-normal">
           <ArrowLeft className="w-3 h-3" /> Stances
         </Link>
         
         <div className="flex items-start justify-between gap-4 border-b border-vault-border pb-6">
           <div className="flex flex-col gap-4">
-            <h1 className="font-serif text-[36px] text-vault-text leading-tight">{stance.topic}</h1>
+            <h1 className="text-[36px] text-vault-text leading-tight">{stance.topic}</h1>
             <div className="flex items-center gap-3">
               <StatusBadge status={stance.status} />
-              <div className="font-mono text-[10px] bg-vault-bg-4 text-vault-text-3 px-2 py-0.5 rounded-[3px] uppercase tracking-wider">
+              <div className="text-[10px] bg-vault-bg-4 text-vault-text-3 px-2 py-0.5 rounded-[3px] uppercase tracking-normal">
                 {stance.category}
               </div>
-              <div className="font-mono text-[10px] text-vault-text-3 uppercase tracking-wider">
+              <div className="text-[10px] text-vault-text-3 uppercase tracking-normal">
                 Last updated {format(new Date(stance.last_updated), "MMM d, yyyy")}
               </div>
             </div>
@@ -226,7 +226,7 @@ export default function StanceClient({ initialStance, allSettledStances }: { ini
                 handleUpdate({ status: e.target.value })
                 saveToDb({ ...stance, status: e.target.value })
               }}
-              className="bg-vault-bg-4 border border-vault-border text-vault-text-2 font-mono text-[10px] uppercase tracking-wider px-3 py-1.5 rounded-[4px] focus:outline-none focus:border-vault-accent cursor-pointer outline-none"
+              className="bg-vault-bg-4 border border-vault-border text-vault-text-2 text-[10px] uppercase tracking-normal px-3 py-1.5 rounded-[4px] focus:outline-none focus:border-vault-accent cursor-pointer outline-none"
             >
               <option value="empty">Not Started</option>
               <option value="undecided">Undecided</option>
@@ -237,7 +237,7 @@ export default function StanceClient({ initialStance, allSettledStances }: { ini
             <button 
               onClick={() => saveToDb(stance)}
               disabled={saving}
-              className="bg-vault-accent text-[#0D0D0F] font-mono text-[11px] uppercase tracking-[0.1em] py-1.5 px-4 rounded-[4px] hover:bg-vault-accent-2 transition-colors duration-150 disabled:opacity-50"
+              className="bg-vault-accent text-[#0D0D0F] text-[11px] uppercase tracking-[0.1em] py-1.5 px-4 rounded-[4px] hover:bg-vault-accent-2 transition-colors duration-150 disabled:opacity-50"
             >
               {saving ? 'Saving...' : 'Save'}
             </button>
@@ -255,7 +255,7 @@ export default function StanceClient({ initialStance, allSettledStances }: { ini
               value={stance.my_stance} 
               onChange={(val: string) => handleUpdate({ my_stance: val })} 
               placeholder="State your position clearly in one or two sentences..." 
-              className="font-serif italic text-[19px] text-vault-text leading-snug"
+              className="text-[19px] text-vault-text leading-snug"
             />
           </Section>
 
@@ -264,7 +264,7 @@ export default function StanceClient({ initialStance, allSettledStances }: { ini
               value={stance.why_i_hold_this} 
               onChange={(val: string) => handleUpdate({ why_i_hold_this: val })} 
               placeholder="What reasoning, evidence, or experience convinced you?" 
-              className="font-sans text-[16px] text-vault-text-2 leading-[1.7]"
+              className="text-[16px] text-vault-text-2 leading-[1.7]"
             />
           </Section>
 
@@ -273,13 +273,13 @@ export default function StanceClient({ initialStance, allSettledStances }: { ini
               value={stance.strongest_counter} 
               onChange={(val: string) => handleUpdate({ strongest_counter: val })} 
               placeholder="Write the best case the opposing side would make. No strawmanning." 
-              className="font-sans text-[16px] text-vault-text-2 leading-[1.7]"
+              className="text-[16px] text-vault-text-2 leading-[1.7]"
             />
             <div className="mt-4">
               <button 
                 onClick={generateSteelman}
                 disabled={steelmanLoading}
-                className="flex items-center gap-1.5 text-vault-accent hover:text-vault-accent-2 transition-colors font-mono text-[10px] uppercase tracking-wider"
+                className="flex items-center gap-1.5 text-vault-accent hover:text-vault-accent-2 transition-colors text-[10px] uppercase tracking-normal"
               >
                 <Sparkles className="w-3 h-3" />
                 {steelmanLoading ? 'Generating...' : '✦ Generate steelman'}
@@ -288,9 +288,9 @@ export default function StanceClient({ initialStance, allSettledStances }: { ini
               {steelmanResponse && (
                 <div className="mt-4 border-l-2 border-vault-accent pl-4 py-1">
                   <div className="flex items-center gap-2 mb-2">
-                    <div className="bg-vault-accent/[0.15] text-vault-accent font-mono text-[8px] uppercase px-1.5 py-0.5 rounded-[2px] tracking-widest">AI Response</div>
+                    <div className="bg-vault-accent/[0.15] text-vault-accent text-[8px] uppercase px-1.5 py-0.5 rounded-[2px] tracking-normal">AI Response</div>
                   </div>
-                  <div className="font-sans text-[15px] text-vault-text-2 leading-relaxed mb-3">
+                  <div className="text-[15px] text-vault-text-2 leading-relaxed mb-3">
                     {steelmanResponse}
                   </div>
                   <button 
@@ -298,7 +298,7 @@ export default function StanceClient({ initialStance, allSettledStances }: { ini
                       handleUpdate({ strongest_counter: (stance.strongest_counter ? stance.strongest_counter + '\n\n' : '') + steelmanResponse })
                       setSteelmanResponse('')
                     }}
-                    className="font-mono text-[10px] uppercase tracking-wider text-[#0D0D0F] bg-vault-accent px-3 py-1.5 rounded hover:bg-vault-accent-2 transition-colors"
+                    className="text-[10px] uppercase tracking-normal text-[#0D0D0F] bg-vault-accent px-3 py-1.5 rounded hover:bg-vault-accent-2 transition-colors"
                   >
                     Insert into section
                   </button>
@@ -312,7 +312,7 @@ export default function StanceClient({ initialStance, allSettledStances }: { ini
               value={stance.my_rebuttal} 
               onChange={(val: string) => handleUpdate({ my_rebuttal: val })} 
               placeholder="Why does your stance hold despite the counter-argument above?" 
-              className="font-sans text-[16px] text-vault-text-2 leading-[1.7]"
+              className="text-[16px] text-vault-text-2 leading-[1.7]"
             />
           </Section>
 
@@ -321,11 +321,11 @@ export default function StanceClient({ initialStance, allSettledStances }: { ini
               value={parsedUncertainties.text} 
               onChange={(val: string) => handleUncertaintiesText(val)} 
               placeholder="What aspects of this topic are you still unsure about?" 
-              className="font-sans text-[16px] text-vault-text-2 leading-[1.7] mb-4"
+              className="text-[16px] text-vault-text-2 leading-[1.7] mb-4"
             />
             <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-vault-border">
               {parsedUncertainties.tags.map((tag: string, i: number) => (
-                <div key={i} className="flex items-center gap-1.5 bg-vault-accent/[0.1] border border-vault-accent/20 text-vault-accent font-mono text-[10px] px-2 py-1 rounded-[4px]">
+                <div key={i} className="flex items-center gap-1.5 bg-vault-accent/[0.1] border border-vault-accent/20 text-vault-accent text-[10px] px-2 py-1 rounded-[4px]">
                   {tag}
                   <button onClick={() => removeTag(i)} className="hover:text-vault-text leading-none">&times;</button>
                 </div>
@@ -335,7 +335,7 @@ export default function StanceClient({ initialStance, allSettledStances }: { ini
                 onChange={e => setTagInput(e.target.value)}
                 onKeyDown={addTag}
                 placeholder="+ Add tag (Enter)"
-                className="bg-transparent border-none focus:outline-none font-mono text-[10px] text-vault-text placeholder-vault-text-3 min-w-[120px] ml-1"
+                className="bg-transparent border-none focus:outline-none text-[10px] text-vault-text placeholder-vault-text-3 min-w-[120px] ml-1"
               />
             </div>
           </Section>
@@ -345,7 +345,7 @@ export default function StanceClient({ initialStance, allSettledStances }: { ini
               value={stance.life_impact} 
               onChange={(val: string) => handleUpdate({ life_impact: val })} 
               placeholder="Does this stance change your behaviour, relationships, or decisions?" 
-              className="font-sans text-[16px] text-vault-text-2 leading-[1.7]"
+              className="text-[16px] text-vault-text-2 leading-[1.7]"
             />
           </Section>
 
@@ -357,7 +357,7 @@ export default function StanceClient({ initialStance, allSettledStances }: { ini
                     <select 
                       value={source.type}
                       onChange={e => updateSource(i, { type: e.target.value })}
-                      className="bg-vault-bg-3 border border-vault-border-2 rounded text-vault-text-2 text-[12px] px-2 py-1 font-sans focus:outline-none focus:border-vault-accent outline-none"
+                      className="bg-vault-bg-3 border border-vault-border-2 rounded text-vault-text-2 text-[12px] px-2 py-1 focus:outline-none focus:border-vault-accent outline-none"
                     >
                       <option>Book</option>
                       <option>Paper</option>
@@ -388,7 +388,7 @@ export default function StanceClient({ initialStance, allSettledStances }: { ini
                     </label>
                   </div>
                   {source.type === 'AI Summary' && !source.verified && (
-                    <div className="flex items-center gap-2 mt-1 bg-vault-evolving/[0.1] border border-vault-evolving/20 text-vault-evolving font-mono text-[10px] px-2 py-1 rounded w-fit">
+                    <div className="flex items-center gap-2 mt-1 bg-vault-evolving/[0.1] border border-vault-evolving/20 text-vault-evolving text-[10px] px-2 py-1 rounded w-fit">
                       <span>⚠ Primary source not yet verified</span>
                     </div>
                   )}
@@ -402,14 +402,14 @@ export default function StanceClient({ initialStance, allSettledStances }: { ini
                   const newSources = [...parsedSources, { type: 'Book', title: '', author: '', verified: false }]
                   handleUpdate({ sources: JSON.stringify(newSources) })
                 }}
-                className="font-mono text-[10px] uppercase text-vault-text-3 hover:text-vault-text transition-colors tracking-wider border border-vault-border-2 px-3 py-1.5 rounded"
+                className="text-[10px] uppercase text-vault-text-3 hover:text-vault-text transition-colors tracking-normal border border-vault-border-2 px-3 py-1.5 rounded"
               >
                 + Add Source
               </button>
               <button 
                 onClick={suggestSources}
                 disabled={sourcesLoading}
-                className="flex items-center gap-1.5 text-vault-accent hover:text-vault-accent-2 transition-colors font-mono text-[10px] uppercase tracking-wider"
+                className="flex items-center gap-1.5 text-vault-accent hover:text-vault-accent-2 transition-colors text-[10px] uppercase tracking-normal"
               >
                 <Sparkles className="w-3 h-3" />
                 {sourcesLoading ? 'Thinking...' : '✦ Suggest sources'}
@@ -419,19 +419,19 @@ export default function StanceClient({ initialStance, allSettledStances }: { ini
             {sourcesResponse.length > 0 && (
               <div className="mt-4 border-l-2 border-vault-accent pl-4 py-2">
                 <div className="flex items-center gap-2 mb-3">
-                  <div className="bg-vault-accent/[0.15] text-vault-accent font-mono text-[8px] uppercase px-1.5 py-0.5 rounded-[2px] tracking-widest">AI Suggestions</div>
+                  <div className="bg-vault-accent/[0.15] text-vault-accent text-[8px] uppercase px-1.5 py-0.5 rounded-[2px] tracking-normal">AI Suggestions</div>
                 </div>
                 <div className="flex flex-col gap-4">
                   {sourcesResponse.map((src, idx) => (
                     <div key={idx} className="flex flex-col gap-1">
-                      <div className="font-sans text-[14px] text-vault-text font-medium">{src.title} <span className="text-vault-text-3 font-normal">by {src.author} ({src.type})</span></div>
-                      <div className="font-sans text-[13px] text-vault-text-2">{src.why}</div>
+                      <div className="text-[14px] text-vault-text font-medium">{src.title} <span className="text-vault-text-3 font-normal">by {src.author} ({src.type})</span></div>
+                      <div className="text-[13px] text-vault-text-2">{src.why}</div>
                       <button 
                         onClick={() => {
                           const newSources = [...parsedSources, { type: src.type, title: src.title, author: src.author, verified: false }]
                           handleUpdate({ sources: JSON.stringify(newSources) })
                         }}
-                        className="text-vault-accent text-[11px] font-sans hover:underline w-fit mt-1"
+                        className="text-vault-accent text-[11px] hover:underline w-fit mt-1"
                       >
                         + Add to sources
                       </button>
@@ -444,7 +444,7 @@ export default function StanceClient({ initialStance, allSettledStances }: { ini
 
           <Section num={8} title="Last Updated">
             <div className="flex items-center justify-between">
-              <div className="font-mono text-[11px] text-vault-text-3">
+              <div className="text-[11px] text-vault-text-3">
                 {format(new Date(stance.last_updated), "MMM d, yyyy 'at' HH:mm")}
               </div>
               <button
@@ -453,7 +453,7 @@ export default function StanceClient({ initialStance, allSettledStances }: { ini
                   handleUpdate({ last_updated: now })
                   saveToDb({ ...stance, last_updated: now })
                 }}
-                className="border border-vault-border bg-vault-bg-3 hover:bg-vault-bg-4 text-vault-text-2 font-mono text-[10px] uppercase px-3 py-1.5 rounded transition-colors tracking-wider"
+                className="border border-vault-border bg-vault-bg-3 hover:bg-vault-bg-4 text-vault-text-2 text-[10px] uppercase px-3 py-1.5 rounded transition-colors tracking-normal"
               >
                 Mark as reviewed today
               </button>
@@ -466,37 +466,37 @@ export default function StanceClient({ initialStance, allSettledStances }: { ini
         <div className="hidden xl:flex flex-col w-[280px] shrink-0 gap-4 mt-1">
           <div className="flex items-center gap-2 mb-1">
             <Sparkles className="w-3.5 h-3.5 text-vault-accent" />
-            <div className="font-mono text-[10px] uppercase tracking-widest text-vault-text-3">AI Assistant</div>
+            <div className="text-[10px] uppercase tracking-normal text-vault-text-3">AI Assistant</div>
           </div>
           
           <button 
             onClick={() => alert("Coming soon: AI Challenge")}
             className="flex items-center justify-between w-full bg-vault-bg-2 border border-vault-border hover:border-vault-accent-border hover:bg-vault-accent/[0.02] p-3 rounded-[6px] transition-all duration-150 text-left group"
           >
-            <span className="font-mono text-[11px] text-vault-text-2 group-hover:text-vault-accent transition-colors">✦ Challenge my stance</span>
+            <span className="text-[11px] text-vault-text-2 group-hover:text-vault-accent transition-colors">✦ Challenge my stance</span>
           </button>
 
           <button 
             onClick={() => alert("Coming soon: AI Contradiction Check")}
             className="flex items-center justify-between w-full bg-vault-bg-2 border border-vault-border hover:border-vault-accent-border hover:bg-vault-accent/[0.02] p-3 rounded-[6px] transition-all duration-150 text-left group"
           >
-            <span className="font-mono text-[11px] text-vault-text-2 group-hover:text-vault-accent transition-colors">✦ Find contradictions</span>
+            <span className="text-[11px] text-vault-text-2 group-hover:text-vault-accent transition-colors">✦ Find contradictions</span>
           </button>
 
           <button 
             onClick={() => alert("Coming soon: AI Clarity")}
             className="flex items-center justify-between w-full bg-vault-bg-2 border border-vault-border hover:border-vault-accent-border hover:bg-vault-accent/[0.02] p-3 rounded-[6px] transition-all duration-150 text-left group"
           >
-            <span className="font-mono text-[11px] text-vault-text-2 group-hover:text-vault-accent transition-colors">✦ Improve clarity</span>
+            <span className="text-[11px] text-vault-text-2 group-hover:text-vault-accent transition-colors">✦ Improve clarity</span>
           </button>
           
           <div className="bg-vault-accent/[0.05] border border-vault-accent/20 rounded-[6px] p-4 flex flex-col gap-3 mt-4">
-            <div className="font-sans text-[13px] text-vault-text leading-relaxed">
+            <div className="text-[13px] text-vault-text leading-relaxed">
               You claim objective morality exists, but in your previous stance "Meaning & purpose of life" you stated that meaning is entirely self-constructed. How do you reconcile objective morals with subjective meaning?
             </div>
             <div className="flex items-center gap-3 pt-2 border-t border-vault-accent/10">
-              <button className="text-vault-accent hover:underline font-mono text-[9px] uppercase tracking-wider">Reflect</button>
-              <button className="text-vault-text-3 hover:text-vault-text font-mono text-[9px] uppercase tracking-wider transition-colors">Dismiss</button>
+              <button className="text-vault-accent hover:underline text-[9px] uppercase tracking-normal">Reflect</button>
+              <button className="text-vault-text-3 hover:text-vault-text text-[9px] uppercase tracking-normal transition-colors">Dismiss</button>
             </div>
           </div>
         </div>

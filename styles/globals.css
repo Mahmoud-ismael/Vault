@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@300;400;500&family=Geist:wght@300;400;500;600&display=swap');
+@import url("https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
@@ -8,10 +8,10 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: 'Geist', sans-serif;
-  --font-mono: 'DM Mono', monospace;
-  --font-serif: 'Instrument Serif', serif;
-  --font-heading: 'Instrument Serif', serif;
+  --font-sans: 'Satoshi', sans-serif;
+  --font-mono: 'Satoshi', sans-serif;
+  --font-serif: 'Satoshi', sans-serif;
+  --font-heading: 'Satoshi', sans-serif;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -176,12 +176,13 @@
 
 @layer base {
   * {
+    font-family: 'Satoshi', sans-serif;
     @apply border-border outline-ring/50;
   }
   body {
+    font-family: 'Satoshi', sans-serif;
     background-color: var(--vault-bg);
     color: var(--vault-text);
-    font-family: 'Geist', sans-serif;
   }
 }
 
@@ -211,7 +212,7 @@ a, button, input, select, textarea, [role="button"] {
   background: var(--vault-bg-2) !important;
   border: 1px solid var(--vault-border) !important;
   color: var(--vault-text) !important;
-  font-family: 'DM Mono', monospace !important;
+  font-family: 'Satoshi', sans-serif !important;
   font-size: 12px !important;
   border-radius: 6px !important;
 }

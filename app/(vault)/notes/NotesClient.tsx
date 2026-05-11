@@ -18,13 +18,13 @@ import { TableCell } from '@tiptap/extension-table-cell'
 import { createClient } from '@/lib/supabase/client'
 
 const EditorStyles = `
-.tiptap h1 { font-family: 'Instrument Serif', serif; font-size: 28px; color: var(--vault-text); margin-bottom: 1rem; }
-.tiptap h2 { font-family: 'Geist', sans-serif; font-size: 20px; color: var(--vault-text); margin-bottom: 0.75rem; margin-top: 1.5rem; }
-.tiptap h3 { font-family: 'Geist', sans-serif; font-size: 17px; font-weight: 500; color: var(--vault-text); margin-bottom: 0.5rem; margin-top: 1.5rem; }
+.tiptap h1 { font-family: 'Satoshi', sans-serif; font-size: 28px; color: var(--vault-text); margin-bottom: 1rem; }
+.tiptap h2 { font-family: 'Satoshi', sans-serif; font-size: 20px; color: var(--vault-text); margin-bottom: 0.75rem; margin-top: 1.5rem; }
+.tiptap h3 { font-family: 'Satoshi', sans-serif; font-size: 17px; font-weight: 500; color: var(--vault-text); margin-bottom: 0.5rem; margin-top: 1.5rem; }
 .tiptap ul { list-style-type: disc; padding-left: 1.5rem; margin-bottom: 1rem; }
 .tiptap ol { list-style-type: decimal; padding-left: 1.5rem; margin-bottom: 1rem; }
-.tiptap blockquote { border-left: 2px solid var(--vault-accent); padding-left: 1rem; font-style: italic; color: var(--vault-text-3); background: var(--vault-accent-dim); padding-top: 0.5rem; padding-bottom: 0.5rem; border-radius: 0 4px 4px 0; margin-bottom: 1rem; }
-.tiptap .callout-block { background: var(--vault-bg-4); border-left: 3px solid var(--vault-accent); padding: 1rem 1rem 1rem 2.5rem; border-radius: 4px; position: relative; margin: 1.5rem 0; font-family: 'Geist', sans-serif; }
+.tiptap blockquote { border-left: 2px solid var(--vault-accent); padding-left: 1rem; font-style: ; color: var(--vault-text-3); background: var(--vault-accent-dim); padding-top: 0.5rem; padding-bottom: 0.5rem; border-radius: 0 4px 4px 0; margin-bottom: 1rem; }
+.tiptap .callout-block { background: var(--vault-bg-4); border-left: 3px solid var(--vault-accent); padding: 1rem 1rem 1rem 2.5rem; border-radius: 4px; position: relative; margin: 1.5rem 0; font-family: 'Satoshi', sans-serif; }
 .tiptap .callout-block::before { content: '💡'; position: absolute; left: 0.75rem; top: 1rem; }
 .tiptap table { border-collapse: collapse; table-layout: fixed; width: 100%; margin: 0; overflow: hidden; border-radius: 4px; }
 .tiptap td, .tiptap th { border: 1px solid var(--vault-border); padding: 8px; vertical-align: top; box-sizing: border-box; position: relative; }
@@ -153,10 +153,10 @@ export default function NotesClient({ initialNotes }: { initialNotes: any[] }) {
             <div className="w-4 h-4 shrink-0" />
           )}
           <div className="flex flex-col gap-0.5 overflow-hidden">
-            <div className={`font-sans text-[13px] ${isActive ? 'text-vault-accent' : 'text-vault-text'} line-clamp-1`}>
+            <div className={`text-[13px] ${isActive ? 'text-vault-accent' : 'text-vault-text'} line-clamp-1`}>
               {n.title || 'Untitled'}
             </div>
-            <div className="font-mono text-[9px] uppercase text-vault-text-3 tracking-wider">
+            <div className="text-[9px] uppercase text-vault-text-3 tracking-normal">
               {format(new Date(n.updated_at), 'MMM d, yyyy')}
             </div>
           </div>
@@ -187,14 +187,14 @@ export default function NotesClient({ initialNotes }: { initialNotes: any[] }) {
           <>
             <div className="fixed inset-0 z-40" onClick={(e) => { e.stopPropagation(); setContextMenuId(null) }} />
             <div className="absolute right-8 top-6 z-50 w-36 bg-vault-bg-2 border border-vault-border rounded-[4px] shadow-lg flex flex-col py-1">
-              <button onClick={(e) => togglePin(e, n.id, n.pinned)} className="flex items-center gap-2 px-3 py-1.5 text-[11px] font-sans text-vault-text-2 hover:bg-vault-bg-3 hover:text-vault-text transition-colors text-left">
+              <button onClick={(e) => togglePin(e, n.id, n.pinned)} className="flex items-center gap-2 px-3 py-1.5 text-[11px] text-vault-text-2 hover:bg-vault-bg-3 hover:text-vault-text transition-colors text-left">
                 <Pin className="w-3 h-3" /> {n.pinned ? 'Unpin' : 'Pin to top'}
               </button>
-              <button onClick={(e) => duplicateNote(e, n)} className="flex items-center gap-2 px-3 py-1.5 text-[11px] font-sans text-vault-text-2 hover:bg-vault-bg-3 hover:text-vault-text transition-colors text-left">
+              <button onClick={(e) => duplicateNote(e, n)} className="flex items-center gap-2 px-3 py-1.5 text-[11px] text-vault-text-2 hover:bg-vault-bg-3 hover:text-vault-text transition-colors text-left">
                 <Copy className="w-3 h-3" /> Duplicate
               </button>
               <div className="h-[1px] bg-vault-border my-1" />
-              <button onClick={(e) => deleteNote(e, n.id)} className="flex items-center gap-2 px-3 py-1.5 text-[11px] font-sans text-vault-danger hover:bg-vault-danger/[0.1] transition-colors text-left">
+              <button onClick={(e) => deleteNote(e, n.id)} className="flex items-center gap-2 px-3 py-1.5 text-[11px] text-vault-danger hover:bg-vault-danger/[0.1] transition-colors text-left">
                 <Trash2 className="w-3 h-3" /> Delete
               </button>
             </div>
@@ -241,7 +241,7 @@ export default function NotesClient({ initialNotes }: { initialNotes: any[] }) {
       <div className="w-[260px] flex-shrink-0 flex flex-col border-r border-vault-border bg-vault-bg-2">
         <div className="flex flex-col gap-3 p-4 border-b border-vault-border">
           <div className="flex items-center justify-between">
-            <div className="font-mono text-[10px] uppercase tracking-widest text-vault-text-3">
+            <div className="text-[10px] uppercase tracking-normal text-vault-text-3">
               NOTES <span className="text-vault-text-4 ml-1">({notes.length})</span>
             </div>
             <Link href="/notes/new" className="p-1 rounded-[3px] bg-vault-bg-4 text-vault-text-3 hover:text-vault-text transition-colors">
@@ -256,7 +256,7 @@ export default function NotesClient({ initialNotes }: { initialNotes: any[] }) {
               placeholder="Search notes..."
               value={search}
               onChange={e => setSearch(e.target.value)}
-              className="w-full bg-vault-bg-4 border border-vault-border rounded-[4px] pl-8 pr-3 py-1.5 font-sans text-[13px] text-vault-text placeholder-vault-text-3 focus:outline-none focus:border-vault-accent transition-colors duration-150"
+              className="w-full bg-vault-bg-4 border border-vault-border rounded-[4px] pl-8 pr-3 py-1.5 text-[13px] text-vault-text placeholder-vault-text-3 focus:outline-none focus:border-vault-accent transition-colors duration-150"
             />
           </div>
         </div>
@@ -272,7 +272,7 @@ export default function NotesClient({ initialNotes }: { initialNotes: any[] }) {
             <>
               {pinnedNotes.length > 0 && (
                 <div className="flex flex-col gap-1">
-                  <div className="font-mono text-[9px] uppercase tracking-widest text-vault-text-3 px-2 mb-1 flex items-center gap-1.5">
+                  <div className="text-[9px] uppercase tracking-normal text-vault-text-3 px-2 mb-1 flex items-center gap-1.5">
                     <Pin className="w-2.5 h-2.5" /> Pinned
                   </div>
                   <NoteTree isPinnedOnly={true} />
@@ -281,7 +281,7 @@ export default function NotesClient({ initialNotes }: { initialNotes: any[] }) {
               
               <div className="flex flex-col gap-1">
                 {pinnedNotes.length > 0 && unpinnedNotes.length > 0 && (
-                  <div className="font-mono text-[9px] uppercase tracking-widest text-vault-text-3 px-2 mb-1">
+                  <div className="text-[9px] uppercase tracking-normal text-vault-text-3 px-2 mb-1">
                     All Notes
                   </div>
                 )}
@@ -303,7 +303,7 @@ export default function NotesClient({ initialNotes }: { initialNotes: any[] }) {
               action={
                 <Link 
                   href="/notes/new"
-                  className="bg-vault-accent text-[#0D0D0F] font-mono text-[11px] uppercase tracking-[0.1em] py-2 px-6 rounded-[4px] hover:bg-vault-accent-2 transition-colors duration-150 inline-block mt-4"
+                  className="bg-vault-accent text-[#0D0D0F] text-[11px] uppercase tracking-[0.1em] py-2 px-6 rounded-[4px] hover:bg-vault-accent-2 transition-colors duration-150 inline-block mt-4"
                 >
                   {notes.length === 0 ? "Create First Note" : "New Note"}
                 </Link>
@@ -313,22 +313,22 @@ export default function NotesClient({ initialNotes }: { initialNotes: any[] }) {
         ) : (
           <div className="flex-1 overflow-y-auto p-10 lg:p-16 flex flex-col gap-6 w-full mx-auto max-w-4xl">
             <div className="flex items-center justify-between">
-              <div className="font-mono text-[10px] uppercase text-vault-text-3 tracking-widest">
+              <div className="text-[10px] uppercase text-vault-text-3 tracking-normal">
                 Last updated {format(new Date(selectedNote.updated_at), 'MMM d, yyyy')}
               </div>
               <Link 
                 href={`/notes/${selectedNote.id}`}
-                className="flex items-center gap-1 font-mono text-[10px] uppercase text-vault-accent hover:text-vault-accent-2 tracking-wider transition-colors"
+                className="flex items-center gap-1 text-[10px] uppercase text-vault-accent hover:text-vault-accent-2 tracking-normal transition-colors"
               >
                 Open full editor <ArrowRight className="w-3 h-3" />
               </Link>
             </div>
             
-            <h1 className="font-serif text-[36px] text-vault-text leading-tight mt-2">
+            <h1 className="text-[36px] text-vault-text leading-tight mt-2">
               {selectedNote.title}
             </h1>
             
-            <div className="mt-8 font-sans text-[16px] leading-[1.8] text-vault-text-2 max-w-none w-full">
+            <div className="mt-8 text-[16px] leading-[1.8] text-vault-text-2 max-w-none w-full">
               <ReadOnlyEditor content={selectedNote.content} key={selectedNote.id} />
             </div>
           </div>

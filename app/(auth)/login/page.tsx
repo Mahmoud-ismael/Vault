@@ -60,10 +60,10 @@ export default function LoginPage() {
       {/* Right Side - 40% */}
       <div className="flex flex-col justify-center items-center w-full lg:w-[40%] p-8 bg-vault-bg border-l border-vault-border">
         <div className="w-full max-w-[420px] bg-vault-bg-2 border border-vault-border rounded-[6px] p-[32px] transition-colors duration-150 ease-in-out hover:border-vault-border-2 hover:bg-vault-bg-3">
-          <div className="font-mono text-[10px] text-vault-text-3 uppercase tracking-[0.2em] mb-8">Vault</div>
+          <div className="text-[10px] text-vault-text-3 uppercase tracking-[0.2em] mb-8">Vault</div>
           
-          <h2 className="font-serif text-[22px] mb-2 text-vault-text">Sign in</h2>
-          <p className="font-sans text-[14px] text-vault-text-2 mb-8">
+          <h2 className="text-[22px] mb-2 text-vault-text">Sign in</h2>
+          <p className="text-[14px] text-vault-text-2 mb-8">
             Enter your credentials to access your Vault.
           </p>
 
@@ -77,7 +77,7 @@ export default function LoginPage() {
                   setError(null)
                 }}
                 placeholder="Email address"
-                className="w-full bg-vault-bg-4 border border-vault-border rounded-[4px] px-3 py-2 font-sans text-[15px] text-vault-text placeholder-vault-text-3 placeholder:italic focus:outline-none focus:border-vault-accent transition-all duration-150"
+                className="w-full bg-vault-bg-4 border border-vault-border rounded-[4px] px-3 py-2 text-[15px] text-vault-text placeholder-vault-text-3 placeholder: focus:outline-none focus:border-vault-accent transition-all duration-150"
                 disabled={loading}
               />
             </div>
@@ -91,11 +91,11 @@ export default function LoginPage() {
                   setError(null)
                 }}
                 placeholder="Password"
-                className="w-full bg-vault-bg-4 border border-vault-border rounded-[4px] px-3 py-2 font-sans text-[15px] text-vault-text placeholder-vault-text-3 placeholder:italic focus:outline-none focus:border-vault-accent transition-all duration-150"
+                className="w-full bg-vault-bg-4 border border-vault-border rounded-[4px] px-3 py-2 text-[15px] text-vault-text placeholder-vault-text-3 placeholder: focus:outline-none focus:border-vault-accent transition-all duration-150"
                 disabled={loading}
               />
               {error && (
-                <span className="font-mono text-[11px] text-vault-danger mt-1">
+                <span className="text-[11px] text-vault-danger mt-1">
                   {error}
                 </span>
               )}
@@ -104,7 +104,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex items-center justify-center bg-vault-accent text-[#0D0D0F] font-mono text-[11px] uppercase tracking-[0.1em] py-2 px-4 rounded-[4px] hover:bg-vault-accent-2 disabled:opacity-50 transition-colors duration-150 h-10 mt-2"
+              className="w-full flex items-center justify-center bg-vault-accent text-[#0D0D0F] text-[11px] uppercase tracking-[0.1em] py-2 px-4 rounded-[4px] hover:bg-vault-accent-2 disabled:opacity-50 transition-colors duration-150 h-10 mt-2"
             >
               {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : "SIGN IN"}
             </button>

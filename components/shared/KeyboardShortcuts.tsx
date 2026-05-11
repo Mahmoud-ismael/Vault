@@ -63,28 +63,28 @@ export function KeyboardShortcuts() {
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[#0D0D0F]/80 backdrop-blur-sm" onClick={() => setShowModal(false)}>
       <div className="bg-vault-bg-2 border border-vault-border rounded-[8px] p-8 w-[400px] shadow-2xl animate-in fade-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
-        <h2 className="font-serif italic text-[24px] text-vault-text mb-6">Keyboard Shortcuts</h2>
+        <h2 className="text-[24px] text-vault-text mb-6">Keyboard Shortcuts</h2>
         
         <div className="flex flex-col gap-4">
           <div className="flex justify-between items-center pb-2 border-b border-vault-border-2">
-            <span className="font-sans text-[14px] text-vault-text-2">Search Vault</span>
-            <span className="font-mono text-[11px] bg-vault-bg-4 px-2 py-1 rounded text-vault-text-3">Cmd + K</span>
+            <span className="text-[14px] text-vault-text-2">Search Vault</span>
+            <span className="text-[11px] bg-vault-bg-4 px-2 py-1 rounded text-vault-text-3">Cmd + K</span>
           </div>
           <div className="flex justify-between items-center pb-2 border-b border-vault-border-2">
-            <span className="font-sans text-[14px] text-vault-text-2">New Entry / Note</span>
-            <span className="font-mono text-[11px] bg-vault-bg-4 px-2 py-1 rounded text-vault-text-3">Cmd + N</span>
+            <span className="text-[14px] text-vault-text-2">New Entry / Note</span>
+            <span className="text-[11px] bg-vault-bg-4 px-2 py-1 rounded text-vault-text-3">Cmd + N</span>
           </div>
           <div className="flex justify-between items-center pb-2 border-b border-vault-border-2">
-            <span className="font-sans text-[14px] text-vault-text-2">Save Document</span>
-            <span className="font-mono text-[11px] bg-vault-bg-4 px-2 py-1 rounded text-vault-text-3">Cmd + S</span>
+            <span className="text-[14px] text-vault-text-2">Save Document</span>
+            <span className="text-[11px] bg-vault-bg-4 px-2 py-1 rounded text-vault-text-3">Cmd + S</span>
           </div>
           <div className="flex justify-between items-center pb-2 border-b border-vault-border-2">
-            <span className="font-sans text-[14px] text-vault-text-2">Close AI Panels</span>
-            <span className="font-mono text-[11px] bg-vault-bg-4 px-2 py-1 rounded text-vault-text-3">Esc</span>
+            <span className="text-[14px] text-vault-text-2">Close AI Panels</span>
+            <span className="text-[11px] bg-vault-bg-4 px-2 py-1 rounded text-vault-text-3">Esc</span>
           </div>
           <div className="flex justify-between items-center pb-2 border-b border-vault-border-2">
-            <span className="font-sans text-[14px] text-vault-text-2">Show Shortcuts</span>
-            <span className="font-mono text-[11px] bg-vault-bg-4 px-2 py-1 rounded text-vault-text-3">?</span>
+            <span className="text-[14px] text-vault-text-2">Show Shortcuts</span>
+            <span className="text-[11px] bg-vault-bg-4 px-2 py-1 rounded text-vault-text-3">?</span>
           </div>
         </div>
       </div>

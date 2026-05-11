@@ -34,7 +34,7 @@ function ReadOnlyEditor({ content }: { content: any }) {
   })
 
   return (
-    <div className="[&_p]:mb-4 [&_p:last-child]:mb-0 [&_h1]:font-serif [&_h1]:text-[28px] [&_h1]:text-vault-text [&_h1]:mb-4 [&_h2]:font-sans [&_h2]:text-[20px] [&_h2]:text-vault-text [&_h2]:mb-3 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:mb-4 [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:mb-4 [&_blockquote]:border-l-2 [&_blockquote]:border-vault-accent [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:text-vault-text-3">
+    <div className="[&_p]:mb-4 [&_p:last-child]:mb-0 [&_h1]: [&_h1]:text-[28px] [&_h1]:text-vault-text [&_h1]:mb-4 [&_h2]: [&_h2]:text-[20px] [&_h2]:text-vault-text [&_h2]:mb-3 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:mb-4 [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:mb-4 [&_blockquote]:border-l-2 [&_blockquote]:border-vault-accent [&_blockquote]:pl-4 [&_blockquote]: [&_blockquote]:text-vault-text-3">
       <EditorContent editor={editor} />
     </div>
   )
@@ -76,7 +76,7 @@ export default function JournalClient({ initialEntries }: { initialEntries: Entr
         {/* Header */}
         <div className="flex flex-col gap-3 p-4 border-b border-vault-border">
           <div className="flex items-center justify-between">
-            <div className="font-mono text-[10px] uppercase tracking-widest text-vault-text-3">
+            <div className="text-[10px] uppercase tracking-normal text-vault-text-3">
               JOURNAL <span className="text-vault-text-4 ml-1">({entries.length})</span>
             </div>
             <div className="flex items-center gap-1 bg-vault-bg-4 rounded-[4px] p-0.5">
@@ -102,7 +102,7 @@ export default function JournalClient({ initialEntries }: { initialEntries: Entr
               placeholder="Search journal..."
               value={search}
               onChange={e => setSearch(e.target.value)}
-              className="w-full bg-vault-bg-4 border border-vault-border rounded-[4px] pl-8 pr-3 py-1.5 font-sans text-[13px] text-vault-text placeholder-vault-text-3 focus:outline-none focus:border-vault-accent transition-colors duration-150"
+              className="w-full bg-vault-bg-4 border border-vault-border rounded-[4px] pl-8 pr-3 py-1.5 text-[13px] text-vault-text placeholder-vault-text-3 focus:outline-none focus:border-vault-accent transition-colors duration-150"
             />
           </div>
         </div>
@@ -132,19 +132,19 @@ export default function JournalClient({ initialEntries }: { initialEntries: Entr
                         : 'border-transparent hover:bg-vault-bg-3'
                     }`}
                   >
-                    <div className="font-mono text-[9px] uppercase text-vault-text-3 tracking-wider">
+                    <div className="text-[9px] uppercase text-vault-text-3 tracking-normal">
                       {format(new Date(entry.created_at), 'dd MMM yyyy')}
                     </div>
-                    <div className={`font-sans text-[14px] ${isActive ? 'text-vault-accent' : 'text-vault-text'} line-clamp-1`}>
+                    <div className={`text-[14px] ${isActive ? 'text-vault-accent' : 'text-vault-text'} line-clamp-1`}>
                       {entry.title || 'Untitled'}
                     </div>
-                    <div className="font-sans text-[12px] text-vault-text-3 line-clamp-2 leading-snug">
+                    <div className="text-[12px] text-vault-text-3 line-clamp-2 leading-snug">
                       {truncatedPreview || 'No content...'}
                     </div>
                     {entry.tags && entry.tags.length > 0 && (
                       <div className="flex flex-wrap gap-1.5 mt-1">
                         {entry.tags.map((tag, i) => (
-                          <div key={i} className="font-mono text-[9px] bg-vault-bg-4 text-vault-text-3 px-1.5 py-0.5 rounded-[2px]">
+                          <div key={i} className="text-[9px] bg-vault-bg-4 text-vault-text-3 px-1.5 py-0.5 rounded-[2px]">
                             {tag}
                           </div>
                         ))}
@@ -161,7 +161,7 @@ export default function JournalClient({ initialEntries }: { initialEntries: Entr
         {view === 'calendar' && (
           <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-5">
             <div className="flex items-center justify-between px-1">
-              <div className="font-mono text-[11px] text-vault-text uppercase tracking-widest">
+              <div className="text-[11px] text-vault-text uppercase tracking-normal">
                 {format(currentMonth, 'MMMM yyyy')}
               </div>
               <div className="flex items-center gap-2">
@@ -176,7 +176,7 @@ export default function JournalClient({ initialEntries }: { initialEntries: Entr
             
             <div className="grid grid-cols-7 gap-1.5">
               {['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'].map(day => (
-                <div key={day} className="font-mono text-[9px] uppercase text-vault-text-3 text-center mb-2 tracking-widest">
+                <div key={day} className="text-[9px] uppercase text-vault-text-3 text-center mb-2 tracking-normal">
                   {day}
                 </div>
               ))}
@@ -203,7 +203,7 @@ export default function JournalClient({ initialEntries }: { initialEntries: Entr
                       selectedId && hasEntry && dayEntries[0].id === selectedId ? 'ring-1 ring-vault-accent' : ''
                     }`}
                   >
-                    <span className="font-mono text-[10px]">{format(date, 'd')}</span>
+                    <span className="text-[10px]">{format(date, 'd')}</span>
                     {hasEntry && (
                       <div className="w-1 h-1 bg-vault-accent rounded-full absolute bottom-1" />
                     )}
@@ -218,7 +218,7 @@ export default function JournalClient({ initialEntries }: { initialEntries: Entr
         <div className="p-4 border-t border-vault-border">
           <Link 
             href="/journal/new"
-            className="flex items-center justify-center gap-2 w-full bg-vault-bg-3 hover:bg-vault-bg-4 border border-vault-border text-vault-text-2 font-mono text-[11px] uppercase tracking-[0.1em] py-2 rounded-[4px] transition-colors"
+            className="flex items-center justify-center gap-2 w-full bg-vault-bg-3 hover:bg-vault-bg-4 border border-vault-border text-vault-text-2 text-[11px] uppercase tracking-[0.1em] py-2 rounded-[4px] transition-colors"
           >
             <Plus className="w-3.5 h-3.5" /> New Entry
           </Link>
@@ -236,7 +236,7 @@ export default function JournalClient({ initialEntries }: { initialEntries: Entr
               action={
                 <Link 
                   href="/journal/new"
-                  className="bg-vault-accent text-[#0D0D0F] font-mono text-[11px] uppercase tracking-[0.1em] py-2 px-6 rounded-[4px] hover:bg-vault-accent-2 transition-colors duration-150 inline-block mt-4"
+                  className="bg-vault-accent text-[#0D0D0F] text-[11px] uppercase tracking-[0.1em] py-2 px-6 rounded-[4px] hover:bg-vault-accent-2 transition-colors duration-150 inline-block mt-4"
                 >
                   {entries.length === 0 ? "Write First Entry" : "New Entry"}
                 </Link>
@@ -246,32 +246,32 @@ export default function JournalClient({ initialEntries }: { initialEntries: Entr
         ) : (
           <div className="flex-1 overflow-y-auto p-10 lg:p-16 flex flex-col gap-6 w-full mx-auto max-w-4xl">
             <div className="flex items-center justify-between">
-              <div className="font-mono text-[10px] uppercase text-vault-text-3 tracking-widest">
+              <div className="text-[10px] uppercase text-vault-text-3 tracking-normal">
                 {format(new Date(selectedEntry.created_at), 'EEEE, MMMM do yyyy')}
               </div>
               <Link 
                 href={`/journal/${selectedEntry.id}`}
-                className="flex items-center gap-1 font-mono text-[10px] uppercase text-vault-accent hover:text-vault-accent-2 tracking-wider transition-colors"
+                className="flex items-center gap-1 text-[10px] uppercase text-vault-accent hover:text-vault-accent-2 tracking-normal transition-colors"
               >
                 Open full editor <ArrowRight className="w-3 h-3" />
               </Link>
             </div>
             
-            <h1 className="font-serif text-[36px] text-vault-text leading-tight mt-2">
+            <h1 className="text-[36px] text-vault-text leading-tight mt-2">
               {selectedEntry.title}
             </h1>
             
             {selectedEntry.tags && selectedEntry.tags.length > 0 && (
               <div className="flex flex-wrap gap-2 mt-1">
                 {selectedEntry.tags.map((tag, i) => (
-                  <div key={i} className="font-mono text-[10px] bg-vault-bg-4 text-vault-text-3 px-2 py-0.5 rounded-[3px]">
+                  <div key={i} className="text-[10px] bg-vault-bg-4 text-vault-text-3 px-2 py-0.5 rounded-[3px]">
                     {tag}
                   </div>
                 ))}
               </div>
             )}
             
-            <div className="mt-8 font-sans text-[16px] leading-[1.8] text-vault-text-2 max-w-none w-full">
+            <div className="mt-8 text-[16px] leading-[1.8] text-vault-text-2 max-w-none w-full">
               <ReadOnlyEditor content={selectedEntry.content} key={selectedEntry.id} />
             </div>
           </div>

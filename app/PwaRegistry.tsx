@@ -51,14 +51,14 @@ export function PwaRegistry() {
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-vault-bg-2 border-t border-vault-border p-4 z-[100] flex items-center justify-between shadow-2xl md:hidden">
       <div className="flex flex-col">
-        <span className="font-serif text-[18px] text-vault-text">Install Vault</span>
-        <span className="font-sans text-[12px] text-vault-text-3">Add to your home screen for quick access.</span>
+        <span className="text-[18px] text-vault-text">Install Vault</span>
+        <span className="text-[12px] text-vault-text-3">Add to your home screen for quick access.</span>
       </div>
       <div className="flex items-center gap-4">
-        <button onClick={handleDismiss} className="font-sans text-[12px] text-vault-text-3 hover:text-vault-text transition-colors">
+        <button onClick={handleDismiss} className="text-[12px] text-vault-text-3 hover:text-vault-text transition-colors">
           Dismiss
         </button>
-        <button onClick={handleInstall} className="bg-vault-accent text-[#0D0D0F] font-mono text-[10px] uppercase tracking-widest px-4 py-2 rounded-[4px] hover:bg-vault-accent-2 transition-colors">
+        <button onClick={handleInstall} className="bg-vault-accent text-[#0D0D0F] text-[10px] uppercase tracking-normal px-4 py-2 rounded-[4px] hover:bg-vault-accent-2 transition-colors">
           Install
         </button>
       </div>
