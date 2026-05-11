@@ -286,7 +286,7 @@ ${tiptapJsonToMarkdown(n.content)}
                   onChange={e => setSetting('primaryModel', e.target.value)}
                   className="w-full bg-vault-bg border border-vault-border rounded-[4px] px-3 py-2.5 text-[15px] md:text-[14px] text-vault-text focus:border-vault-accent focus:outline-none transition-colors appearance-none h-11"
                 >
-                  <option value="llama-405b">Llama 3.1 405B (Powerful)</option>
+                  <option value="llama-70b">Llama 3.1 70B (Powerful)</option>
                   <option value="llama-8b">Llama 3.1 8B (Fast)</option>
                 </select>
                 <span className="text-[11px] text-vault-text-3">Powered by NVIDIA NIM · Free tier</span>

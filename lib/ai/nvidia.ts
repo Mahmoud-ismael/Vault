@@ -12,7 +12,7 @@ export async function generateText(
 ): Promise<string> {
   const model = fast
     ? 'meta/llama-3.1-8b-instruct'
-    : 'meta/llama-3.1-405b-instruct';
+    : 'meta/llama-3.1-70b-instruct';
 
   const response = await client.chat.completions.create({
     model,
@@ -33,7 +33,7 @@ export async function streamText(
 ): Promise<ReadableStream> {
   const model = fast
     ? 'meta/llama-3.1-8b-instruct'
-    : 'meta/llama-3.1-405b-instruct';
+    : 'meta/llama-3.1-70b-instruct';
 
   const stream = await client.chat.completions.create({
     model,

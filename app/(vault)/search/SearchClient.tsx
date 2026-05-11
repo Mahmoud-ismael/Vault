@@ -288,7 +288,7 @@ export default function SearchClient() {
               <div className="flex items-center gap-2 mb-6">
                 <Sparkles className="w-4 h-4 text-vault-accent" />
                 <span className="text-[11px] uppercase tracking-normal text-vault-text-2 font-bold">
-                  {mode === 'Deep Reason' ? 'Llama 3.1 405B Analysis' : 'Llama + Tavily Synthesis'}
+                  {mode === 'Deep Reason' ? 'Llama 3.1 70B Analysis' : 'Llama + Tavily Synthesis'}
                 </span>
               </div>
               <div className="text-[16px] md:text-[17px] leading-[1.8] text-vault-text prose prose-invert max-w-none [&_h1]:text-[22px] md:[&_h1]:text-[24px] [&_h1]:mt-6 [&_h1]:mb-4 [&_h1]:font-bold [&_h2]:text-[18px] md:[&_h2]:text-[20px] [&_h2]:mt-6 [&_h2]:mb-3 [&_h2]:font-bold [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:mb-4 [&_p]:mb-4">
