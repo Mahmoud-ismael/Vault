@@ -14,6 +14,7 @@ import { Table } from '@tiptap/extension-table'
 import { TableRow } from '@tiptap/extension-table-row'
 import { TableHeader } from '@tiptap/extension-table-header'
 import { TableCell } from '@tiptap/extension-table-cell'
+import { createClient } from '@/lib/supabase/client'
 
 const EditorStyles = `
 .tiptap h1 { font-family: 'Satoshi', sans-serif; font-size: 28px; color: var(--vault-text); margin-bottom: 1rem; }
@@ -60,6 +61,7 @@ export default function NotesClient({ initialNotes }: { initialNotes: any[] }) {
   const [mobileView, setMobileView] = useState<'list' | 'detail'>('list')
   const [search, setSearch] = useState('')
   const [contextMenuId, setContextMenuId] = useState<string | null>(null)
+  const supabase = createClient()
 
   // Setup FAB
   useEffect(() => {
