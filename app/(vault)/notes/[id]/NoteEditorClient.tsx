@@ -17,6 +17,7 @@ import { Table } from '@tiptap/extension-table'
 import { TableRow } from '@tiptap/extension-table-row'
 import { TableHeader } from '@tiptap/extension-table-header'
 import { TableCell } from '@tiptap/extension-table-cell'
+import LinkExtension from '@tiptap/extension-link'
 import { Node, mergeAttributes } from '@tiptap/core'
 
 const Callout = Node.create({
@@ -66,6 +67,8 @@ const EditorStyles = `
 .tiptap table { border-collapse: collapse; table-layout: fixed; width: 100%; margin: 0; overflow: hidden; border-radius: 4px; }
 .tiptap td, .tiptap th { border: 1px solid var(--vault-border); padding: 8px; vertical-align: top; box-sizing: border-box; position: relative; }
 .tiptap th { background-color: var(--vault-bg-3); text-align: left; font-weight: 500; }
+.tiptap a { color: #38bdf8; text-decoration: none; border-bottom: 1px dashed #38bdf8; cursor: pointer; transition: opacity 0.15s; }
+.tiptap a:hover { opacity: 0.8; }
 `
 
 const SLASH_COMMANDS = [
@@ -98,6 +101,13 @@ export default function NoteEditorClient({ initialNote }: { initialNote: any }) 
   const [slashQuery, setSlashQuery] = useState('')
   const [slashIndex, setSlashIndex] = useState(0)
   
+  const [linkPos, setLinkPos] = useState<{ top: number, left: number } | null>(null)
+  const [linkQuery, setLinkQuery] = useState('')
+  const [linkIndex, setLinkIndex] = useState(0)
+
+  const [allNotes, setAllNotes] = useState<any[]>([])
+  const [referencedBy, setReferencedBy] = useState<any[]>([])
+  
   const [aiOutlineTopic, setAiOutlineTopic] = useState('')
   const [aiOutlineLoading, setAiOutlineLoading] = useState(false)
   const [aiSummary, setAiSummary] = useState('')
@@ -106,6 +116,19 @@ export default function NoteEditorClient({ initialNote }: { initialNote: any }) 
   const saveTimer = useRef<NodeJS.Timeout | null>(null)
   
   const filteredCommands = SLASH_COMMANDS.filter(c => c.id.includes(slashQuery.toLowerCase()) || c.label.toLowerCase().includes(slashQuery.toLowerCase()))
+  const filteredNotes = allNotes.filter(n => n.id !== initialNote.id && n.title.toLowerCase().includes(linkQuery.toLowerCase()))
+
+  useEffect(() => {
+    const fetchNotes = async () => {
+      const { data } = await supabase.from('notes').select('id, title, content')
+      if (data) {
+        setAllNotes(data)
+        const refs = data.filter(n => n.id !== initialNote.id && JSON.stringify(n.content).includes(initialNote.id))
+        setReferencedBy(refs)
+      }
+    }
+    fetchNotes()
+  }, [])
 
   const editor = useEditor({
     extensions: [
@@ -118,6 +141,12 @@ export default function NoteEditorClient({ initialNote }: { initialNote: any }) 
       TableHeader,
       TableCell,
       Callout,
+      LinkExtension.configure({
+        openOnClick: false,
+        HTMLAttributes: {
+          class: 'note-link',
+        },
+      }),
     ],
     content: initialNote.content || {},
     onUpdate: ({ editor }) => {
@@ -125,15 +154,26 @@ export default function NoteEditorClient({ initialNote }: { initialNote: any }) 
       
       const { from } = editor.state.selection
       const textBefore = editor.state.doc.textBetween(Math.max(0, from - 15), from, '\n')
-      const match = textBefore.match(/\/([a-zA-Z0-9]*)$/)
       
-      if (match) {
+      const slashMatch = textBefore.match(/\/([a-zA-Z0-9]*)$/)
+      if (slashMatch) {
         const coords = editor.view.coordsAtPos(from)
         setSlashPos({ top: coords.top + window.scrollY + 20, left: coords.left + window.scrollX })
-        setSlashQuery(match[1])
+        setSlashQuery(slashMatch[1])
         setSlashIndex(0)
+        setLinkPos(null)
       } else {
         setSlashPos(null)
+      }
+
+      const linkMatch = textBefore.match(/\[\[([a-zA-Z0-9 ]*)$/)
+      if (linkMatch && !slashMatch) {
+        const coords = editor.view.coordsAtPos(from)
+        setLinkPos({ top: coords.top + window.scrollY + 20, left: coords.left + window.scrollX })
+        setLinkQuery(linkMatch[1])
+        setLinkIndex(0)
+      } else {
+        setLinkPos(null)
       }
     }
   })
@@ -190,18 +230,36 @@ export default function NoteEditorClient({ initialNote }: { initialNote: any }) 
     setSlashPos(null)
   }
 
+  const insertNoteLink = (note: any) => {
+    if (!editor) return
+    const { from } = editor.state.selection
+    editor.chain().focus()
+      .deleteRange({ from: from - linkQuery.length - 2, to: from })
+      .setLink({ href: `/notes/${note.id}` })
+      .insertContent(note.title)
+      .unsetLink()
+      .insertContent(' ')
+      .run()
+    setLinkPos(null)
+  }
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (slashPos) {
+      if (slashPos && filteredCommands.length > 0) {
         if (e.key === 'ArrowDown') { e.preventDefault(); setSlashIndex(i => (i + 1) % filteredCommands.length) }
         else if (e.key === 'ArrowUp') { e.preventDefault(); setSlashIndex(i => (i - 1 + filteredCommands.length) % filteredCommands.length) }
         else if (e.key === 'Enter') { e.preventDefault(); executeCommand(filteredCommands[slashIndex]) }
         else if (e.key === 'Escape') { setSlashPos(null) }
+      } else if (linkPos && filteredNotes.length > 0) {
+        if (e.key === 'ArrowDown') { e.preventDefault(); setLinkIndex(i => (i + 1) % filteredNotes.length) }
+        else if (e.key === 'ArrowUp') { e.preventDefault(); setLinkIndex(i => (i - 1 + filteredNotes.length) % filteredNotes.length) }
+        else if (e.key === 'Enter') { e.preventDefault(); insertNoteLink(filteredNotes[linkIndex]) }
+        else if (e.key === 'Escape') { setLinkPos(null) }
       }
     }
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [slashPos, slashIndex, filteredCommands])
+  }, [slashPos, slashIndex, filteredCommands, linkPos, linkIndex, filteredNotes])
 
   const applyTemplate = (templateHtml: string) => {
     if (editor) {
@@ -363,6 +421,25 @@ export default function NoteEditorClient({ initialNote }: { initialNote: any }) 
             <EditorContent editor={editor} />
           </div>
           
+          {referencedBy.length > 0 && (
+            <div className="mt-20 pt-8 border-t border-vault-border">
+              <div className="font-mono text-[10px] uppercase tracking-widest text-vault-text-3 mb-4">Referenced By</div>
+              <div className="flex flex-col gap-2">
+                {referencedBy.map(ref => (
+                  <Link 
+                    key={ref.id} 
+                    href={`/notes/${ref.id}`}
+                    className="group block bg-vault-bg-2 border border-vault-border rounded-[4px] p-4 hover:border-vault-accent transition-colors"
+                  >
+                    <div className="font-sans text-[14px] text-vault-text group-hover:text-vault-accent transition-colors">
+                      {ref.title || 'Untitled Note'}
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+          
         </div>
       </div>
 
@@ -381,6 +458,25 @@ export default function NoteEditorClient({ initialNote }: { initialNote: any }) 
             >
               <div className="font-mono text-[11px] uppercase tracking-wider text-vault-text">{cmd.label}</div>
               <div className="font-sans text-[12px] text-vault-text-3">{cmd.desc}</div>
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* LINK COMMAND PALETTE */}
+      {linkPos && filteredNotes.length > 0 && (
+        <div 
+          className="fixed z-50 bg-vault-bg-2 border border-vault-border-2 rounded-[6px] shadow-lg w-64 overflow-hidden py-1 max-h-64 overflow-y-auto"
+          style={{ top: linkPos.top, left: linkPos.left }}
+        >
+          {filteredNotes.map((note, i) => (
+            <button
+              key={note.id}
+              onClick={() => insertNoteLink(note)}
+              onMouseEnter={() => setLinkIndex(i)}
+              className={`w-full text-left px-3 py-2 flex flex-col gap-0.5 ${i === linkIndex ? 'bg-vault-bg-3' : 'hover:bg-vault-bg-4'}`}
+            >
+              <div className="font-sans text-[13px] text-vault-text line-clamp-1">{note.title || 'Untitled'}</div>
             </button>
           ))}
         </div>

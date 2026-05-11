@@ -104,35 +104,84 @@ export default function NotesClient({ initialNotes }: { initialNotes: any[] }) {
     if (data) setNotes(prev => [data, ...prev])
   }
 
-  const NoteRow = ({ n }: { n: any }) => {
+  const [expanded, setExpanded] = useState<Record<string, boolean>>({})
+
+  const toggleExpand = (e: any, id: string) => {
+    e.stopPropagation()
+    setExpanded(prev => ({ ...prev, [id]: !prev[id] }))
+  }
+
+  const addSubNote = async (e: any, parentId: string) => {
+    e.stopPropagation()
+    const { data } = await supabase.from('notes').insert({
+      user_id: notes[0]?.user_id || (await supabase.auth.getUser()).data.user?.id,
+      title: 'New Sub-note',
+      content: {},
+      parent_id: parentId
+    }).select().single()
+    
+    if (data) {
+      setNotes(prev => [data, ...prev])
+      setExpanded(prev => ({ ...prev, [parentId]: true }))
+      setSelectedId(data.id)
+    }
+  }
+
+  const NoteRow = ({ n, depth = 0 }: { n: any, depth?: number }) => {
     const isActive = selectedId === n.id
+    const hasChildren = notes.some(child => child.parent_id === n.id)
+    
     return (
       <div
         onClick={() => setSelectedId(n.id)}
-        className={`group flex items-center justify-between p-3 rounded-[4px] border-l-[3px] transition-all duration-150 text-left cursor-pointer relative ${
+        className={`group flex items-center justify-between p-2 rounded-[4px] border-l-[3px] transition-all duration-150 text-left cursor-pointer relative ${
           isActive 
             ? 'bg-vault-accent-dim border-vault-accent' 
             : 'border-transparent hover:bg-vault-bg-3'
         }`}
+        style={{ paddingLeft: `${8 + depth * 16}px` }}
       >
-        <div className="flex flex-col gap-1 pr-6 overflow-hidden">
-          <div className={`font-sans text-[14px] ${isActive ? 'text-vault-accent' : 'text-vault-text'} line-clamp-1`}>
-            {n.title || 'Untitled'}
-          </div>
-          <div className="font-mono text-[9px] uppercase text-vault-text-3 tracking-wider">
-            {format(new Date(n.updated_at), 'MMM d, yyyy')}
+        <div className="flex items-center gap-2 pr-12 overflow-hidden flex-1">
+          {hasChildren ? (
+            <button 
+              onClick={(e) => toggleExpand(e, n.id)} 
+              className="w-4 h-4 flex items-center justify-center text-vault-text-3 hover:text-vault-text shrink-0"
+            >
+              <div className={`transition-transform duration-150 text-[10px] ${expanded[n.id] ? 'rotate-90' : ''}`}>▶</div>
+            </button>
+          ) : (
+            <div className="w-4 h-4 shrink-0" />
+          )}
+          <div className="flex flex-col gap-0.5 overflow-hidden">
+            <div className={`font-sans text-[13px] ${isActive ? 'text-vault-accent' : 'text-vault-text'} line-clamp-1`}>
+              {n.title || 'Untitled'}
+            </div>
+            <div className="font-mono text-[9px] uppercase text-vault-text-3 tracking-wider">
+              {format(new Date(n.updated_at), 'MMM d, yyyy')}
+            </div>
           </div>
         </div>
 
-        <button 
-          onClick={(e) => {
-            e.stopPropagation()
-            setContextMenuId(contextMenuId === n.id ? null : n.id)
-          }}
-          className={`absolute right-3 p-1 rounded hover:bg-vault-bg-4 text-vault-text-3 transition-opacity ${isActive || contextMenuId === n.id ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}
-        >
-          <MoreVertical className="w-3.5 h-3.5" />
-        </button>
+        <div className={`absolute right-2 flex items-center gap-1 transition-opacity ${isActive || contextMenuId === n.id ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
+          {depth < 2 && (
+            <button
+              onClick={(e) => addSubNote(e, n.id)}
+              title="New sub-note"
+              className="p-1 rounded hover:bg-vault-bg-4 text-vault-text-3 transition-colors"
+            >
+              <Plus className="w-3.5 h-3.5" />
+            </button>
+          )}
+          <button 
+            onClick={(e) => {
+              e.stopPropagation()
+              setContextMenuId(contextMenuId === n.id ? null : n.id)
+            }}
+            className="p-1 rounded hover:bg-vault-bg-4 text-vault-text-3 transition-colors"
+          >
+            <MoreVertical className="w-3.5 h-3.5" />
+          </button>
+        </div>
 
         {contextMenuId === n.id && (
           <>
@@ -151,6 +200,35 @@ export default function NotesClient({ initialNotes }: { initialNotes: any[] }) {
             </div>
           </>
         )}
+      </div>
+    )
+  }
+
+  const NoteTree = ({ parentId = null, depth = 0, isPinnedOnly = false }: { parentId?: string | null, depth?: number, isPinnedOnly?: boolean }) => {
+    let sourceNotes = isPinnedOnly ? pinnedNotes : unpinnedNotes
+    if (search) sourceNotes = filteredNotes // Flatten tree when searching
+    
+    // When searching, we don't show the tree, we just show matching notes as a flat list
+    if (search) {
+      if (depth > 0) return null // Only render at top level during search
+      return (
+        <div className="flex flex-col gap-[2px]">
+          {sourceNotes.map(n => <NoteRow key={n.id} n={n} depth={0} />)}
+        </div>
+      )
+    }
+
+    const children = sourceNotes.filter(n => (n.parent_id || null) === parentId)
+    if (children.length === 0) return null
+
+    return (
+      <div className="flex flex-col gap-[2px]">
+        {children.map(n => (
+          <div key={n.id} className="flex flex-col">
+            <NoteRow n={n} depth={depth} />
+            {expanded[n.id] && <NoteTree parentId={n.id} depth={depth + 1} isPinnedOnly={isPinnedOnly} />}
+          </div>
+        ))}
       </div>
     )
   }
@@ -197,7 +275,7 @@ export default function NotesClient({ initialNotes }: { initialNotes: any[] }) {
                   <div className="font-mono text-[9px] uppercase tracking-widest text-vault-text-3 px-2 mb-1 flex items-center gap-1.5">
                     <Pin className="w-2.5 h-2.5" /> Pinned
                   </div>
-                  {pinnedNotes.map(n => <NoteRow key={n.id} n={n} />)}
+                  <NoteTree isPinnedOnly={true} />
                 </div>
               )}
               
@@ -207,7 +285,7 @@ export default function NotesClient({ initialNotes }: { initialNotes: any[] }) {
                     All Notes
                   </div>
                 )}
-                {unpinnedNotes.map(n => <NoteRow key={n.id} n={n} />)}
+                <NoteTree isPinnedOnly={false} />
               </div>
             </>
           )}
