@@ -438,7 +438,5 @@ export default function JournalEditorClient({ initialEntry }: { initialEntry: an
       )}
 
     </div>
-
-    </div>
   )
 }

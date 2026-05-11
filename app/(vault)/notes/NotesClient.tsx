@@ -76,8 +76,6 @@ export default function NotesClient({ initialNotes }: { initialNotes: any[] }) {
     setMobileView('detail')
   }
   
-  const supabase = createClient()
-  const router = useRouter()
 
   const selectedNote = useMemo(() => notes.find(n => n.id === selectedId), [notes, selectedId])
 

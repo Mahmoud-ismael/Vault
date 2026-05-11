@@ -561,6 +561,5 @@ export default function NoteEditorClient({ initialNote }: { initialNote: any }) 
         </>
       )}
     </div>
-    </div>
   )
 }

@@ -309,7 +309,7 @@ export default function DocumentsClient({ initialDocuments, user }: { initialDoc
                 Multi-page auto-crop
               </div>
             </button>
-          </div>>
+          </div>
 
           {/* Upload Progress Queue */}
           {uploads.length > 0 && (
