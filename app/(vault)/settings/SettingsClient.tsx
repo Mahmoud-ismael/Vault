@@ -219,20 +219,20 @@ ${tiptapJsonToMarkdown(n.content)}
   if (!loaded) return null
 
   return (
-    <div className="w-full min-h-screen bg-vault-bg py-10 px-8">
+    <div className="w-full min-h-screen bg-vault-bg py-6 md:py-10 px-4 md:px-8">
       <SetTopbar title="Settings" />
       
-      <div className="max-w-[1000px] mx-auto flex gap-8 mt-4">
+      <div className="max-w-[1000px] mx-auto flex flex-col lg:flex-row gap-6 md:gap-8 mt-4">
         
         {/* NAV PANEL */}
-        <div className="w-[200px] shrink-0 flex flex-col gap-1 bg-vault-bg-2 border border-vault-border rounded-[6px] overflow-hidden self-start p-2">
+        <div className="w-full lg:w-[200px] shrink-0 flex flex-row lg:flex-col gap-1 bg-vault-bg-2 border border-vault-border rounded-[6px] overflow-x-auto no-scrollbar lg:self-start p-1.5 md:p-2">
           {(['General', 'AI & Search', 'Privacy', 'Export & Backup'] as Tab[]).map(tab => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`w-full text-left  text-[14px] px-4 py-3 rounded-[4px] transition-colors ${
+              className={`whitespace-nowrap text-left text-[13px] md:text-[14px] px-4 py-2.5 md:py-3 rounded-[4px] transition-colors flex-1 lg:flex-none ${
                 activeTab === tab
-                  ? 'bg-vault-accent-dim text-vault-accent'
+                  ? 'bg-vault-accent-dim text-vault-accent font-bold'
                   : 'text-vault-text-2 hover:bg-vault-bg-3 hover:text-vault-text'
               }`}
             >
@@ -242,36 +242,36 @@ ${tiptapJsonToMarkdown(n.content)}
         </div>
 
         {/* SETTINGS PANEL */}
-        <div className="flex-1 bg-vault-bg-2 border border-vault-border rounded-[6px] p-10 flex flex-col gap-10">
-          <h2 className="text-[28px] text-vault-text pb-6 border-b border-vault-border">
+        <div className="flex-1 bg-vault-bg-2 border border-vault-border rounded-[6px] p-6 md:p-10 flex flex-col gap-8 md:gap-10">
+          <h2 className="text-[24px] md:text-[28px] text-vault-text pb-4 md:pb-6 border-b border-vault-border font-bold">
             {activeTab}
           </h2>
 
           {activeTab === 'General' && (
             <div className="flex flex-col gap-8">
-              <div className="flex flex-col gap-2 max-w-sm">
-                <label className="text-[10px] uppercase tracking-normal text-vault-text-3">Profile Name</label>
-                <div className="flex gap-2">
+              <div className="flex flex-col gap-2 w-full md:max-w-sm">
+                <label className="text-[10px] uppercase tracking-normal text-vault-text-3 font-bold">Profile Name</label>
+                <div className="flex flex-col sm:flex-row gap-2">
                   <input
                     value={name}
                     onChange={e => setName(e.target.value)}
-                    className="flex-1 bg-vault-bg border border-vault-border rounded-[4px] px-3 py-2 text-[14px] text-vault-text focus:border-vault-accent focus:outline-none transition-colors"
+                    className="flex-1 bg-vault-bg border border-vault-border rounded-[4px] px-3 py-2.5 text-[15px] md:text-[14px] text-vault-text focus:border-vault-accent focus:outline-none transition-colors"
                   />
                   <button 
                     onClick={saveName}
                     disabled={savingName || name === initialProfile?.name}
-                    className="bg-vault-bg-4 hover:bg-vault-bg-3 text-vault-text text-[13px] px-4 py-2 rounded-[4px] border border-vault-border transition-colors disabled:opacity-50"
+                    className="h-11 sm:h-auto bg-vault-bg-4 hover:bg-vault-bg-3 text-vault-text text-[13px] px-6 py-2 rounded-[4px] border border-vault-border transition-colors disabled:opacity-50 font-bold"
                   >
                     {savingName ? 'Saving...' : 'Save'}
                   </button>
                 </div>
               </div>
 
-              <div className="flex flex-col gap-2 max-w-sm">
-                <label className="text-[10px] uppercase tracking-normal text-vault-text-3">Theme</label>
-                <div className="flex items-center gap-3 bg-vault-bg border border-vault-border rounded-[4px] px-3 py-2 cursor-not-allowed opacity-70">
+              <div className="flex flex-col gap-2 w-full md:max-w-sm">
+                <label className="text-[10px] uppercase tracking-normal text-vault-text-3 font-bold">Theme</label>
+                <div className="flex items-center gap-3 bg-vault-bg border border-vault-border rounded-[4px] px-3 py-2.5 cursor-not-allowed opacity-70">
                   <div className="w-4 h-4 rounded-full bg-[#0D0D0F] border border-vault-border" />
-                  <span className="text-[14px] text-vault-text">Industrial Dark (Locked)</span>
+                  <span className="text-[15px] md:text-[14px] text-vault-text">Industrial Dark (Locked)</span>
                 </div>
               </div>
             </div>
@@ -279,12 +279,12 @@ ${tiptapJsonToMarkdown(n.content)}
 
           {activeTab === 'AI & Search' && (
             <div className="flex flex-col gap-8">
-              <div className="flex flex-col gap-2 max-w-sm">
-                <label className="text-[10px] uppercase tracking-normal text-vault-text-3">Primary Reasoning Model</label>
+              <div className="flex flex-col gap-2 w-full md:max-w-sm">
+                <label className="text-[10px] uppercase tracking-normal text-vault-text-3 font-bold">Primary Reasoning Model</label>
                 <select 
                   value={settings.primaryModel}
                   onChange={e => setSetting('primaryModel', e.target.value)}
-                  className="w-full bg-vault-bg border border-vault-border rounded-[4px] px-3 py-2 text-[14px] text-vault-text focus:border-vault-accent focus:outline-none transition-colors appearance-none"
+                  className="w-full bg-vault-bg border border-vault-border rounded-[4px] px-3 py-2.5 text-[15px] md:text-[14px] text-vault-text focus:border-vault-accent focus:outline-none transition-colors appearance-none h-11"
                 >
                   <option>Claude Sonnet</option>
                   <option>Claude Haiku</option>
@@ -292,42 +292,42 @@ ${tiptapJsonToMarkdown(n.content)}
               </div>
 
               <div className="flex flex-col gap-6">
-                <div className="flex items-center justify-between py-2 border-b border-vault-border border-dashed">
-                  <div className="flex flex-col gap-1">
-                    <span className="text-[14px] text-vault-text">Live Web Search</span>
-                    <span className="text-[12px] text-vault-text-3">Allow AI to search the internet for missing context.</span>
+                <div className="flex items-center justify-between py-3 border-b border-vault-border border-dashed">
+                  <div className="flex flex-col gap-1 pr-4">
+                    <span className="text-[15px] md:text-[14px] text-vault-text font-medium">Live Web Search</span>
+                    <span className="text-[12px] text-vault-text-3 leading-snug">Allow AI to search the internet for missing context.</span>
                   </div>
                   <Toggle checked={settings.liveWebSearch} onChange={v => setSetting('liveWebSearch', v)} />
                 </div>
                 
-                <div className="flex items-center justify-between py-2 border-b border-vault-border border-dashed">
-                  <div className="flex flex-col gap-1">
-                    <span className="text-[14px] text-vault-text">Show AI Friction Prompts</span>
-                    <span className="text-[12px] text-vault-text-3">Show "what do you think?" prompts after AI responses.</span>
+                <div className="flex items-center justify-between py-3 border-b border-vault-border border-dashed">
+                  <div className="flex flex-col gap-1 pr-4">
+                    <span className="text-[15px] md:text-[14px] text-vault-text font-medium">Show AI Friction Prompts</span>
+                    <span className="text-[12px] text-vault-text-3 leading-snug">Show "what do you think?" prompts after AI responses.</span>
                   </div>
                   <Toggle checked={settings.showFrictionPrompts} onChange={v => setSetting('showFrictionPrompts', v)} />
                 </div>
                 
-                <div className="flex items-center justify-between py-2 border-b border-vault-border border-dashed">
-                  <div className="flex flex-col gap-1">
-                    <span className="text-[14px] text-vault-text">Flag Unverified AI Summaries</span>
-                    <span className="text-[12px] text-vault-text-3">Visually highlight AI abstracts that haven't been reviewed.</span>
+                <div className="flex items-center justify-between py-3 border-b border-vault-border border-dashed">
+                  <div className="flex flex-col gap-1 pr-4">
+                    <span className="text-[15px] md:text-[14px] text-vault-text font-medium">Flag Unverified AI Summaries</span>
+                    <span className="text-[12px] text-vault-text-3 leading-snug">Visually highlight AI abstracts that haven't been reviewed.</span>
                   </div>
                   <Toggle checked={settings.flagUnverifiedSummaries} onChange={v => setSetting('flagUnverifiedSummaries', v)} />
                 </div>
 
-                <div className="flex items-center justify-between py-2 border-b border-vault-border border-dashed">
-                  <div className="flex flex-col gap-1">
-                    <span className="text-[14px] text-vault-text">90-Day Stance Review Nudges</span>
-                    <span className="text-[12px] text-vault-text-3">Remind you to revisit stances older than 3 months.</span>
+                <div className="flex items-center justify-between py-3 border-b border-vault-border border-dashed">
+                  <div className="flex flex-col gap-1 pr-4">
+                    <span className="text-[15px] md:text-[14px] text-vault-text font-medium">90-Day Stance Review Nudges</span>
+                    <span className="text-[12px] text-vault-text-3 leading-snug">Remind you to revisit stances older than 3 months.</span>
                   </div>
                   <Toggle checked={settings.stanceReviewNudges} onChange={v => setSetting('stanceReviewNudges', v)} />
                 </div>
 
-                <div className="flex items-center justify-between py-2 border-b border-vault-border border-dashed">
-                  <div className="flex flex-col gap-1">
-                    <span className="text-[14px] text-vault-text">Daily Reflection Prompt</span>
-                    <span className="text-[12px] text-vault-text-3">Show a philosophical question on your dashboard.</span>
+                <div className="flex items-center justify-between py-3 border-b border-vault-border border-dashed">
+                  <div className="flex flex-col gap-1 pr-4">
+                    <span className="text-[15px] md:text-[14px] text-vault-text font-medium">Daily Reflection Prompt</span>
+                    <span className="text-[12px] text-vault-text-3 leading-snug">Show a philosophical question on your dashboard.</span>
                   </div>
                   <Toggle checked={settings.dailyReflectionPrompt} onChange={v => setSetting('dailyReflectionPrompt', v)} />
                 </div>
@@ -337,19 +337,19 @@ ${tiptapJsonToMarkdown(n.content)}
 
           {activeTab === 'Privacy' && (
             <div className="flex flex-col gap-8">
-              <div className="bg-vault-accent-dim border border-vault-accent-border p-4 rounded-[6px]">
-                <h3 className="font-medium text-[14px] text-vault-text mb-1">Vault is Private</h3>
-                <p className="text-[13px] text-vault-text-2">
+              <div className="bg-vault-accent-dim border border-vault-accent-border p-5 rounded-[6px]">
+                <h3 className="font-bold text-[15px] md:text-[14px] text-vault-text mb-1">Vault is Private</h3>
+                <p className="text-[13px] text-vault-text-2 leading-relaxed">
                   Your data is encrypted in transit and at rest. AI features only send context explicitly when you invoke them. No data is used to train foundational models.
                 </p>
               </div>
 
-              <div className="flex flex-col gap-2 max-w-sm">
-                <label className="text-[10px] uppercase tracking-normal text-vault-text-3">Session Timeout</label>
+              <div className="flex flex-col gap-2 w-full md:max-w-sm">
+                <label className="text-[10px] uppercase tracking-normal text-vault-text-3 font-bold">Session Timeout</label>
                 <select 
                   value={settings.sessionTimeout}
                   onChange={e => setSetting('sessionTimeout', e.target.value)}
-                  className="w-full bg-vault-bg border border-vault-border rounded-[4px] px-3 py-2 text-[14px] text-vault-text focus:border-vault-accent focus:outline-none transition-colors appearance-none"
+                  className="w-full bg-vault-bg border border-vault-border rounded-[4px] px-3 py-2.5 text-[15px] md:text-[14px] text-vault-text focus:border-vault-accent focus:outline-none transition-colors appearance-none h-11"
                 >
                   <option>Never</option>
                   <option>1 hour</option>
@@ -364,38 +364,38 @@ ${tiptapJsonToMarkdown(n.content)}
           )}
 
           {activeTab === 'Export & Backup' && (
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-4 md:gap-6">
               
-              <div className="flex items-center justify-between bg-vault-bg border border-vault-border p-4 rounded-[6px]">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-vault-bg border border-vault-border p-5 rounded-[6px]">
                 <div className="flex flex-col gap-1">
-                  <span className="text-[14px] text-vault-text font-medium">Export as JSON</span>
-                  <span className="text-[13px] text-vault-text-3">Raw database export containing all metadata and content blocks.</span>
+                  <span className="text-[15px] md:text-[14px] text-vault-text font-bold">Export as JSON</span>
+                  <span className="text-[13px] text-vault-text-3">Raw database export containing all metadata and content.</span>
                 </div>
                 <button 
                   onClick={exportAsJson}
                   disabled={exporting}
-                  className="flex items-center gap-2 bg-vault-bg-3 border border-vault-border hover:border-vault-text-3 text-vault-text text-[13px] px-4 py-2 rounded-[4px] transition-colors disabled:opacity-50"
+                  className="h-12 sm:h-auto flex items-center justify-center gap-2 bg-vault-bg-3 border border-vault-border hover:border-vault-text-3 text-vault-text text-[13px] px-6 py-2 rounded-[4px] transition-colors disabled:opacity-50 font-bold"
                 >
                   {exporting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />} JSON
                 </button>
               </div>
 
-              <div className="flex items-center justify-between bg-vault-bg border border-vault-border p-4 rounded-[6px]">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-vault-bg border border-vault-border p-5 rounded-[6px]">
                 <div className="flex flex-col gap-1">
-                  <span className="text-[14px] text-vault-text font-medium">Export as Markdown</span>
-                  <span className="text-[13px] text-vault-text-3">Bundles your stances and journal entries into a flat ZIP of .md files.</span>
+                  <span className="text-[15px] md:text-[14px] text-vault-text font-bold">Export as Markdown</span>
+                  <span className="text-[13px] text-vault-text-3">Bundles entries into a flat ZIP of .md files.</span>
                 </div>
                 <button 
                   onClick={exportAsMarkdown}
                   disabled={exporting}
-                  className="flex items-center gap-2 bg-vault-bg-3 border border-vault-border hover:border-vault-text-3 text-vault-text text-[13px] px-4 py-2 rounded-[4px] transition-colors disabled:opacity-50"
+                  className="h-12 sm:h-auto flex items-center justify-center gap-2 bg-vault-bg-3 border border-vault-border hover:border-vault-text-3 text-vault-text text-[13px] px-6 py-2 rounded-[4px] transition-colors disabled:opacity-50 font-bold"
                 >
                   {exporting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />} ZIP
                 </button>
               </div>
 
               {lastExport && (
-                <div className="text-[10px] uppercase tracking-normal text-vault-text-3 mt-2">
+                <div className="text-[10px] uppercase tracking-normal text-vault-text-3 mt-2 text-center sm:text-left">
                   Last exported: {lastExport}
                 </div>
               )}

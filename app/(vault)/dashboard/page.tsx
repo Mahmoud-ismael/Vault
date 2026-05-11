@@ -116,12 +116,12 @@ export default async function DashboardPage() {
   }
 
   return (
-    <div className="flex flex-col gap-12 w-full max-w-5xl mx-auto pb-10">
+    <div className="flex flex-col gap-8 md:gap-12 w-full max-w-5xl mx-auto pb-10">
       <SetTopbar title="Dashboard" />
 
       {/* 1. GREETING SECTION */}
       <div className="flex flex-col gap-2">
-        <h1 className="text-[32px] text-vault-text">
+        <h1 className="text-[26px] md:text-[32px] text-vault-text">
           {greeting}, {userName}.
         </h1>
         <div className="text-[11px] uppercase tracking-normal text-vault-text-3">
@@ -130,14 +130,14 @@ export default async function DashboardPage() {
       </div>
 
       {/* 2. DAILY REFLECTION PROMPT */}
-      <div className="bg-vault-bg-2 border border-vault-accent-border rounded-[6px] p-[20px] px-[24px] flex flex-col gap-4">
-        <div className="text-[9px] uppercase tracking-[0.2em] text-vault-accent">
+      <div className="bg-vault-bg-2 border border-vault-accent-border rounded-[6px] p-[16px] md:p-[20px] md:px-[24px] flex flex-col gap-4">
+        <div className="text-[9px] uppercase tracking-normal text-vault-accent">
           Today's Reflection
         </div>
-        <div className="text-[20px] text-vault-text leading-snug">
+        <div className="text-[18px] md:text-[20px] text-vault-text leading-snug">
           "{prompt}"
         </div>
-        <div className="pt-2">
+        <div className="pt-1">
           <Link 
             href="/journal/new" 
             className="text-[14px] text-vault-text-2 hover:text-vault-accent transition-colors"
@@ -148,31 +148,31 @@ export default async function DashboardPage() {
       </div>
 
       {/* 3. STATS ROW */}
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
-        <div className="bg-vault-bg-2 border border-vault-border rounded-[6px] p-5 flex flex-col gap-1">
-          <div className="text-[36px] text-vault-accent leading-none mb-1">{settledCount || 0}</div>
+      <div className="grid grid-cols-2 xl:grid-cols-4 gap-3 md:gap-4">
+        <div className="bg-vault-bg-2 border border-vault-border rounded-[6px] p-4 md:p-5 flex flex-col gap-1">
+          <div className="text-[28px] md:text-[36px] text-vault-accent leading-none mb-1">{settledCount || 0}</div>
           <div className="text-[10px] uppercase tracking-normal text-vault-text-3">Stances Settled</div>
         </div>
-        <div className="bg-vault-bg-2 border border-vault-border rounded-[6px] p-5 flex flex-col gap-1">
-          <div className="text-[36px] text-vault-accent leading-none mb-1">{evolvingCount || 0}</div>
+        <div className="bg-vault-bg-2 border border-vault-border rounded-[6px] p-4 md:p-5 flex flex-col gap-1">
+          <div className="text-[28px] md:text-[36px] text-vault-accent leading-none mb-1">{evolvingCount || 0}</div>
           <div className="text-[10px] uppercase tracking-normal text-vault-text-3">Still Evolving</div>
         </div>
-        <div className="bg-vault-bg-2 border border-vault-border rounded-[6px] p-5 flex flex-col gap-1">
-          <div className="text-[36px] text-vault-accent leading-none mb-1">{journalCount || 0}</div>
+        <div className="bg-vault-bg-2 border border-vault-border rounded-[6px] p-4 md:p-5 flex flex-col gap-1">
+          <div className="text-[28px] md:text-[36px] text-vault-accent leading-none mb-1">{journalCount || 0}</div>
           <div className="text-[10px] uppercase tracking-normal text-vault-text-3">Journal Entries</div>
         </div>
-        <div className="bg-vault-bg-2 border border-vault-border rounded-[6px] p-5 flex flex-col gap-1">
-          <div className="text-[36px] text-vault-accent leading-none mb-1">{docsCount || 0}</div>
+        <div className="bg-vault-bg-2 border border-vault-border rounded-[6px] p-4 md:p-5 flex flex-col gap-1">
+          <div className="text-[28px] md:text-[36px] text-vault-accent leading-none mb-1">{docsCount || 0}</div>
           <div className="text-[10px] uppercase tracking-normal text-vault-text-3">Documents</div>
         </div>
       </div>
 
       {/* 4. TWO-COLUMN GRID */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-12 lg:gap-24">
         
         {/* Left: Stance Progress */}
         <div className="flex flex-col gap-6">
-          <div className="text-[10px] uppercase tracking-[0.2em] text-vault-text-3">
+          <div className="text-[10px] uppercase tracking-normal text-vault-text-3">
             Stance Progress
           </div>
           <div className="flex flex-col gap-4">
@@ -201,7 +201,7 @@ export default async function DashboardPage() {
 
         {/* Right: Recent Activity Feed */}
         <div className="flex flex-col gap-6">
-          <div className="text-[10px] uppercase tracking-[0.2em] text-vault-text-3">
+          <div className="text-[10px] uppercase tracking-normal text-vault-text-3">
             Recent Activity
           </div>
           <div className="flex flex-col gap-4">
@@ -232,14 +232,14 @@ export default async function DashboardPage() {
       </div>
 
       {/* 5. EXPORT BANNER */}
-      <div className="mt-4 bg-vault-bg-2 border border-vault-border rounded-[6px] p-4 px-5 flex items-center justify-between">
+      <div className="mt-4 bg-vault-bg-2 border border-vault-border rounded-[6px] p-4 md:px-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div className="flex items-center gap-4">
-          <div className="w-8 h-8 rounded bg-vault-bg-4 flex items-center justify-center shrink-0 border border-vault-border">
+          <div className="hidden md:flex w-8 h-8 rounded bg-vault-bg-4 items-center justify-center shrink-0 border border-vault-border">
             <Download className="w-4 h-4 text-vault-text-2" />
           </div>
           <div className="flex flex-col gap-0.5">
             <div className="text-[15px] text-vault-text">Your vault is always yours</div>
-            <div className="text-[10px] text-vault-text-3">Export all data as JSON or Markdown · Last export: Never</div>
+            <div className="text-[10px] text-vault-text-3">Export as JSON or Markdown</div>
           </div>
         </div>
         <ExportButton />

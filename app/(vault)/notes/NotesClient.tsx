@@ -1,14 +1,12 @@
 'use client'
 
-import { useState, useMemo } from 'react'
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import { format } from 'date-fns'
-import { Plus, Search, MoreVertical, Pin, Copy, Trash2, ArrowRight, FileText } from 'lucide-react'
+import { Plus, Search, MoreVertical, Pin, Copy, Trash2, ArrowRight, FileText, ChevronLeft as BackIcon } from 'lucide-react'
 import { SetTopbar } from '@/components/vault/SetTopbar'
 import { EmptyState } from '@/components/shared/EmptyState'
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
+import { useTopbar } from '@/components/vault/TopbarContext'
+import { useEffect } from 'react'
 import TaskList from '@tiptap/extension-task-list'
 import TaskItem from '@tiptap/extension-task-item'
 import { Table } from '@tiptap/extension-table'
@@ -55,10 +53,28 @@ function ReadOnlyEditor({ content }: { content: any }) {
 }
 
 export default function NotesClient({ initialNotes }: { initialNotes: any[] }) {
+  const router = useRouter()
+  const { setFab } = useTopbar()
   const [notes, setNotes] = useState(initialNotes)
   const [selectedId, setSelectedId] = useState<string | null>(null)
+  const [mobileView, setMobileView] = useState<'list' | 'detail'>('list')
   const [search, setSearch] = useState('')
   const [contextMenuId, setContextMenuId] = useState<string | null>(null)
+
+  // Setup FAB
+  useEffect(() => {
+    setFab({
+      label: 'New Note',
+      icon: Plus,
+      onClick: () => router.push('/notes/new')
+    })
+    return () => setFab(null)
+  }, [setFab, router])
+
+  const handleSelect = (id: string) => {
+    setSelectedId(id)
+    setMobileView('detail')
+  }
   
   const supabase = createClient()
   const router = useRouter()
@@ -133,13 +149,13 @@ export default function NotesClient({ initialNotes }: { initialNotes: any[] }) {
     
     return (
       <div
-        onClick={() => setSelectedId(n.id)}
-        className={`group flex items-center justify-between p-2 rounded-[4px] border-l-[3px] transition-all duration-150 text-left cursor-pointer relative ${
+        onClick={() => handleSelect(n.id)}
+        className={`group flex items-center justify-between p-4 md:p-2 rounded-[4px] border-l-[3px] transition-all duration-150 text-left cursor-pointer relative min-h-[64px] md:min-h-0 ${
           isActive 
             ? 'bg-vault-accent-dim border-vault-accent' 
             : 'border-transparent hover:bg-vault-bg-3'
         }`}
-        style={{ paddingLeft: `${8 + depth * 16}px` }}
+        style={{ paddingLeft: `${isActive ? 12 : 8 + depth * 16}px` }}
       >
         <div className="flex items-center gap-2 pr-12 overflow-hidden flex-1">
           {hasChildren ? (
@@ -234,29 +250,37 @@ export default function NotesClient({ initialNotes }: { initialNotes: any[] }) {
   }
 
   return (
-    <div className="flex w-full h-[calc(100vh-52px)] -m-8 lg:-m-10">
+    <div className="flex w-full h-screen md:h-[calc(100vh-52px)] -m-4 md:-m-8 lg:-m-10 overflow-hidden">
       <SetTopbar title="Notes" />
 
       {/* LEFT PANEL */}
-      <div className="w-[260px] flex-shrink-0 flex flex-col border-r border-vault-border bg-vault-bg-2">
+      <div className={`w-full md:w-[320px] lg:w-[380px] flex-shrink-0 flex flex-col border-r border-vault-border bg-vault-bg-2 transition-transform duration-300 md:translate-x-0 ${
+        mobileView === 'detail' ? 'hidden md:flex' : 'flex'
+      }`}>
         <div className="flex flex-col gap-3 p-4 border-b border-vault-border">
           <div className="flex items-center justify-between">
             <div className="text-[10px] uppercase tracking-normal text-vault-text-3">
               NOTES <span className="text-vault-text-4 ml-1">({notes.length})</span>
             </div>
-            <Link href="/notes/new" className="p-1 rounded-[3px] bg-vault-bg-4 text-vault-text-3 hover:text-vault-text transition-colors">
+            <button 
+              onClick={() => router.push('/notes/new')}
+              className="md:hidden p-2 text-vault-text-2 hover:text-vault-text"
+            >
+              <Plus className="w-6 h-6" />
+            </button>
+            <Link href="/notes/new" className="hidden md:block p-1 rounded-[3px] bg-vault-bg-4 text-vault-text-3 hover:text-vault-text transition-colors">
               <Plus className="w-3.5 h-3.5" />
             </Link>
           </div>
           
           <div className="relative">
-            <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-vault-text-3" />
+            <Search className="w-4 h-4 md:w-3.5 md:h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-vault-text-3" />
             <input 
               type="text"
               placeholder="Search notes..."
               value={search}
               onChange={e => setSearch(e.target.value)}
-              className="w-full bg-vault-bg-4 border border-vault-border rounded-[4px] pl-8 pr-3 py-1.5 text-[13px] text-vault-text placeholder-vault-text-3 focus:outline-none focus:border-vault-accent transition-colors duration-150"
+              className="w-full bg-vault-bg-4 border border-vault-border rounded-[4px] pl-9 pr-3 py-2.5 md:py-1.5 text-[16px] md:text-[13px] text-vault-text placeholder-vault-text-3 focus:outline-none focus:border-vault-accent transition-colors duration-150"
             />
           </div>
         </div>
@@ -272,8 +296,8 @@ export default function NotesClient({ initialNotes }: { initialNotes: any[] }) {
             <>
               {pinnedNotes.length > 0 && (
                 <div className="flex flex-col gap-1">
-                  <div className="text-[9px] uppercase tracking-normal text-vault-text-3 px-2 mb-1 flex items-center gap-1.5">
-                    <Pin className="w-2.5 h-2.5" /> Pinned
+                  <div className="text-[10px] md:text-[9px] uppercase tracking-normal text-vault-text-3 px-2 mb-1 flex items-center gap-1.5 font-bold">
+                    <Pin className="w-3 h-3 md:w-2.5 md:h-2.5" /> Pinned
                   </div>
                   <NoteTree isPinnedOnly={true} />
                 </div>
@@ -281,7 +305,7 @@ export default function NotesClient({ initialNotes }: { initialNotes: any[] }) {
               
               <div className="flex flex-col gap-1">
                 {pinnedNotes.length > 0 && unpinnedNotes.length > 0 && (
-                  <div className="text-[9px] uppercase tracking-normal text-vault-text-3 px-2 mb-1">
+                  <div className="text-[10px] md:text-[9px] uppercase tracking-normal text-vault-text-3 px-2 mb-1 font-bold">
                     All Notes
                   </div>
                 )}
@@ -293,17 +317,19 @@ export default function NotesClient({ initialNotes }: { initialNotes: any[] }) {
       </div>
 
       {/* RIGHT PANEL */}
-      <div className="flex-1 bg-vault-bg flex flex-col overflow-hidden relative">
+      <div className={`flex-1 bg-vault-bg flex flex-col overflow-hidden relative ${
+        mobileView === 'list' ? 'hidden md:flex' : 'flex'
+      }`}>
         {!selectedNote ? (
-          <div className="flex flex-col items-center justify-center h-full gap-6">
+          <div className="flex flex-col items-center justify-center h-full gap-6 p-8 text-center">
             <EmptyState 
               icon={FileText}
-              title={notes.length === 0 ? "Nothing here yet." : "Select a note or write something new."}
-              subtitle={notes.length === 0 ? "Create your first note." : undefined}
+              title={notes.length === 0 ? "Nothing here yet." : "Select a note."}
+              subtitle={notes.length === 0 ? "Create your first note." : "Select a note from the sidebar to start writing."}
               action={
                 <Link 
                   href="/notes/new"
-                  className="bg-vault-accent text-[#0D0D0F] text-[11px] uppercase tracking-[0.1em] py-2 px-6 rounded-[4px] hover:bg-vault-accent-2 transition-colors duration-150 inline-block mt-4"
+                  className="bg-vault-accent text-[#0D0D0F] text-[11px] uppercase tracking-widest py-2.5 px-8 rounded-[4px] hover:bg-vault-accent-2 transition-colors duration-150 inline-block mt-4 font-bold"
                 >
                   {notes.length === 0 ? "Create First Note" : "New Note"}
                 </Link>
@@ -311,25 +337,40 @@ export default function NotesClient({ initialNotes }: { initialNotes: any[] }) {
             />
           </div>
         ) : (
-          <div className="flex-1 overflow-y-auto p-10 lg:p-16 flex flex-col gap-6 w-full mx-auto max-w-4xl">
-            <div className="flex items-center justify-between">
-              <div className="text-[10px] uppercase text-vault-text-3 tracking-normal">
-                Last updated {format(new Date(selectedNote.updated_at), 'MMM d, yyyy')}
-              </div>
-              <Link 
-                href={`/notes/${selectedNote.id}`}
-                className="flex items-center gap-1 text-[10px] uppercase text-vault-accent hover:text-vault-accent-2 tracking-normal transition-colors"
+          <div className="flex flex-col h-full overflow-hidden">
+            {/* Mobile Header with Back Button */}
+            <div className="flex items-center gap-3 p-4 border-b border-vault-border md:hidden">
+              <button 
+                onClick={() => setMobileView('list')}
+                className="p-2 -ml-2 text-vault-text-2 hover:text-vault-text"
               >
-                Open full editor <ArrowRight className="w-3 h-3" />
-              </Link>
+                <BackIcon className="w-6 h-6" />
+              </button>
+              <div className="text-[14px] text-vault-text-2 font-medium truncate">
+                {selectedNote.title || 'Untitled'}
+              </div>
             </div>
-            
-            <h1 className="text-[36px] text-vault-text leading-tight mt-2">
-              {selectedNote.title}
-            </h1>
-            
-            <div className="mt-8 text-[16px] leading-[1.8] text-vault-text-2 max-w-none w-full">
-              <ReadOnlyEditor content={selectedNote.content} key={selectedNote.id} />
+
+            <div className="flex-1 overflow-y-auto p-6 md:p-10 lg:p-16 flex flex-col gap-6 w-full mx-auto max-w-4xl">
+              <div className="flex items-center justify-between">
+                <div className="text-[10px] uppercase text-vault-text-3 tracking-normal">
+                  Last updated {format(new Date(selectedNote.updated_at), 'MMM d, yyyy')}
+                </div>
+                <Link 
+                  href={`/notes/${selectedNote.id}`}
+                  className="flex items-center gap-1 text-[11px] uppercase text-vault-accent hover:text-vault-accent-2 tracking-widest transition-colors font-bold"
+                >
+                  Full Editor <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
+              
+              <h1 className="text-[28px] md:text-[36px] text-vault-text leading-tight mt-2 font-bold">
+                {selectedNote.title}
+              </h1>
+              
+              <div className="mt-8 text-[17px] md:text-[16px] leading-[1.8] text-vault-text-2 max-w-none w-full pb-20">
+                <ReadOnlyEditor content={selectedNote.content} key={selectedNote.id} />
+              </div>
             </div>
           </div>
         )}

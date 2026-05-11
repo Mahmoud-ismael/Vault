@@ -5,9 +5,11 @@ import { createClient } from '@/lib/supabase/client'
 import { STANCE_SEEDS } from '@/lib/stances/seed'
 import { SetTopbar } from '@/components/vault/SetTopbar'
 import { StanceCard } from '@/components/vault/StanceCard'
-import { Target } from 'lucide-react'
+import { Target, Plus } from 'lucide-react'
 import { Skeleton } from '@/components/shared/Skeleton'
 import { EmptyState } from '@/components/shared/EmptyState'
+import { useTopbar } from '@/components/vault/TopbarContext'
+import { useRouter } from 'next/navigation'
 
 type Stance = {
   id: string
@@ -19,6 +21,7 @@ type Stance = {
 }
 
 export default function StancesPage() {
+  const { setFab } = useTopbar()
   const [stances, setStances] = useState<Stance[]>([])
   const [loading, setLoading] = useState(true)
   const [seeding, setSeeding] = useState(false)
@@ -26,6 +29,16 @@ export default function StancesPage() {
   const [search, setSearch] = useState('')
 
   const supabase = createClient()
+
+  // Setup FAB
+  useEffect(() => {
+    setFab({
+      label: 'New Stance',
+      icon: Plus,
+      onClick: () => alert("Coming soon: New Stance Modal")
+    })
+    return () => setFab(null)
+  }, [setFab])
 
   useEffect(() => {
     async function loadStances() {
@@ -143,13 +156,15 @@ export default function StancesPage() {
       </div>
 
       {/* FILTER BAR */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 py-4 border-y border-vault-border mt-2">
-        <div className="flex flex-wrap items-center gap-2">
-          <FilterChip label="All" />
-          <FilterChip label="Settled" />
-          <FilterChip label="Evolving" />
-          <FilterChip label="Undecided" />
-          <FilterChip label="Not Started" />
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 py-4 border-y border-vault-border mt-2">
+        <div className="w-full md:w-auto overflow-x-auto no-scrollbar -webkit-overflow-scrolling-touch">
+          <div className="flex items-center gap-2 whitespace-nowrap pb-1 md:pb-0">
+            <FilterChip label="All" />
+            <FilterChip label="Settled" />
+            <FilterChip label="Evolving" />
+            <FilterChip label="Undecided" />
+            <FilterChip label="Not Started" />
+          </div>
         </div>
         
         <input 
@@ -157,7 +172,7 @@ export default function StancesPage() {
           placeholder="Filter topics..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full sm:w-[240px] bg-vault-bg-4 border border-vault-border rounded-[4px] px-3 py-1.5 text-[13px] text-vault-text placeholder-vault-text-3 focus:outline-none focus:border-vault-accent transition-all duration-150"
+          className="w-full md:w-[240px] bg-vault-bg-4 border border-vault-border rounded-[4px] px-3 py-1.5 text-[16px] md:text-[13px] text-vault-text placeholder-vault-text-3 focus:outline-none focus:border-vault-accent transition-all duration-150"
         />
       </div>
 

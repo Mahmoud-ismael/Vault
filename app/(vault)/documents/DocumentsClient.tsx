@@ -10,6 +10,8 @@ import { SetTopbar } from '@/components/vault/SetTopbar'
 import { DocumentCard } from '@/components/vault/DocumentCard'
 import { EmptyState } from '@/components/shared/EmptyState'
 import { toast } from 'sonner'
+import { useTopbar } from '@/components/vault/TopbarContext'
+import { useEffect } from 'react'
 
 type UploadStatus = {
   filename: string
@@ -18,11 +20,22 @@ type UploadStatus = {
 }
 
 export default function DocumentsClient({ initialDocuments, user }: { initialDocuments: any[], user: any }) {
+  const { setFab } = useTopbar()
   const [documents, setDocuments] = useState(initialDocuments)
   const [filter, setFilter] = useState('All')
   const [uploads, setUploads] = useState<UploadStatus[]>([])
   const [showUploader, setShowUploader] = useState(initialDocuments.length === 0)
   const [cameraMode, setCameraMode] = useState<CameraMode | null>(null)
+
+  // Setup FAB
+  useEffect(() => {
+    setFab({
+      label: 'Upload',
+      icon: Plus,
+      onClick: () => setShowUploader(true)
+    })
+    return () => setFab(null)
+  }, [setFab])
   
   const supabase = createClient()
   const router = useRouter()
@@ -221,22 +234,23 @@ export default function DocumentsClient({ initialDocuments, user }: { initialDoc
   }
 
   const LeftNode = (
-    <div className="text-[28px] text-vault-text leading-none">Documents</div>
+    <div className="text-[24px] md:text-[28px] text-vault-text leading-none font-bold">Documents</div>
   )
 
   const RightNode = (
-    <div className="flex items-center gap-4">
-      <div className="hidden sm:flex items-center gap-2 text-[10px] uppercase tracking-normal text-vault-text-3">
+    <div className="flex items-center gap-2 md:gap-4">
+      <div className="hidden lg:flex items-center gap-2 text-[10px] uppercase tracking-normal text-vault-text-3">
         {documents.length} · PDFs, images, scans, articles
       </div>
-      <div className="w-[1px] h-4 bg-vault-border hidden sm:block" />
-      <div className="flex bg-vault-bg-4 rounded-[4px] p-0.5 border border-vault-border">
+      <div className="w-[1px] h-4 bg-vault-border hidden lg:block" />
+      
+      <div className="flex bg-vault-bg-4 rounded-[4px] p-0.5 border border-vault-border overflow-x-auto no-scrollbar max-w-[150px] sm:max-w-none">
         {['All', 'PDF', 'Image', 'Article'].map(f => (
           <button 
             key={f}
             onClick={() => setFilter(f)}
-            className={`px-3 py-1 text-[10px]  uppercase tracking-normal rounded-[3px] transition-colors ${
-              filter === f ? 'bg-vault-bg-2 text-vault-text shadow-sm' : 'text-vault-text-3 hover:text-vault-text-2 hover:bg-vault-bg-3'
+            className={`px-3 py-1 text-[10px] uppercase tracking-normal rounded-[3px] transition-colors whitespace-nowrap ${
+              filter === f ? 'bg-vault-bg-2 text-vault-text shadow-sm font-bold' : 'text-vault-text-3 hover:text-vault-text-2 hover:bg-vault-bg-3'
             }`}
           >
             {f}
@@ -245,41 +259,41 @@ export default function DocumentsClient({ initialDocuments, user }: { initialDoc
       </div>
       <button 
         onClick={() => setShowUploader(!showUploader)}
-        className="flex items-center gap-2 bg-vault-accent text-[#0D0D0F] text-[11px] uppercase tracking-[0.1em] py-1.5 px-4 rounded-[4px] hover:bg-vault-accent-2 transition-colors duration-150"
+        className="flex items-center justify-center bg-vault-accent text-[#0D0D0F] text-[11px] uppercase tracking-widest py-1.5 px-3 md:px-4 rounded-[4px] hover:bg-vault-accent-2 transition-colors duration-150 font-bold"
       >
-        <Plus className="w-3.5 h-3.5" /> Upload
+        <Plus className="w-4 h-4 md:w-3.5 md:h-3.5 mr-1" /> <span className="hidden sm:inline">Upload</span>
       </button>
     </div>
   )
 
   return (
-    <div className="w-full flex flex-col gap-8 pb-16 relative">
+    <div className="w-full flex flex-col gap-6 md:gap-8 pb-16 relative">
       <SetTopbar title="" leftNode={LeftNode} rightNode={RightNode} />
 
       {/* UPLOADER */}
       {showUploader && (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 animate-in fade-in slide-in-from-top-2 duration-300">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div 
               {...getRootProps()} 
-              className={`md:col-span-1 border-[2px] border-dashed rounded-[8px] p-8 flex flex-col items-center justify-center cursor-pointer transition-colors duration-150 ${
+              className={`md:col-span-1 border-[2px] border-dashed rounded-[8px] p-6 md:p-8 flex flex-col items-center justify-center cursor-pointer transition-colors duration-150 min-h-[140px] md:min-h-0 ${
                 isDragActive ? 'border-vault-accent bg-vault-accent/[0.05]' : 'border-vault-border-2 bg-vault-bg-2 hover:border-vault-accent-border hover:bg-vault-bg-3'
               }`}
             >
               <input {...getInputProps()} />
-              <Archive className="w-8 h-8 text-vault-text-3 mb-4" />
-              <h2 className="text-[18px] text-vault-text mb-2 text-center">Drop files or click</h2>
+              <Archive className="w-8 h-8 text-vault-text-3 mb-3 md:mb-4" />
+              <h2 className="text-[16px] md:text-[18px] text-vault-text mb-1 text-center font-bold">Drop files or click</h2>
               <div className="text-[9px] text-vault-text-3 uppercase tracking-normal text-center">
-                PDF, DOCX, TXT, PNG, JPG, WEBP
+                PDF, TXT, IMAGES
               </div>
             </div>
 
             <button 
               onClick={() => setCameraMode('photo')}
-              className="md:col-span-1 border border-vault-border-2 bg-vault-bg-2 hover:border-vault-accent-border hover:bg-vault-bg-3 rounded-[8px] p-8 flex flex-col items-center justify-center transition-colors duration-150"
+              className="md:col-span-1 border border-vault-border-2 bg-vault-bg-2 hover:border-vault-accent-border hover:bg-vault-bg-3 rounded-[8px] p-6 md:p-8 flex flex-col items-center justify-center transition-colors duration-150 min-h-[140px] md:min-h-0 h-28 md:h-auto"
             >
-              <Camera className="w-8 h-8 text-vault-text-3 mb-4" />
-              <h2 className="text-[18px] text-vault-text mb-2">Take Photo</h2>
+              <Camera className="w-8 h-8 text-vault-text-3 mb-3 md:mb-4" />
+              <h2 className="text-[16px] md:text-[18px] text-vault-text mb-1 font-bold">Take Photo</h2>
               <div className="text-[9px] text-vault-text-3 uppercase tracking-normal text-center">
                 Capture image instantly
               </div>
@@ -287,15 +301,15 @@ export default function DocumentsClient({ initialDocuments, user }: { initialDoc
 
             <button 
               onClick={() => setCameraMode('scan')}
-              className="md:col-span-1 border border-vault-border-2 bg-vault-bg-2 hover:border-vault-accent-border hover:bg-vault-bg-3 rounded-[8px] p-8 flex flex-col items-center justify-center transition-colors duration-150"
+              className="md:col-span-1 border border-vault-border-2 bg-vault-bg-2 hover:border-vault-accent-border hover:bg-vault-bg-3 rounded-[8px] p-6 md:p-8 flex flex-col items-center justify-center transition-colors duration-150 min-h-[140px] md:min-h-0 h-28 md:h-auto"
             >
-              <Scan className="w-8 h-8 text-vault-text-3 mb-4" />
-              <h2 className="text-[18px] text-vault-text mb-2">Scan Document</h2>
+              <Scan className="w-8 h-8 text-vault-text-3 mb-3 md:mb-4" />
+              <h2 className="text-[16px] md:text-[18px] text-vault-text mb-1 font-bold">Scan Document</h2>
               <div className="text-[9px] text-vault-text-3 uppercase tracking-normal text-center">
                 Multi-page auto-crop
               </div>
             </button>
-          </div>
+          </div>>
 
           {/* Upload Progress Queue */}
           {uploads.length > 0 && (

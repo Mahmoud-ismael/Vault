@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { X, Download } from 'lucide-react'
 
 export function PwaRegistry() {
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null)
@@ -16,11 +17,11 @@ export function PwaRegistry() {
       })
     }
 
-    const handler = (e: Event) => {
+    const handler = (e: any) => {
       e.preventDefault()
       setDeferredPrompt(e)
       
-      const dismissed = localStorage.getItem('vault_pwa_dismissed')
+      const dismissed = sessionStorage.getItem('vault_pwa_dismissed')
       if (!dismissed) {
         setShowBanner(true)
       }
@@ -35,32 +36,45 @@ export function PwaRegistry() {
     deferredPrompt.prompt()
     const { outcome } = await deferredPrompt.userChoice
     if (outcome === 'accepted') {
-      console.log('User accepted the install prompt')
+      setShowBanner(false)
     }
     setDeferredPrompt(null)
-    setShowBanner(false)
   }
 
   const handleDismiss = () => {
-    localStorage.setItem('vault_pwa_dismissed', 'true')
+    sessionStorage.setItem('vault_pwa_dismissed', 'true')
     setShowBanner(false)
   }
 
   if (!showBanner) return null
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-vault-bg-2 border-t border-vault-border p-4 z-[100] flex items-center justify-between shadow-2xl md:hidden">
-      <div className="flex flex-col">
-        <span className="text-[18px] text-vault-text">Install Vault</span>
-        <span className="text-[12px] text-vault-text-3">Add to your home screen for quick access.</span>
-      </div>
-      <div className="flex items-center gap-4">
-        <button onClick={handleDismiss} className="text-[12px] text-vault-text-3 hover:text-vault-text transition-colors">
-          Dismiss
-        </button>
-        <button onClick={handleInstall} className="bg-vault-accent text-[#0D0D0F] text-[10px] uppercase tracking-normal px-4 py-2 rounded-[4px] hover:bg-vault-accent-2 transition-colors">
-          Install
-        </button>
+    <div className="fixed bottom-0 left-0 right-0 z-[100] md:hidden p-4">
+      <div className="bg-vault-bg-2 border border-vault-border rounded-[12px] p-4 shadow-[0_-8px_30px_rgb(0,0,0,0.5)] flex items-center justify-between gap-4 animate-in slide-in-from-bottom-full duration-500">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-vault-accent rounded-[8px] flex items-center justify-center shrink-0">
+            <span className="text-[#0D0D0F] font-bold text-[18px]">V</span>
+          </div>
+          <div className="flex flex-col">
+            <span className="text-vault-text text-[14px] font-bold">Install Vault</span>
+            <span className="text-vault-text-3 text-[11px]">Personal intelligence offline.</span>
+          </div>
+        </div>
+        
+        <div className="flex items-center gap-2">
+          <button 
+            onClick={handleInstall}
+            className="bg-vault-accent text-[#0D0D0F] text-[12px] px-4 py-2 rounded-[6px] font-bold flex items-center gap-2"
+          >
+            <Download className="w-3.5 h-3.5" /> Install
+          </button>
+          <button 
+            onClick={handleDismiss}
+            className="text-vault-text-3 p-2 hover:text-vault-text"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
       </div>
     </div>
   )

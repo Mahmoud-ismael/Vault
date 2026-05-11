@@ -398,13 +398,13 @@ export default function NoteEditorClient({ initialNote }: { initialNote: any }) 
   )
 
   return (
-    <div className="flex w-full h-[calc(100vh-52px)] -m-8 lg:-m-10 relative">
+    <div className="flex w-full h-[calc(100vh-52px)] -m-4 md:-m-8 lg:-m-10 relative overflow-hidden">
       <SetTopbar title={EditableTitle} leftNode={LeftNode} rightNode={RightNode} />
       <style>{EditorStyles}</style>
 
       {/* EDITOR PANEL */}
       <div className="flex-1 overflow-y-auto w-full relative">
-        <div className="max-w-[720px] mx-auto py-12 px-8 lg:px-0 lg:py-16">
+        <div className="max-w-[720px] mx-auto py-8 md:py-12 px-4 md:px-8 lg:px-0 lg:py-16">
           
           <input 
             value={title}
@@ -414,24 +414,24 @@ export default function NoteEditorClient({ initialNote }: { initialNote: any }) 
             }}
             placeholder="Untitled Note"
             autoFocus={initialNote.title === 'Untitled Note'}
-            className="w-full bg-transparent border-none focus:outline-none text-[36px] text-vault-text leading-tight mb-8"
+            className="w-full bg-transparent border-none focus:outline-none text-[28px] md:text-[36px] text-vault-text leading-tight mb-6 md:mb-8 font-bold"
           />
           
-          <div className="text-[17px] leading-[1.8] text-vault-text-2 min-h-[400px]">
+          <div className="text-[16px] md:text-[17px] leading-[1.8] text-vault-text-2 min-h-[400px]">
             <EditorContent editor={editor} />
           </div>
           
           {referencedBy.length > 0 && (
-            <div className="mt-20 pt-8 border-t border-vault-border">
-              <div className="text-[10px] uppercase tracking-normal text-vault-text-3 mb-4">Referenced By</div>
+            <div className="mt-16 md:mt-20 pt-8 border-t border-vault-border">
+              <div className="text-[10px] uppercase tracking-normal text-vault-text-3 mb-4 font-bold">Referenced By</div>
               <div className="flex flex-col gap-2">
                 {referencedBy.map(ref => (
                   <Link 
                     key={ref.id} 
                     href={`/notes/${ref.id}`}
-                    className="group block bg-vault-bg-2 border border-vault-border rounded-[4px] p-4 hover:border-vault-accent transition-colors"
+                    className="group block bg-vault-bg-2 border border-vault-border rounded-[6px] p-4 hover:border-vault-accent transition-colors"
                   >
-                    <div className="text-[14px] text-vault-text group-hover:text-vault-accent transition-colors">
+                    <div className="text-[14px] text-vault-text group-hover:text-vault-accent transition-colors font-bold">
                       {ref.title || 'Untitled Note'}
                     </div>
                   </Link>
@@ -446,8 +446,11 @@ export default function NoteEditorClient({ initialNote }: { initialNote: any }) 
       {/* SLASH COMMAND PALETTE */}
       {slashPos && filteredCommands.length > 0 && (
         <div 
-          className="fixed z-50 bg-vault-bg-2 border border-vault-border-2 rounded-[6px] shadow-lg w-64 overflow-hidden py-1"
-          style={{ top: slashPos.top, left: slashPos.left }}
+          className="fixed z-[101] bg-vault-bg-2 border border-vault-border-2 rounded-[6px] shadow-lg w-64 overflow-hidden py-1"
+          style={{ 
+            top: Math.min(slashPos.top, typeof window !== 'undefined' ? window.innerHeight - 200 : 0), 
+            left: Math.min(slashPos.left, typeof window !== 'undefined' ? window.innerWidth - 260 : 0) 
+          }}
         >
           {filteredCommands.map((cmd, i) => (
             <button
@@ -456,7 +459,7 @@ export default function NoteEditorClient({ initialNote }: { initialNote: any }) 
               onMouseEnter={() => setSlashIndex(i)}
               className={`w-full text-left px-3 py-2 flex flex-col gap-0.5 ${i === slashIndex ? 'bg-vault-bg-3' : 'hover:bg-vault-bg-4'}`}
             >
-              <div className="text-[11px] uppercase tracking-normal text-vault-text">{cmd.label}</div>
+              <div className="text-[11px] uppercase tracking-normal text-vault-text font-bold">{cmd.label}</div>
               <div className="text-[12px] text-vault-text-3">{cmd.desc}</div>
             </button>
           ))}
@@ -466,8 +469,11 @@ export default function NoteEditorClient({ initialNote }: { initialNote: any }) 
       {/* LINK COMMAND PALETTE */}
       {linkPos && filteredNotes.length > 0 && (
         <div 
-          className="fixed z-50 bg-vault-bg-2 border border-vault-border-2 rounded-[6px] shadow-lg w-64 overflow-hidden py-1 max-h-64 overflow-y-auto"
-          style={{ top: linkPos.top, left: linkPos.left }}
+          className="fixed z-[101] bg-vault-bg-2 border border-vault-border-2 rounded-[6px] shadow-lg w-64 overflow-hidden py-1 max-h-64 overflow-y-auto"
+          style={{ 
+            top: Math.min(linkPos.top, typeof window !== 'undefined' ? window.innerHeight - 200 : 0), 
+            left: Math.min(linkPos.left, typeof window !== 'undefined' ? window.innerWidth - 260 : 0) 
+          }}
         >
           {filteredNotes.map((note, i) => (
             <button
@@ -476,77 +482,85 @@ export default function NoteEditorClient({ initialNote }: { initialNote: any }) 
               onMouseEnter={() => setLinkIndex(i)}
               className={`w-full text-left px-3 py-2 flex flex-col gap-0.5 ${i === linkIndex ? 'bg-vault-bg-3' : 'hover:bg-vault-bg-4'}`}
             >
-              <div className="text-[13px] text-vault-text line-clamp-1">{note.title || 'Untitled'}</div>
+              <div className="text-[13px] text-vault-text line-clamp-1 font-bold">{note.title || 'Untitled'}</div>
             </button>
           ))}
         </div>
       )}
 
-      {/* AI SIDEBAR */}
+      {/* AI SIDEBAR / DRAWER */}
       {showAI && (
-        <div className="w-[280px] shrink-0 border-l border-vault-border bg-vault-bg-2 overflow-y-auto">
-          <div className="sticky top-0 z-10 bg-vault-bg-2 border-b border-vault-border p-4 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Sparkles className="w-3.5 h-3.5 text-vault-accent" />
-              <div className="text-[10px] uppercase tracking-normal text-vault-text-3">AI Tools</div>
-            </div>
-            <button onClick={() => setShowAI(false)} className="text-vault-text-3 hover:text-vault-text transition-colors">
-              <SidebarClose className="w-4 h-4" />
-            </button>
-          </div>
-          
-          <div className="p-4 flex flex-col gap-4">
-            <div className="flex flex-col gap-2 bg-vault-bg-3 border border-vault-border p-3 rounded-[6px]">
-              <div className="text-[10px] uppercase tracking-normal text-vault-accent">✦ Generate outline</div>
-              <input 
-                value={aiOutlineTopic}
-                onChange={e => setAiOutlineTopic(e.target.value)}
-                placeholder="Topic to research..."
-                className="w-full bg-vault-bg-4 border border-vault-border rounded-[4px] px-2 py-1.5 text-[13px] text-vault-text placeholder-vault-text-3 focus:outline-none focus:border-vault-accent transition-colors duration-150"
-              />
-              <button 
-                onClick={generateOutline}
-                disabled={aiOutlineLoading || !aiOutlineTopic.trim()}
-                className="w-full bg-vault-accent text-[#0D0D0F] text-[10px] uppercase tracking-normal py-1.5 rounded-[4px] hover:bg-vault-accent-2 disabled:opacity-50 transition-colors"
-              >
-                {aiOutlineLoading ? 'Generating...' : 'Generate Blocks'}
+        <>
+          {/* Overlay for mobile */}
+          <div 
+            className="fixed inset-0 bg-black/50 z-[90] md:hidden"
+            onClick={() => setShowAI(false)}
+          />
+          <div className="fixed md:relative right-0 top-0 bottom-0 z-[100] md:z-auto w-[280px] shrink-0 border-l border-vault-border bg-vault-bg-2 overflow-y-auto transition-transform duration-300 md:translate-x-0">
+            <div className="sticky top-0 z-10 bg-vault-bg-2 border-b border-vault-border p-4 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Sparkles className="w-3.5 h-3.5 text-vault-accent" />
+                <div className="text-[10px] uppercase tracking-normal text-vault-text-3 font-bold">AI Tools</div>
+              </div>
+              <button onClick={() => setShowAI(false)} className="text-vault-text-3 hover:text-vault-text transition-colors p-1">
+                <SidebarClose className="w-5 h-5" />
               </button>
             </div>
-
-            <button 
-              onClick={summarizeNote}
-              disabled={aiSummaryLoading}
-              className="flex items-center justify-between w-full bg-vault-bg-3 hover:bg-vault-bg-4 border border-vault-border hover:border-vault-accent-border p-3 rounded-[6px] transition-all duration-150 text-left group"
-            >
-              <span className="text-[11px] text-vault-text-2 group-hover:text-vault-accent transition-colors">
-                {aiSummaryLoading ? 'Thinking...' : '✦ Summarise note'}
-              </span>
-            </button>
-
-            {aiSummary && (
-              <div className="bg-vault-accent-dim border-l-[3px] border-vault-accent rounded-r-[6px] p-3 flex flex-col gap-2">
-                <div className="text-[13px] text-vault-text leading-relaxed">
-                  {aiSummary}
-                </div>
+            
+            <div className="p-4 flex flex-col gap-4">
+              <div className="flex flex-col gap-2 bg-vault-bg-3 border border-vault-border p-4 rounded-[8px]">
+                <div className="text-[10px] uppercase tracking-normal text-vault-accent font-bold">✦ Generate outline</div>
+                <input 
+                  value={aiOutlineTopic}
+                  onChange={e => setAiOutlineTopic(e.target.value)}
+                  placeholder="Topic to research..."
+                  className="w-full bg-vault-bg-4 border border-vault-border rounded-[4px] px-3 py-2 text-[14px] text-vault-text placeholder-vault-text-3 focus:outline-none focus:border-vault-accent transition-colors duration-150"
+                />
+                <button 
+                  onClick={generateOutline}
+                  disabled={aiOutlineLoading || !aiOutlineTopic.trim()}
+                  className="w-full bg-vault-accent text-[#0D0D0F] text-[11px] uppercase tracking-normal py-2.5 rounded-[4px] hover:bg-vault-accent-2 disabled:opacity-50 transition-colors font-bold mt-1"
+                >
+                  {aiOutlineLoading ? 'Generating...' : 'Generate Blocks'}
+                </button>
               </div>
-            )}
 
-            <button 
-              onClick={() => alert("Coming soon: AI Improve Note")}
-              className="flex items-center justify-between w-full bg-vault-bg-3 hover:bg-vault-bg-4 border border-vault-border hover:border-vault-accent-border p-3 rounded-[6px] transition-all duration-150 text-left group"
-            >
-              <span className="text-[11px] text-vault-text-2 group-hover:text-vault-accent transition-colors">✦ Improve note</span>
-            </button>
+              <button 
+                onClick={summarizeNote}
+                disabled={aiSummaryLoading}
+                className="flex items-center justify-between w-full bg-vault-bg-3 hover:bg-vault-bg-4 border border-vault-border hover:border-vault-accent-border p-4 rounded-[8px] transition-all duration-150 text-left group"
+              >
+                <span className="text-[12px] text-vault-text-2 group-hover:text-vault-accent transition-colors font-medium">
+                  {aiSummaryLoading ? 'Thinking...' : '✦ Summarise note'}
+                </span>
+              </button>
 
-            <button 
-              onClick={() => alert("Coming soon: AI Suggest Related")}
-              className="flex items-center justify-between w-full bg-vault-bg-3 hover:bg-vault-bg-4 border border-vault-border hover:border-vault-accent-border p-3 rounded-[6px] transition-all duration-150 text-left group"
-            >
-              <span className="text-[11px] text-vault-text-2 group-hover:text-vault-accent transition-colors">✦ Suggest related</span>
-            </button>
+              {aiSummary && (
+                <div className="bg-vault-accent-dim border-l-[3px] border-vault-accent rounded-r-[8px] p-4 flex flex-col gap-2 animate-in fade-in duration-300">
+                  <div className="text-[13px] text-vault-text leading-relaxed">
+                    {aiSummary}
+                  </div>
+                </div>
+              )}
+
+              <button 
+                onClick={() => alert("Coming soon: AI Improve Note")}
+                className="flex items-center justify-between w-full bg-vault-bg-3 hover:bg-vault-bg-4 border border-vault-border hover:border-vault-accent-border p-4 rounded-[8px] transition-all duration-150 text-left group"
+              >
+                <span className="text-[12px] text-vault-text-2 group-hover:text-vault-accent transition-colors font-medium">✦ Improve note</span>
+              </button>
+
+              <button 
+                onClick={() => alert("Coming soon: AI Suggest Related")}
+                className="flex items-center justify-between w-full bg-vault-bg-3 hover:bg-vault-bg-4 border border-vault-border hover:border-vault-accent-border p-4 rounded-[8px] transition-all duration-150 text-left group"
+              >
+                <span className="text-[12px] text-vault-text-2 group-hover:text-vault-accent transition-colors font-medium">✦ Suggest related</span>
+              </button>
+            </div>
           </div>
-        </div>
+        </>
       )}
+    </div>
     </div>
   )
 }

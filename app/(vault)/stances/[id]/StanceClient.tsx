@@ -205,28 +205,28 @@ export default function StanceClient({ initialStance, allSettledStances }: { ini
           <ArrowLeft className="w-3 h-3" /> Stances
         </Link>
         
-        <div className="flex items-start justify-between gap-4 border-b border-vault-border pb-6">
+        <div className="flex flex-col md:flex-row md:items-start justify-between gap-6 md:gap-4 border-b border-vault-border pb-6">
           <div className="flex flex-col gap-4">
-            <h1 className="text-[36px] text-vault-text leading-tight">{stance.topic}</h1>
-            <div className="flex items-center gap-3">
+            <h1 className="text-[28px] md:text-[36px] text-vault-text leading-tight">{stance.topic}</h1>
+            <div className="flex flex-wrap items-center gap-3">
               <StatusBadge status={stance.status} />
               <div className="text-[10px] bg-vault-bg-4 text-vault-text-3 px-2 py-0.5 rounded-[3px] uppercase tracking-normal">
                 {stance.category}
               </div>
               <div className="text-[10px] text-vault-text-3 uppercase tracking-normal">
-                Last updated {format(new Date(stance.last_updated), "MMM d, yyyy")}
+                Updated {format(new Date(stance.last_updated), "MMM d, yyyy")}
               </div>
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
             <select
               value={stance.status}
               onChange={(e) => {
                 handleUpdate({ status: e.target.value })
                 saveToDb({ ...stance, status: e.target.value })
               }}
-              className="bg-vault-bg-4 border border-vault-border text-vault-text-2 text-[10px] uppercase tracking-normal px-3 py-1.5 rounded-[4px] focus:outline-none focus:border-vault-accent cursor-pointer outline-none"
+              className="w-full sm:w-auto bg-vault-bg-4 border border-vault-border text-vault-text-2 text-[10px] uppercase tracking-normal px-3 py-1.5 rounded-[4px] focus:outline-none focus:border-vault-accent cursor-pointer outline-none h-11 md:h-auto"
             >
               <option value="empty">Not Started</option>
               <option value="undecided">Undecided</option>
@@ -237,9 +237,9 @@ export default function StanceClient({ initialStance, allSettledStances }: { ini
             <button 
               onClick={() => saveToDb(stance)}
               disabled={saving}
-              className="bg-vault-accent text-[#0D0D0F] text-[11px] uppercase tracking-[0.1em] py-1.5 px-4 rounded-[4px] hover:bg-vault-accent-2 transition-colors duration-150 disabled:opacity-50"
+              className="w-full sm:w-auto bg-vault-accent text-[#0D0D0F] text-[11px] uppercase tracking-widest py-1.5 px-6 rounded-[4px] hover:bg-vault-accent-2 transition-colors duration-150 disabled:opacity-50 h-11 md:h-auto font-bold"
             >
-              {saving ? 'Saving...' : 'Save'}
+              {saving ? 'Saving...' : 'Save Changes'}
             </button>
           </div>
         </div>

@@ -290,13 +290,13 @@ export default function JournalEditorClient({ initialEntry }: { initialEntry: an
   )
 
   return (
-    <div className="flex w-full h-[calc(100vh-52px)] -m-8 lg:-m-10 relative">
+    <div className="flex w-full h-[calc(100vh-52px)] -m-4 md:-m-8 lg:-m-10 relative overflow-hidden bg-vault-bg">
       <SetTopbar title={EditableTitle} leftNode={LeftNode} rightNode={RightNode} />
       <style>{EditorStyles}</style>
 
       {/* EDITOR PANEL */}
       <div className="flex-1 overflow-y-auto w-full relative">
-        <div className="max-w-[720px] mx-auto py-12 px-8 lg:px-0 lg:py-16">
+        <div className="max-w-[720px] mx-auto py-8 md:py-12 px-4 md:px-8 lg:px-0 lg:py-16">
           
           <input 
             value={title}
@@ -306,20 +306,20 @@ export default function JournalEditorClient({ initialEntry }: { initialEntry: an
             }}
             placeholder="Title..."
             autoFocus={initialEntry.title === 'Untitled'}
-            className="w-full bg-transparent border-none focus:outline-none text-[36px] text-vault-text leading-tight mb-2"
+            className="w-full bg-transparent border-none focus:outline-none text-[28px] md:text-[36px] text-vault-text leading-tight mb-2 font-bold"
           />
           
-          <div className="text-[10px] uppercase text-vault-text-3 tracking-normal mb-6">
+          <div className="text-[10px] uppercase text-vault-text-3 tracking-widest mb-6 font-bold">
             {format(new Date(initialEntry.created_at), 'EEEE, MMMM do yyyy')}
           </div>
 
           {showTags && (
-            <div className="flex flex-wrap items-center gap-2 mb-8 bg-vault-bg-2 border border-vault-border rounded-[4px] p-2">
-              <Tag className="w-3.5 h-3.5 text-vault-text-3 ml-1" />
+            <div className="flex flex-wrap items-center gap-2 mb-8 bg-vault-bg-2 border border-vault-border rounded-[8px] p-3 shadow-sm">
+              <Tag className="w-4 h-4 text-vault-text-3 ml-1" />
               {tags.map((tag, i) => (
-                <div key={i} className="flex items-center gap-1 bg-vault-bg-4 text-vault-text-2 text-[9px] uppercase tracking-normal px-2 py-1 rounded-[3px]">
+                <div key={i} className="flex items-center gap-1 bg-vault-bg-4 text-vault-text-2 text-[10px] uppercase tracking-normal px-2.5 py-1.5 rounded-[4px] font-bold">
                   {tag}
-                  <button onClick={() => removeTag(i)} className="hover:text-vault-text ml-1"><X className="w-2.5 h-2.5" /></button>
+                  <button onClick={() => removeTag(i)} className="hover:text-vault-text ml-1 p-0.5"><X className="w-3 h-3" /></button>
                 </div>
               ))}
               <input 
@@ -327,106 +327,117 @@ export default function JournalEditorClient({ initialEntry }: { initialEntry: an
                 onChange={e => setTagInput(e.target.value)}
                 onKeyDown={handleAddTag}
                 placeholder="Add tag..."
-                className="bg-transparent border-none focus:outline-none text-[10px] text-vault-text placeholder-vault-text-3 min-w-[100px] px-1"
+                className="bg-transparent border-none focus:outline-none text-[12px] text-vault-text placeholder-vault-text-4 min-w-[120px] px-2"
               />
             </div>
           )}
 
-          <MenuBar editor={editor} />
+          <div className="overflow-x-auto no-scrollbar -mx-4 px-4 md:mx-0 md:px-0 mb-8 sticky top-0 md:top-6 z-10">
+            <MenuBar editor={editor} />
+          </div>
           
-          <div className="text-[17px] leading-[1.8] text-vault-text-2 min-h-[400px]">
+          <div className="text-[16px] md:text-[18px] leading-[1.8] text-vault-text-2 min-h-[400px] pb-32">
             <EditorContent editor={editor} />
           </div>
           
         </div>
       </div>
 
-      {/* AI SIDEBAR */}
+      {/* AI SIDEBAR / DRAWER */}
       {showAI && (
-        <div className="w-[280px] shrink-0 border-l border-vault-border bg-vault-bg-2 overflow-y-auto">
-          <div className="sticky top-0 z-10 bg-vault-bg-2 border-b border-vault-border p-4 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Sparkles className="w-3.5 h-3.5 text-vault-accent" />
-              <div className="text-[10px] uppercase tracking-normal text-vault-text-3">AI Tools</div>
+        <>
+          {/* Overlay for mobile */}
+          <div 
+            className="fixed inset-0 bg-black/50 z-[90] md:hidden"
+            onClick={() => setShowAI(false)}
+          />
+          <div className="fixed md:relative right-0 top-0 bottom-0 z-[100] md:z-auto w-[280px] shrink-0 border-l border-vault-border bg-vault-bg-2 overflow-y-auto transition-transform duration-300 md:translate-x-0">
+            <div className="sticky top-0 z-10 bg-vault-bg-2 border-b border-vault-border p-4 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Sparkles className="w-3.5 h-3.5 text-vault-accent" />
+                <div className="text-[10px] uppercase tracking-normal text-vault-text-3 font-bold">AI Tools</div>
+              </div>
+              <button onClick={() => setShowAI(false)} className="text-vault-text-3 hover:text-vault-text transition-colors p-1">
+                <SidebarClose className="w-5 h-5" />
+              </button>
             </div>
-            <button onClick={() => setShowAI(false)} className="text-vault-text-3 hover:text-vault-text transition-colors">
-              <SidebarClose className="w-4 h-4" />
-            </button>
-          </div>
-          
-          <div className="p-4 flex flex-col gap-4">
-            <button 
-              onClick={summarizeEntry}
-              disabled={aiSummaryLoading}
-              className="flex items-center justify-between w-full bg-vault-bg-3 hover:bg-vault-bg-4 border border-vault-border hover:border-vault-accent-border p-3 rounded-[6px] transition-all duration-150 text-left group"
-            >
-              <span className="text-[11px] text-vault-text-2 group-hover:text-vault-accent transition-colors">
-                {aiSummaryLoading ? 'Thinking...' : '✦ Summarise entry'}
-              </span>
-            </button>
             
-            {aiSummary && (
-              <div className="bg-vault-accent-dim border-l-[3px] border-vault-accent rounded-r-[6px] p-3 flex flex-col gap-2">
-                <div className="flex items-center gap-2">
-                  <div className="bg-vault-accent/[0.15] text-vault-accent text-[8px] uppercase px-1.5 py-0.5 rounded-[2px] tracking-normal">Summary</div>
+            <div className="p-4 flex flex-col gap-4">
+              <button 
+                onClick={summarizeEntry}
+                disabled={aiSummaryLoading}
+                className="flex items-center justify-between w-full bg-vault-bg-3 hover:bg-vault-bg-4 border border-vault-border hover:border-vault-accent-border p-4 rounded-[8px] transition-all duration-150 text-left group"
+              >
+                <span className="text-[12px] text-vault-text-2 group-hover:text-vault-accent transition-colors font-medium">
+                  {aiSummaryLoading ? 'Thinking...' : '✦ Summarise entry'}
+                </span>
+              </button>
+              
+              {aiSummary && (
+                <div className="bg-vault-accent-dim border-l-[3px] border-vault-accent rounded-r-[8px] p-4 flex flex-col gap-2 animate-in fade-in duration-300">
+                  <div className="flex items-center gap-2">
+                    <div className="bg-vault-accent/[0.15] text-vault-accent text-[9px] uppercase px-2 py-0.5 rounded-[4px] tracking-widest font-bold">Summary</div>
+                  </div>
+                  <div className="text-[13px] text-vault-text leading-relaxed">
+                    {aiSummary}
+                  </div>
                 </div>
-                <div className="text-[13px] text-vault-text leading-relaxed">
-                  {aiSummary}
-                </div>
-              </div>
-            )}
+              )}
 
-            <button 
-              onClick={expandThought}
-              disabled={aiExpandLoading}
-              className="flex items-center justify-between w-full bg-vault-bg-3 hover:bg-vault-bg-4 border border-vault-border hover:border-vault-accent-border p-3 rounded-[6px] transition-all duration-150 text-left group"
-            >
-              <span className="text-[11px] text-vault-text-2 group-hover:text-vault-accent transition-colors">
-                {aiExpandLoading ? 'Expanding...' : '✦ Expand thought'}
-              </span>
-            </button>
-            
-            {aiExpand && (
-              <div className="bg-vault-accent-dim border-l-[3px] border-vault-accent rounded-r-[6px] p-3 flex flex-col gap-2">
-                <div className="flex items-center gap-2">
-                  <div className="bg-vault-accent/[0.15] text-vault-accent text-[8px] uppercase px-1.5 py-0.5 rounded-[2px] tracking-normal">Expansion</div>
+              <button 
+                onClick={expandThought}
+                disabled={aiExpandLoading}
+                className="flex items-center justify-between w-full bg-vault-bg-3 hover:bg-vault-bg-4 border border-vault-border hover:border-vault-accent-border p-4 rounded-[8px] transition-all duration-150 text-left group"
+              >
+                <span className="text-[12px] text-vault-text-2 group-hover:text-vault-accent transition-colors font-medium">
+                  {aiExpandLoading ? 'Expanding...' : '✦ Expand thought'}
+                </span>
+              </button>
+              
+              {aiExpand && (
+                <div className="bg-vault-accent-dim border-l-[3px] border-vault-accent rounded-r-[8px] p-4 flex flex-col gap-2 animate-in fade-in duration-300">
+                  <div className="flex items-center gap-2">
+                    <div className="bg-vault-accent/[0.15] text-vault-accent text-[9px] uppercase px-2 py-0.5 rounded-[4px] tracking-widest font-bold">Expansion</div>
+                  </div>
+                  <div className="text-[13px] text-vault-text leading-relaxed">
+                    {aiExpand}
+                  </div>
+                  <div className="flex items-center gap-4 pt-2">
+                    <button 
+                      onClick={() => {
+                        if (editor) {
+                          editor.chain().focus().insertContent('\n\n' + aiExpand).run()
+                          setAiExpand('')
+                        }
+                      }}
+                      className="text-vault-accent hover:underline text-[10px] uppercase tracking-widest font-bold"
+                    >
+                      Insert
+                    </button>
+                    <button onClick={() => setAiExpand('')} className="text-vault-text-3 hover:text-vault-text text-[10px] uppercase tracking-widest font-bold transition-colors">Dismiss</button>
+                  </div>
                 </div>
-                <div className="text-[13px] text-vault-text leading-relaxed">
-                  {aiExpand}
-                </div>
-                <div className="flex items-center gap-3 pt-2">
-                  <button 
-                    onClick={() => {
-                      if (editor) {
-                        editor.chain().focus().insertContent('\n\n' + aiExpand).run()
-                        setAiExpand('')
-                      }
-                    }}
-                    className="text-vault-accent hover:underline text-[9px] uppercase tracking-normal"
-                  >
-                    Insert
-                  </button>
-                  <button onClick={() => setAiExpand('')} className="text-vault-text-3 hover:text-vault-text text-[9px] uppercase tracking-normal transition-colors">Dismiss</button>
-                </div>
-              </div>
-            )}
+              )}
 
-            <button 
-              onClick={() => alert("Coming soon: AI Contradiction Check")}
-              className="flex items-center justify-between w-full bg-vault-bg-3 hover:bg-vault-bg-4 border border-vault-border hover:border-vault-accent-border p-3 rounded-[6px] transition-all duration-150 text-left group"
-            >
-              <span className="text-[11px] text-vault-text-2 group-hover:text-vault-accent transition-colors">✦ Find contradictions</span>
-            </button>
+              <button 
+                onClick={() => alert("Coming soon: AI Contradiction Check")}
+                className="flex items-center justify-between w-full bg-vault-bg-3 hover:bg-vault-bg-4 border border-vault-border hover:border-vault-accent-border p-4 rounded-[8px] transition-all duration-150 text-left group"
+              >
+                <span className="text-[12px] text-vault-text-2 group-hover:text-vault-accent transition-colors font-medium">✦ Find contradictions</span>
+              </button>
 
-            <button 
-              onClick={() => alert("Coming soon: AI Stance Link")}
-              className="flex items-center justify-between w-full bg-vault-bg-3 hover:bg-vault-bg-4 border border-vault-border hover:border-vault-accent-border p-3 rounded-[6px] transition-all duration-150 text-left group"
-            >
-              <span className="text-[11px] text-vault-text-2 group-hover:text-vault-accent transition-colors">✦ Link to stance</span>
-            </button>
+              <button 
+                onClick={() => alert("Coming soon: AI Stance Link")}
+                className="flex items-center justify-between w-full bg-vault-bg-3 hover:bg-vault-bg-4 border border-vault-border hover:border-vault-accent-border p-4 rounded-[8px] transition-all duration-150 text-left group"
+              >
+                <span className="text-[12px] text-vault-text-2 group-hover:text-vault-accent transition-colors font-medium">✦ Link to stance</span>
+              </button>
+            </div>
           </div>
-        </div>
+        </>
       )}
+
+    </div>
 
     </div>
   )

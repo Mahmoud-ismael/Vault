@@ -5,6 +5,7 @@ import { createContext, useContext, useState } from 'react'
 export type TopbarAction = {
   label: string
   onClick: () => void
+  icon?: any
 }
 
 type TopbarContextType = {
@@ -12,10 +13,14 @@ type TopbarContextType = {
   setTitle: (title: React.ReactNode) => void
   action: TopbarAction | null
   setAction: (action: TopbarAction | null) => void
+  fab: TopbarAction | null
+  setFab: (action: TopbarAction | null) => void
   leftNode: React.ReactNode | null
   setLeftNode: (node: React.ReactNode | null) => void
   rightNode: React.ReactNode | null
   setRightNode: (node: React.ReactNode | null) => void
+  sidebarOpen: boolean
+  setSidebarOpen: (open: boolean) => void
 }
 
 const TopbarContext = createContext<TopbarContextType | null>(null)
@@ -23,11 +28,16 @@ const TopbarContext = createContext<TopbarContextType | null>(null)
 export function TopbarProvider({ children }: { children: React.ReactNode }) {
   const [title, setTitle] = useState<React.ReactNode>('')
   const [action, setAction] = useState<TopbarAction | null>(null)
+  const [fab, setFab] = useState<TopbarAction | null>(null)
   const [leftNode, setLeftNode] = useState<React.ReactNode | null>(null)
   const [rightNode, setRightNode] = useState<React.ReactNode | null>(null)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
 
   return (
-    <TopbarContext.Provider value={{ title, setTitle, action, setAction, leftNode, setLeftNode, rightNode, setRightNode }}>
+    <TopbarContext.Provider value={{ 
+      title, setTitle, action, setAction, fab, setFab, leftNode, setLeftNode, rightNode, setRightNode,
+      sidebarOpen, setSidebarOpen 
+    }}>
       {children}
     </TopbarContext.Provider>
   )

@@ -140,6 +140,16 @@
   --vault-warning: #C98A30;
 }
 
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
 .dark {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
@@ -179,10 +189,27 @@
     font-family: 'Satoshi', sans-serif;
     @apply border-border outline-ring/50;
   }
+  html {
+    overflow-x: hidden;
+  }
   body {
     font-family: 'Satoshi', sans-serif;
     background-color: var(--vault-bg);
     color: var(--vault-text);
+    overflow-x: hidden;
+    position: relative;
+    width: 100%;
+  }
+  input, textarea, select {
+    font-size: 16px !important; /* Prevent iOS zoom */
+  }
+  button, a, [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+    @media (min-width: 768px) {
+      min-height: auto;
+      min-width: auto;
+    }
   }
 }
 
