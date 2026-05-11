@@ -6,7 +6,7 @@ export async function POST(req: Request) {
     const { topic, my_stance } = await req.json()
     
     if (!topic || !my_stance) {
-      return NextResponse.json({ error: 'Missing topic or stance' }, { status: 400 })
+      return NextResponse.json({ error: 'Missing topic or stance', code: 'MISSING_PARAMS' }, { status: 400 })
     }
 
     const anthropic = new Anthropic({
@@ -42,6 +42,6 @@ export async function POST(req: Request) {
     })
   } catch (error: any) {
     console.error(error)
-    return NextResponse.json({ error: error.message }, { status: 500 })
+    return NextResponse.json({ error: error.message, code: 'AI_ERROR' }, { status: 500 })
   }
 }

@@ -5,7 +5,7 @@ export async function POST(req: Request) {
   try {
     const formData = await req.formData()
     const file = formData.get('file') as File
-    if (!file) return NextResponse.json({ error: 'No file provided' }, { status: 400 })
+    if (!file) return NextResponse.json({ error: 'No file provided', code: 'NO_FILE' }, { status: 400 })
 
     const buffer = Buffer.from(await file.arrayBuffer())
     const { data: { text } } = await Tesseract.recognize(buffer, 'eng')
@@ -13,6 +13,6 @@ export async function POST(req: Request) {
     return NextResponse.json({ text })
   } catch (error: any) {
     console.error('OCR Error:', error)
-    return NextResponse.json({ error: error.message }, { status: 500 })
+    return NextResponse.json({ error: error.message, code: 'OCR_ERROR' }, { status: 500 })
   }
 }

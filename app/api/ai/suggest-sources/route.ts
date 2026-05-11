@@ -6,7 +6,7 @@ export async function POST(req: Request) {
     const { topic } = await req.json()
     
     if (!topic) {
-      return NextResponse.json({ error: 'Missing topic' }, { status: 400 })
+      return NextResponse.json({ error: 'Missing topic', code: 'MISSING_TOPIC' }, { status: 400 })
     }
 
     const anthropic = new Anthropic({
@@ -34,13 +34,13 @@ Return ONLY a raw JSON array of objects with keys: "title", "author", "type" (Bo
         return NextResponse.json(parsed)
       } catch (err) {
         console.error("Failed to parse JSON", content.text)
-        return NextResponse.json({ error: 'Failed to parse AI response' }, { status: 500 })
+        return NextResponse.json({ error: 'Failed to parse AI response', code: 'AI_PARSE_ERROR' }, { status: 500 })
       }
     }
 
-    return NextResponse.json({ error: 'Invalid response format' }, { status: 500 })
+    return NextResponse.json({ error: 'Invalid response format', code: 'INVALID_FORMAT' }, { status: 500 })
   } catch (error: any) {
     console.error(error)
-    return NextResponse.json({ error: error.message }, { status: 500 })
+    return NextResponse.json({ error: error.message, code: 'AI_ERROR' }, { status: 500 })
   }
 }
