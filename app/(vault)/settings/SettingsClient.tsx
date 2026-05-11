@@ -57,12 +57,12 @@ export default function SettingsClient({ initialProfile, user }: { initialProfil
       ])
 
       const data = {
-        exportDate: new Date().toISOString(),
-        user: user.id,
-        stances: stances.data,
-        journal_entries: journal.data,
-        notes: notes.data,
-        documents: docs.data
+        exported_at: new Date().toISOString(),
+        vault_version: "1.0",
+        stances: stances.data || [],
+        journal_entries: journal.data || [],
+        notes: notes.data || [],
+        documents: docs.data || []
       }
 
       const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
@@ -76,41 +76,124 @@ export default function SettingsClient({ initialProfile, user }: { initialProfil
     }
   }
 
+  const tiptapJsonToMarkdown = (node: any): string => {
+    if (!node) return ''
+    if (node.type === 'text') {
+      let text = node.text || ''
+      if (node.marks) {
+        node.marks.forEach((m: any) => {
+          if (m.type === 'bold') text = `**${text}**`
+          if (m.type === 'italic') text = `_${text}_`
+          if (m.type === 'strike') text = `~~${text}~~`
+          if (m.type === 'code') text = `\`${text}\``
+          if (m.type === 'link') text = `[${text}](${m.attrs?.href})`
+        })
+      }
+      return text
+    }
+    
+    const content = node.content ? node.content.map((c: any) => tiptapJsonToMarkdown(c)).join('') : ''
+    
+    switch (node.type) {
+      case 'heading':
+        return '\n' + '#'.repeat(node.attrs?.level || 1) + ' ' + content + '\n'
+      case 'paragraph':
+        return content + '\n\n'
+      case 'bulletList':
+        return node.content?.map((c: any) => `- ${tiptapJsonToMarkdown(c)}`).join('') + '\n'
+      case 'orderedList':
+        return node.content?.map((c: any, i: number) => `${i + 1}. ${tiptapJsonToMarkdown(c)}`).join('') + '\n'
+      case 'listItem':
+        return content
+      case 'taskList':
+        return node.content?.map((c: any) => `- [${c.attrs?.checked ? 'x' : ' '}] ${tiptapJsonToMarkdown(c)}`).join('') + '\n'
+      case 'taskItem':
+        return content
+      case 'blockquote':
+        return '\n> ' + content.split('\n').join('\n> ').trim() + '\n\n'
+      case 'codeBlock':
+        return '\n```\n' + content + '\n```\n\n'
+      case 'horizontalRule':
+        return '\n---\n\n'
+      case 'callout':
+        return '\n> 💡 **Note**\n> ' + content.split('\n').join('\n> ').trim() + '\n\n'
+      default:
+        return content
+    }
+  }
+
   const exportAsMarkdown = async () => {
     setExporting(true)
     try {
-      const [stances, journal] = await Promise.all([
+      const [stances, journal, notes] = await Promise.all([
         supabase.from('stances').select('*'),
-        supabase.from('journal_entries').select('*')
+        supabase.from('journal_entries').select('*'),
+        supabase.from('notes').select('*')
       ])
 
       const zip = new JSZip()
       
       const stancesFolder = zip.folder("stances")
       stances.data?.forEach(s => {
-        const content = `# ${s.topic}\n\n**Category:** ${s.category}\n**Status:** ${s.status}\n\n## My Stance\n${s.my_stance || ''}\n\n## Why I hold this\n${s.why_i_hold_this || ''}`
+        const content = `# ${s.topic}
+**Status:** ${s.status} | **Category:** ${s.category} | **Last Updated:** ${new Date(s.updated_at || s.created_at).toLocaleDateString()}
+
+## My Stance
+${s.my_stance || 'Not provided.'}
+
+## Why I Hold This
+${s.why_i_hold_this || 'Not provided.'}
+
+## Strongest Counter-Argument
+${s.strongest_counter || 'Not provided.'}
+
+## My Rebuttal
+${s.my_rebuttal || 'Not provided.'}
+
+## Where I'm Uncertain
+${s.uncertainties || 'Not provided.'}
+
+## How This Affects My Life
+${s.life_impact || 'Not provided.'}
+
+## Sources
+${s.sources || 'Not provided.'}
+`
         stancesFolder?.file(`${s.topic.replace(/[/\\?%*:|"<>]/g, '-')}.md`, content)
       })
 
       const journalFolder = zip.folder("journal")
       journal.data?.forEach(j => {
-        // Very basic extraction of text from tiptap json
-        const extractText = (node: any): string => {
-          if (!node) return ''
-          if (node.type === 'text') return node.text || ''
-          if (node.type === 'heading') return `\n# ${node.content?.map(extractText).join('')}\n`
-          if (node.type === 'paragraph') return `${node.content?.map(extractText).join('') || ''}\n`
-          if (node.content && Array.isArray(node.content)) return node.content.map(extractText).join('')
-          return ''
-        }
-        const text = extractText(j.content)
-        journalFolder?.file(`${j.title.replace(/[/\\?%*:|"<>]/g, '-')}.md`, text)
+        const tagsStr = j.tags ? JSON.stringify(j.tags) : '[]'
+        const content = `---
+title: ${j.title || 'Untitled'}
+date: ${new Date(j.created_at).toISOString()}
+tags: ${tagsStr}
+---
+
+${tiptapJsonToMarkdown(j.content)}
+`
+        journalFolder?.file(`${j.title.replace(/[/\\?%*:|"<>]/g, '-')}.md`, content)
+      })
+
+      const notesFolder = zip.folder("notes")
+      notes.data?.forEach(n => {
+        const tagsStr = n.tags ? JSON.stringify(n.tags) : '[]'
+        const content = `---
+title: ${n.title || 'Untitled'}
+date: ${new Date(n.created_at).toISOString()}
+tags: ${tagsStr}
+---
+
+${tiptapJsonToMarkdown(n.content)}
+`
+        notesFolder?.file(`${n.title.replace(/[/\\?%*:|"<>]/g, '-')}.md`, content)
       })
 
       const blob = await zip.generateAsync({ type: 'blob' })
-      downloadBlob(blob, `vault-export-md-${new Date().toISOString().split('T')[0]}.zip`)
+      downloadBlob(blob, `vault-markdown-${new Date().toISOString().split('T')[0]}.zip`)
       updateLastExport()
-      toast.success('Export downloaded')
+      toast.success('Markdown export downloaded')
     } catch(e) {
       toast.error('Failed to export data')
     } finally {
