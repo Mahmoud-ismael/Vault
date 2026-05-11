@@ -1,59 +1,53 @@
-import { GoogleGenerativeAI } from '@google/generative-ai'
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server';
+import { generateText } from '@/lib/ai/nvidia';
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
-    const { query, mode } = await req.json()
-    if (!query) return NextResponse.json({ error: 'Missing query', code: 'MISSING_QUERY' }, { status: 400 })
+    const { query, mode } = await req.json();
+    if (!query) return NextResponse.json({ error: 'Missing query', code: 'MISSING_QUERY' }, { status: 400 });
 
-    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '')
-    const model = genAI.getGenerativeModel({ 
-      model: "gemini-flash-latest", 
-      tools: [{ googleSearch: {} }] as any
-    })
+    const finalQuery = mode === 'ACADEMIC'
+      ? `Focus on peer-reviewed research, academic consensus, and scholarly debate. Query: ${query}`
+      : query;
 
-    const finalQuery = mode === 'ACADEMIC' 
-      ? `Focus on peer-reviewed research, academic consensus, and scholarly debate. Cite types of sources that exist. Query: ${query}`
-      : query
+    // Step 1: Search with Tavily
+    const tavilyRes = await fetch('https://api.tavily.com/search', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        api_key: process.env.TAVILY_API_KEY,
+        query: finalQuery,
+        search_depth: 'advanced',
+        max_results: 5,
+        include_answer: false,
+      }),
+    });
 
-    const result = await model.generateContentStream(finalQuery)
-    
-    const stream = new ReadableStream({
-      async start(controller) {
-        let sources: any[] = []
-        try {
-          for await (const chunk of result.stream) {
-            const chunkText = chunk.text()
-            controller.enqueue(new TextEncoder().encode(chunkText))
-            
-            const chunkSources = chunk.candidates?.[0]?.groundingMetadata?.groundingChunks
-            if (chunkSources) {
-              sources = [...sources, ...chunkSources]
-            }
-          }
-          if (sources.length > 0) {
-            // Deduplicate sources
-            const uniqueUrls = new Set()
-            const uniqueSources = []
-            for (const src of sources) {
-              const url = src.web?.uri
-              if (url && !uniqueUrls.has(url)) {
-                uniqueUrls.add(url)
-                uniqueSources.push({ title: src.web.title, url })
-              }
-            }
-            controller.enqueue(new TextEncoder().encode('\n\n___SOURCES___\n' + JSON.stringify(uniqueSources)))
-          }
-        } catch (e) {
-          console.error(e)
-        }
-        controller.close()
-      }
-    })
+    const tavilyData = await tavilyRes.json();
+    const results = tavilyData.results ?? [];
 
-    return new Response(stream, { headers: { 'Content-Type': 'text/plain; charset=utf-8' } })
+    // Step 2: Format results for context
+    const context = results
+      .map((r: { title: string; content: string; url: string }, i: number) =>
+        `Source ${i + 1}: ${r.title}\n${r.content}\nURL: ${r.url}`
+      )
+      .join('\n\n');
+
+    // Step 3: Synthesise with NVIDIA Llama
+    const system = `You are a research assistant. Using the search results provided, give a comprehensive, well-reasoned answer to the query. Reference the sources by number. Be analytical, not just descriptive.`;
+    const prompt = `Query: ${query}\n\nSearch Results:\n${context}`;
+
+    const answer = await generateText(prompt, system, false);
+
+    return NextResponse.json({
+      answer,
+      sources: results.map((r: { title: string; url: string }) => ({
+        title: r.title,
+        url: r.url,
+      })),
+    });
   } catch (error: any) {
-    console.error(error)
-    return NextResponse.json({ error: error.message, code: 'AI_ERROR' }, { status: 500 })
+    console.error(error);
+    return NextResponse.json({ error: error.message, code: 'AI_ERROR' }, { status: 500 });
   }
 }

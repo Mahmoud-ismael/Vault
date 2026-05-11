@@ -1,45 +1,18 @@
 import { NextResponse } from 'next/server'
-import Anthropic from '@anthropic-ai/sdk'
+import { streamText } from '@/lib/ai/nvidia'
 
 export async function POST(req: Request) {
   try {
     const { topic, my_stance } = await req.json()
-    
-    if (!topic || !my_stance) {
-      return NextResponse.json({ error: 'Missing topic or stance', code: 'MISSING_PARAMS' }, { status: 400 })
-    }
+    if (!topic || !my_stance) return NextResponse.json({ error: 'Missing topic or stance', code: 'MISSING_PARAMS' }, { status: 400 })
 
-    const anthropic = new Anthropic({
-      apiKey: process.env.ANTHROPIC_API_KEY,
-    })
+    const stream = await streamText(
+      `Topic: ${topic}\n\nMy stance: ${my_stance}`,
+      'You are helping someone think rigorously. Given their stance on a topic, write the single strongest steelman argument against their position. Be genuinely challenging, not a strawman. 3-4 sentences. No preamble.',
+      false
+    )
 
-    const response = await anthropic.messages.create({
-      model: 'claude-3-5-sonnet-20241022',
-      max_tokens: 500,
-      system: 'You are helping someone think rigorously. Given their stance on a topic, write the single strongest steelman argument against their position. Be genuinely challenging, not a strawman. 3-4 sentences. No preamble.',
-      messages: [
-        {
-          role: 'user',
-          content: `Topic: ${topic}\n\nMy stance: ${my_stance}`
-        }
-      ],
-      stream: true,
-    })
-
-    const stream = new ReadableStream({
-      async start(controller) {
-        for await (const chunk of response) {
-          if (chunk.type === 'content_block_delta' && chunk.delta.type === 'text_delta') {
-            controller.enqueue(new TextEncoder().encode(chunk.delta.text))
-          }
-        }
-        controller.close()
-      }
-    })
-
-    return new Response(stream, {
-      headers: { 'Content-Type': 'text/plain; charset=utf-8' },
-    })
+    return new Response(stream, { headers: { 'Content-Type': 'text/plain; charset=utf-8' } })
   } catch (error: any) {
     console.error(error)
     return NextResponse.json({ error: error.message, code: 'AI_ERROR' }, { status: 500 })
